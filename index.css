@@ -426,7 +426,7 @@ body {
 }
 .property-card {
     background: #fff;
-    border-radius: 18px;
+    border-radius: 10px;
     box-shadow: 0 6px 24px rgba(0,0,0,0.10), 0 1.5px 4px rgba(0,0,0,0.08);
     border: 1.5px solid #e0e3ea;
     margin: 0 0 32px 0;
@@ -445,7 +445,7 @@ body {
 }
 .property-image {
     width: 100%;
-    height: 220px;
+    height: 300px;
     overflow: hidden;
     position: relative;
 }
@@ -459,11 +459,12 @@ body {
     transform: scale(1.05);
 }
 .property-content {
-    padding: 1.5rem;
+    padding: 1.2rem;
     position: relative;
+    font-size: 0.92rem;
 }
 .property-title {
-    font-size: 1.15rem;
+    font-size: 1rem;
     font-weight: 600;
     color: #1a1a1a;
     margin-bottom: .75rem;
@@ -475,7 +476,7 @@ body {
     align-items: center;
     gap: .5rem;
     color: #666;
-    font-size: .9rem;
+    font-size: 0.82rem;
     margin-bottom: .5rem;
     font-weight: 500;
 }
@@ -487,7 +488,7 @@ body {
     color: #666;
 }
 .property-price {
-    font-size: 1.3rem;
+    font-size: 1.05rem;
     font-weight: 700;
     color: #3b52d6;
     margin-bottom: 1rem;
@@ -496,7 +497,7 @@ body {
 .property-specs {
     display: flex;
     gap: 1rem;
-    font-size: .85rem;
+    font-size: 0.78rem;
     color: #666;
     padding-top: 1rem;
     border-top: 1px solid rgba(229,229,229,.6);
@@ -518,7 +519,7 @@ body {
     border: none;
     padding: .7rem 1.2rem;
     border-radius: 10px;
-    font-size: .9rem;
+    font-size: 0.85rem;
     font-weight: 600;
     transition: .3s;
     text-decoration: none;
@@ -549,8 +550,13 @@ body {
     .view-details-btn { width: 100%; justify-content: center; }
 }
 @media (max-width:576px) {
-    .property-specs { gap: .5rem; font-size: .8rem; }
-    .property-image { height: 200px; }
+    .property-image { height: 180px; }
+    .property-content { font-size: 0.88rem; }
+    .property-title { font-size: 0.95rem; }
+    .property-location, .property-type { font-size: 0.75rem; }
+    .property-price { font-size: 0.95rem; }
+    .property-specs { font-size: 0.7rem; }
+    .view-details-btn { font-size: 0.8rem; }
 }
 
 /* Footer */
