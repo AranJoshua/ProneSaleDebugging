@@ -550,7 +550,7 @@ body {
     .view-details-btn { width: 100%; justify-content: center; }
 }
 @media (max-width:576px) {
-    .property-image { height: 170px; }
+    .property-image { height: 200px; }
     .property-content { font-size: 0.88rem; }
     .property-title { font-size: 0.95rem; }
     .property-location, .property-type { font-size: 0.75rem; }
