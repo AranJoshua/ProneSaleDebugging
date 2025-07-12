@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Featured properties for sale and rent in Albania. Browse premium real estate listings with detailed information and high-quality images.">
+    <title>Featured Listings - Prone Sale</title>
+    
+    <!-- Preload critical resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    </noscript>
+    
+    <!-- External CSS with integrity checks -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg==" crossorigin="anonymous" referrerpolicy="no-referrer">
+    
+    <style>
+        /* Critical CSS - Inline for faster rendering */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .featured-section {
+            padding: 1rem 0;
+            background: #f8f9fa;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            color: #333;
+            text-align: center;
+        }
+        
+        .property-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .property-card {
+            background: #fff;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border: 1px solid #e9ecef;
+            display: flex;
+            flex-direction: column;
+            min-height: 420px;
+            cursor: pointer;
+            position: relative;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        
+        .property-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        
+        .property-banner {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(135deg, #1e3a8a, #3730a3);
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 20px;
+            z-index: 20;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .banner-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .banner-logo {
+            width: 32px;
+            height: 32px;
+            background: white;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            font-size: 18px;
+            color: #1e3a8a;
+        }
+        
+        .banner-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: white;
+            letter-spacing: 0.5px;
+        }
+        
+        .property-image {
+            width: 100%;
+            height: 400px;
+            position: relative;
+            border-bottom: 1px solid #eee;
+            overflow: hidden;
+        }
+        
+        .property-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 0;
+            transition: transform 0.3s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .property-card:hover .property-image img {
+            transform: scale(1.05);
+        }
+        
+        /* Smooth slide animation for image transitions */
+        .property-image img.sliding {
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform, opacity;
+        }
+        
+        .property-image img.slide-out-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        
+        .property-image img.slide-out-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .property-image img.slide-in-left {
+            transform: translateX(-100%);
+            opacity: 0;
+        }
+        
+        .property-image img.slide-in-right {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        
+        .property-image img.slide-active {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        
+        /* Navigation arrows - enhanced with outline */
+        .property-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            width: 60px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            z-index: 10;
+            border-radius: 16px;
+            box-shadow: none;
+        }
+        
+        .property-nav:hover,
+        .property-nav:active {
+            transform: translateY(-50%);
+            background: none !important;
+            box-shadow: none !important;
+            border: none !important;
+        }
+        
+        .property-nav.prev { left: 10px; }
+        .property-nav.next { right: 10px; }
+        
+        /* Enhanced arrow styling with better outline */
+        .property-nav svg {
+            width: 50px;
+            height: 70px;
+            fill: none;
+            stroke: white;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.9))
+                    drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7))
+                    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5))
+                    drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.4))
+                    drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.9));
+            transition: all 0.3s ease;
+            transform: translateZ(0);
+        }
+        
+        .property-nav:hover svg {
+            filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.95))
+                    drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8))
+                    drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6))
+                    drop-shadow(0 0 0 3px rgba(0, 0, 0, 0.5))
+                    drop-shadow(0 0 0 2px rgba(255, 255, 255, 0.95));
+            transform: translateZ(0) scale(1.05);
+        }
+        
+        .property-nav:active svg {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))
+                    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6))
+                    drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.3))
+                    drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.8));
+            transform: translateZ(0) scale(0.98);
+        }
+        
+        /* Microanimation for button press feedback */
+        .property-nav:active {
+            transform: translateY(-50%) scale(0.95);
+        }
+        
+        .property-nav:active svg {
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))
+                    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6))
+                    drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.3))
+                    drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.8));
+            transform: translateZ(0) scale(0.95);
+        }
+        
+        .property-content {
+            padding: 1.5rem 1.25rem;
+            flex: 1 1 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+        }
+        
+        .property-price-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .property-price {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #222;
+            line-height: 1.2;
+        }
+        
+        .favorite-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            padding: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            border-radius: 8px;
+        }
+        
+        .favorite-btn:hover {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+        
+        .favorite-btn i {
+            font-size: 1.15rem;
+            color: #666;
+        }
+        
+        .favorite-btn.active i {
+            color: #ffc107;
+        }
+        
+        .property-address {
+            color: #666;
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+        }
+        
+        .property-specs-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+        }
+        
+        .property-specs {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #444;
+            font-size: 0.9rem;
+        }
+        
+        .property-spec i {
+            font-size: 0.9rem;
+            color: #888;
+        }
+        
+        .property-type-info {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: #666;
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .property-type-info .bullet {
+            color: #888;
+            font-size: 0.7rem;
+        }
+        
+        /* Loading animation */
+        .loading {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        .loaded {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .property-grid { grid-template-columns: repeat(2, 1fr); }
+            .property-image { height: 300px; }
+            .property-content { padding: 1.1rem 0.9rem; }
+            .property-price { font-size: 1.2rem; }
+            .property-address { font-size: 0.9rem; }
+            .section-title { font-size: 1.7rem; }
+            .banner-name { font-size: 14px; }
+            .property-nav { width: 50px; height: 70px; }
+            .property-nav svg { 
+                width: 42px; 
+                height: 60px; 
+                filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.9))
+                        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.7))
+                        drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5))
+                        drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.4))
+                        drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.9));
+            }
+            .property-nav:hover svg {
+                filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.95))
+                        drop-shadow(0 3px 6px rgba(0, 0, 0, 0.8))
+                        drop-shadow(0 1px 3px rgba(0, 0, 0, 0.6))
+                        drop-shadow(0 0 0 3px rgba(0, 0, 0, 0.5))
+                        drop-shadow(0 0 0 2px rgba(255, 255, 255, 0.95));
+            }
+        }
+        
+        @media (max-width: 600px) {
+            .property-grid { grid-template-columns: 1fr; }
+            .property-image { height: 250px; }
+            .property-content { padding: 1rem 0.7rem; }
+            .property-price { font-size: 1.1rem; }
+            .property-address { font-size: 0.85rem; }
+            .property-specs { font-size: 0.85rem; }
+            .section-title { font-size: 1.5rem; }
+            .property-specs-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.5rem;
+            }
+            .property-banner { height: 45px; padding: 0 15px; }
+            .banner-logo { width: 28px; height: 28px; font-size: 16px; }
+            .banner-name { font-size: 13px; }
+            .property-nav { width: 45px; height: 60px; }
+            .property-nav svg { 
+                width: 38px; 
+                height: 52px; 
+                filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.9))
+                        drop-shadow(0 1px 2px rgba(0, 0, 0, 0.7))
+                        drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.4))
+                        drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.9));
+            }
+            .property-nav:hover svg {
+                filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.95))
+                        drop-shadow(0 2px 4px rgba(0, 0, 0, 0.8))
+                        drop-shadow(0 1px 2px rgba(0, 0, 0, 0.6))
+                        drop-shadow(0 0 0 2px rgba(0, 0, 0, 0.5))
+                        drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.95));
+            }
+        }
+    </style>
+</head>
+<body>
+    <section class="featured-section">
+        <div class="container">
+            <h2 class="section-title">Featured Properties</h2>
+            <div class="property-grid">
+                <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+                    <div class="property-image">
+                        <img src="img/thumbnail1.jpg" alt="Modern City Center Apartment" loading="lazy" width="400" height="400">
+                        <button class="property-nav prev" type="button" aria-label="Previous image" onclick="previousImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="property-nav next" type="button" aria-label="Next image" onclick="nextImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price-row">
+                            <div class="property-price">For Sale $450,000 - $500,000</div>
+                            <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="toggleFavorite(this)">
+                                <i class="far fa-star" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="property-address">Tirana, City Center</div>
+                        <div class="property-specs-row">
+                            <div class="property-specs">
+                                <div class="property-spec">
+                                    <i class="fas fa-bed" aria-hidden="true"></i>
+                                    <span>2</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-bath" aria-hidden="true"></i>
+                                    <span>1</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-car" aria-hidden="true"></i>
+                                    <span>1</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                                    <span>85m²</span>
+                                </div>
+                                <div class="property-type-info">
+                                    <span class="bullet" aria-hidden="true">•</span>
+                                    <span>Apartment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                
+                <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+                    <div class="property-banner">
+                        <div class="banner-brand">
+                            <div class="banner-logo">PE</div>
+                            <div class="banner-name">PrimeEstate</div>
+                        </div>
+                    </div>
+                    <div class="property-image">
+                        <img src="img/thumbnail1.jpg" alt="Luxury Villa with Pool" loading="lazy" width="400" height="400">
+                        <button class="property-nav prev" type="button" aria-label="Previous image" onclick="previousImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="property-nav next" type="button" aria-label="Next image" onclick="nextImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price-row">
+                            <div class="property-price">For Sale $750,000 - $850,000</div>
+                            <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="toggleFavorite(this)">
+                                <i class="far fa-star" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="property-address">Durrës, Beachfront</div>
+                        <div class="property-specs-row">
+                            <div class="property-specs">
+                                <div class="property-spec">
+                                    <i class="fas fa-bed" aria-hidden="true"></i>
+                                    <span>4</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-bath" aria-hidden="true"></i>
+                                    <span>3</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-car" aria-hidden="true"></i>
+                                    <span>2</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                                    <span>250m²</span>
+                                </div>
+                                <div class="property-type-info">
+                                    <span class="bullet" aria-hidden="true">•</span>
+                                    <span>Villa</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Deferred JavaScript loading -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous" defer></script>
+    
+    <script>
+        // Optimized JavaScript with slide animation for image navigation
+        (function() {
+            'use strict';
+            
+            // Utility functions
+            const $ = (selector) => document.querySelector(selector);
+            const $$ = (selector) => document.querySelectorAll(selector);
+            
+            // Image navigation state
+            const imageIndices = new Map();
+            
+            // Initialize image indices for each property card
+            function initializeImageIndices() {
+                $$('.property-card').forEach((card, index) => {
+                    imageIndices.set(card, 0);
+                });
+            }
+            
+            // Get images array from property card
+            function getImagesArray(propertyCard) {
+                try {
+                    const imagesData = propertyCard.getAttribute('data-images');
+                    return JSON.parse(imagesData) || [];
+                } catch (error) {
+                    console.warn('Error parsing images data:', error);
+                    return [];
+                }
+            }
+            
+            // Update image with smooth slide animation
+            function updateImageWithSlide(propertyCard, newIndex, direction) {
+                const images = getImagesArray(propertyCard);
+                if (images.length === 0) return;
+                
+                const img = propertyCard.querySelector('.property-image img');
+                if (!img) return;
+                
+                // Update index
+                imageIndices.set(propertyCard, newIndex);
+                
+                // Determine slide direction
+                const slideOutClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
+                const slideInClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+                
+                // Add sliding class for smooth transitions
+                img.classList.add('sliding');
+                
+                // Remove any existing animation classes
+                img.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right', 'slide-active');
+                
+                // Start slide out animation immediately
+                img.classList.add(slideOutClass);
+                
+                // Use requestAnimationFrame for smooth timing
+                requestAnimationFrame(() => {
+                    // Change image source
+                    img.src = images[newIndex];
+                    
+                    // Remove slide out class and add slide in class
+                    img.classList.remove(slideOutClass);
+                    img.classList.add(slideInClass);
+                    
+                    // Force reflow and start slide in animation
+                    requestAnimationFrame(() => {
+                        img.classList.remove(slideInClass);
+                        img.classList.add('slide-active');
+                        
+                        // Remove sliding class after animation completes
+                        setTimeout(() => {
+                            img.classList.remove('sliding');
+                        }, 300);
+                    });
+                });
+            }
+            
+            // Previous image functionality
+            function previousImage(button) {
+                try {
+                    const propertyCard = button.closest('.property-card');
+                    const images = getImagesArray(propertyCard);
+                    
+                    if (images.length <= 1) return;
+                    
+                    const currentIndex = imageIndices.get(propertyCard) || 0;
+                    const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
+                    
+                    updateImageWithSlide(propertyCard, newIndex, 'prev');
+                } catch (error) {
+                    console.warn('Error in previousImage:', error);
+                }
+            }
+            
+            // Next image functionality
+            function nextImage(button) {
+                try {
+                    const propertyCard = button.closest('.property-card');
+                    const images = getImagesArray(propertyCard);
+                    
+                    if (images.length <= 1) return;
+                    
+                    const currentIndex = imageIndices.get(propertyCard) || 0;
+                    const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
+                    
+                    updateImageWithSlide(propertyCard, newIndex, 'next');
+                } catch (error) {
+                    console.warn('Error in nextImage:', error);
+                }
+            }
+            
+            // Favorite functionality
+            function toggleFavorite(button) {
+                try {
+                    const icon = button.querySelector('i');
+                    const isActive = icon.classList.contains('fas');
+                    
+                    icon.classList.toggle('far', isActive);
+                    icon.classList.toggle('fas', !isActive);
+                    button.classList.toggle('active', !isActive);
+                    
+                    // Optional: Save to memory (no localStorage in artifacts)
+                    const propertyId = button.closest('.property-card').dataset.propertyId || 'default';
+                    // In a real application, you would save this to a database or state management
+                    console.log(`Property ${propertyId} favorited:`, !isActive);
+                } catch (error) {
+                    console.warn('Error toggling favorite:', error);
+                }
+            }
+            
+            // Intersection Observer for animations
+            function initializeAnimations() {
+                if (!('IntersectionObserver' in window)) {
+                    // Fallback for older browsers
+                    $$('.property-card').forEach(card => {
+                        card.classList.remove('loading');
+                        card.classList.add('loaded');
+                    });
+                    return;
+                }
+                
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            entry.target.classList.remove('loading');
+                            entry.target.classList.add('loaded');
+                            observer.unobserve(entry.target); // Stop observing once animated
+                        }
+                    });
+                }, {
+                    threshold: 0.1,
+                    rootMargin: '0px 0px -50px 0px'
+                });
+                
+                $$('.property-card').forEach(card => observer.observe(card));
+            }
+            
+            // Image loading optimization
+            function optimizeImages() {
+                $$('img[loading="lazy"]').forEach(img => {
+                    img.addEventListener('load', function() {
+                        this.style.opacity = '1';
+                    });
+                    img.addEventListener('error', function() {
+                        this.style.opacity = '0.5';
+                        console.warn('Failed to load image:', this.src);
+                    });
+                });
+            }
+            
+            // Initialize when DOM is ready
+            function initializeApp() {
+                initializeImageIndices();
+                initializeAnimations();
+                optimizeImages();
+                initializeKeyboardNavigation();
+                
+                // Make functions globally available
+                window.toggleFavorite = toggleFavorite;
+                window.previousImage = previousImage;
+                window.nextImage = nextImage;
+                
+                console.log('Property listings initialized with slide animation');
+            }
+            
+            // Keyboard navigation support
+            function initializeKeyboardNavigation() {
+                document.addEventListener('keydown', (event) => {
+                    const activeElement = document.activeElement;
+                    const propertyCard = activeElement.closest('.property-card');
+                    
+                    if (!propertyCard) return;
+                    
+                    switch (event.key) {
+                        case 'ArrowLeft':
+                            event.preventDefault();
+                            const prevButton = propertyCard.querySelector('.property-nav.prev');
+                            if (prevButton) previousImage(prevButton);
+                            break;
+                        case 'ArrowRight':
+                            event.preventDefault();
+                            const nextButton = propertyCard.querySelector('.property-nav.next');
+                            if (nextButton) nextImage(nextButton);
+                            break;
+                    }
+                });
+                
+                // Make property cards focusable
+                $$('.property-card').forEach(card => {
+                    card.setAttribute('tabindex', '0');
+                    card.addEventListener('focus', () => {
+                        card.style.outline = '2px solid #1e3a8a';
+                        card.style.outlineOffset = '2px';
+                    });
+                    card.addEventListener('blur', () => {
+                        card.style.outline = 'none';
+                    });
+                });
+            }
+            
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initializeApp);
+            } else {
+                initializeApp();
+            }
+            
+        })();
+    </script>
+</body>
+</html>
