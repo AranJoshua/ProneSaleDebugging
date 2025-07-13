@@ -27,15 +27,9 @@
                         <a class="navbar-brand" href="#">Prone Sale</a>
                     </div>
                     <div class="navbar-mobile-account ms-auto">
-<<<<<<< HEAD
                         <a href="login.html" class="btn btn-account">
                             <i class="fas fa-user"></i>
                         </a>
-=======
-                        <button class="btn btn-account">
-                            <i class="fas fa-user"></i>
-                        </button>
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
                     </div>
                 </div>
                 <!-- Desktop Nav -->
@@ -46,17 +40,10 @@
                         <div class="nav-separator d-none d-lg-block"></div>
                         <div class="navbar-actions">
                             <button class="btn btn-secondary">List Property</button>
-<<<<<<< HEAD
                             <a href="login.html" class="btn btn-account">
                                 <i class="fas fa-user"></i>
                                 Account
                             </a>
-=======
-                            <button class="btn btn-account">
-                                <i class="fas fa-user"></i>
-                                Account
-                            </button>
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
                         </div>
                     </div>
                 </div>
@@ -276,7 +263,6 @@
     <script>
     // Populate nav links in both desktop and mobile from a single source
     const navLinks = [
-<<<<<<< HEAD
         { text: 'Home', href: 'index.html' },
         { text: 'For Sale', href: '#' },
         { text: 'For Rent', href: '#' },
@@ -299,52 +285,23 @@
             const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
             return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
         }).join('');
-=======
-        { text: 'Home', href: '#' },
-        { text: 'For Sale', href: '#' },
-        { text: 'For Rent', href: '#' },
-        { text: 'Agents', href: '#' },
-        { text: 'Blog', href: '#' },
-        { text: 'Contact', href: '#' }
-    ];
-    const mainNav = document.getElementById('mainNavLinks');
-    const mobileNav = document.getElementById('mobileNavLinks');
-    if (mainNav && mobileNav) {
-        mainNav.innerHTML = navLinks.map(link => `<li class='nav-item'><a class='nav-link' href='${link.href}'>${link.text}</a></li>`).join('');
-        mobileNav.innerHTML = navLinks.map(link => `<li><a href='${link.href}'>${link.text}</a></li>`).join('');
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
     }
     // Populate carousel items from a template
     const bannerData = [
         {
             slideClass: 'banner-slide-1',
             h1: 'Find Your Perfect Home',
-<<<<<<< HEAD
             p: 'Explore a wide range of properties for sale and rent throughout Albania.'
-=======
-            p: 'Explore a wide range of properties for sale and rent throughout Albania.',
-            placeholder: 'Enter location, property type, or postal code'
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
         },
         {
             slideClass: 'banner-slide-2',
             h1: 'Discover Dream Properties',
-<<<<<<< HEAD
             p: 'From cozy apartments to luxury villas, find the perfect space for your lifestyle.'
-=======
-            p: 'From cozy apartments to luxury villas, find the perfect space for your lifestyle.',
-            placeholder: 'Search by neighborhood, features, or price range'
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
         },
         {
             slideClass: 'banner-slide-3',
             h1: 'Your New Home Awaits',
-<<<<<<< HEAD
             p: 'Connect with trusted agents and explore verified properties in prime locations.'
-=======
-            p: 'Connect with trusted agents and explore verified properties in prime locations.',
-            placeholder: 'Find homes, apartments, or commercial spaces'
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
         }
     ];
     const bannerCarouselInner = document.getElementById('bannerCarouselInner');
@@ -355,7 +312,6 @@
                     <div class="banner-content">
                         <h1>${item.h1}</h1>
                         <p>${item.p}</p>
-<<<<<<< HEAD
                         <div class="search-form search-form-tabs">
                             <div class="search-tabs" id="searchTabs${idx}">
                                 <button class="search-tab${idx === 0 ? ' active' : ''}" data-tab="buy" type="button">Buy</button>
@@ -372,17 +328,6 @@
                                 <div class="search-buttons-row">
                                     <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
                                     <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
-=======
-                        <div class="search-form">
-                            <div class="row g-3">
-                                <div class="col-md-8">
-                                    <input type="text" class="form-control" placeholder="${item.placeholder}">
-                                </div>
-                                <div class="col-md-4">
-                                    <button type="button" class="btn btn-primary w-100">
-                                        <i class="fas fa-search"></i>Search
-                                    </button>
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
                                 </div>
                             </div>
                         </div>
@@ -391,7 +336,6 @@
             </div>
         `).join('');
     }
-<<<<<<< HEAD
     // Add tab switching logic for all search bars in all slides
     (function() {
         document.addEventListener('DOMContentLoaded', function() {
@@ -433,8 +377,6 @@
             });
         });
     })();
-=======
->>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
     </script>
 </body>
 </html>
