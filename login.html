@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Prone Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="login.css">
+</head>
+<body>
+    <div class="loading-animation"></div>
+    
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand" href="index.html">Prone Sale</a>
+                <div class="navbar-actions">
+                    <a href="index.html" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Home
+                    </a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="auth-container">
+        <div class="container">
+            <div class="auth-wrapper">
+                <!-- Auth Card -->
+                <div class="auth-card">
+                    <!-- Step 1: Login/Signup Choice -->
+                    <div class="auth-step" id="step1" data-step="1">
+                        <div class="auth-header">
+                            <h1>Welcome to Prone Sale</h1>
+                            <p>Choose how you'd like to access your account</p>
+                        </div>
+                        <div class="auth-options">
+                            <button class="auth-option-btn" data-action="login" type="button" aria-label="Sign in to existing account">
+                                <div class="option-icon">
+                                    <i class="fas fa-sign-in-alt" aria-hidden="true"></i>
+                                </div>
+                                <div class="option-content">
+                                    <h3>Sign In</h3>
+                                    <p>Already have an account? Sign in to continue</p>
+                                </div>
+                            </button>
+                            <button class="auth-option-btn" data-action="signup" type="button" aria-label="Create new account">
+                                <div class="option-icon">
+                                    <i class="fas fa-user-plus" aria-hidden="true"></i>
+                                </div>
+                                <div class="option-content">
+                                    <h3>Sign Up</h3>
+                                    <p>Create a new account to get started</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: User Type Selection (Signup only) -->
+                    <div class="auth-step" id="step2" data-step="2" style="display: none;">
+                        <div class="auth-header">
+                            <div class="auth-header-row">
+                                <button class="back-btn" type="button" aria-label="Go back to previous step">
+                                    <!-- Removed icon -->
+                                </button>
+                                <h1>Choose Account Type</h1>
+                            </div>
+                            <div class="auth-header-desc">Select the type of account that best fits your needs</div>
+                        </div>
+                        <div class="auth-options">
+                            <button class="auth-option-btn" data-user-type="private" type="button" aria-label="Create private user account">
+                                <!-- Removed icon -->
+                                <div class="option-content">
+                                    <h3>Private User</h3>
+                                    <p>Individual looking to buy, sell, or rent properties</p>
+                                </div>
+                            </button>
+                            <button class="auth-option-btn" data-user-type="agency" type="button" aria-label="Create agency account">
+                                <!-- Removed icon -->
+                                <div class="option-content">
+                                    <h3>Real Estate Agency</h3>
+                                    <p>Professional agency managing multiple properties</p>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Login Form -->
+                    <div class="auth-step" id="step3" data-step="3" style="display: none;">
+                        <div class="auth-header">
+                            <div class="auth-header-row">
+                                <button class="back-btn" type="button" aria-label="Go back to previous step">
+                                    <!-- Removed icon -->
+                                </button>
+                                <h1>Sign In</h1>
+                            </div>
+                            <div class="auth-header-desc">Welcome back! Please sign in to your account</div>
+                        </div>
+                        <form class="auth-form" id="loginForm" novalidate>
+                            <div class="form-group">
+                                <label for="loginEmail">Email Address</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="email" id="loginEmail" name="email" required autocomplete="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="loginPassword">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="loginPassword" name="password" required autocomplete="current-password">
+                                    <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-options">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="remember" autocomplete="off">
+                                    <span class="checkmark"></span>
+                                    Remember me
+                                </label>
+                                <a href="#" class="forgot-password">Forgot Password?</a>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span class="btn-text">Sign In</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    Signing In...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Step 4: Private User Signup Form -->
+                    <div class="auth-step" id="step4" data-step="4" style="display: none;">
+                        <div class="auth-header">
+                            <div class="auth-header-row">
+                                <button class="back-btn" type="button" aria-label="Go back to previous step">
+                                    <!-- Removed icon -->
+                                </button>
+                                <h1>Create Private Account</h1>
+                            </div>
+                            <div class="auth-header-desc">Join Prone Sale as a private user</div>
+                        </div>
+                        <form class="auth-form" id="privateSignupForm" novalidate>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="privateFirstName">First Name</label>
+                                    <div class="input-group">
+                                        <!-- Removed icon -->
+                                        <input type="text" id="privateFirstName" name="firstName" required autocomplete="given-name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="privateLastName">Last Name</label>
+                                    <div class="input-group">
+                                        <!-- Removed icon -->
+                                        <input type="text" id="privateLastName" name="lastName" required autocomplete="family-name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privateEmail">Email Address</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="email" id="privateEmail" name="email" required autocomplete="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privatePhone">Phone Number</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="tel" id="privatePhone" name="phone" required autocomplete="tel">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privatePassword">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="privatePassword" name="password" required autocomplete="new-password">
+                                    <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="privateConfirmPassword">Confirm Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="privateConfirmPassword" name="confirmPassword" required autocomplete="new-password">
+                                    <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-options">
+                                <label class="checkbox-label" style="align-items: flex-start; gap: 0.5rem; width: 100%;">
+                                    <input type="checkbox" name="terms" required autocomplete="off">
+                                    <span class="checkmark"></span>
+                                    <span style="display: inline; font-size: 0.95em; color: #6b7280; font-weight: 400;">
+                                        Yes, I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>.
+                                    </span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span class="btn-text">Create Account</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    Creating Account...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Step 5: Agency Signup Form -->
+                    <div class="auth-step" id="step5" data-step="5" style="display: none;">
+                        <div class="auth-header">
+                            <div class="auth-header-row">
+                                <button class="back-btn" type="button" aria-label="Go back to previous step">
+                                    <!-- Removed icon -->
+                                </button>
+                                <h1>Create Agency Account</h1>
+                            </div>
+                            <div class="auth-header-desc">Join Prone Sale as a real estate agency</div>
+                        </div>
+                        <form class="auth-form" id="agencySignupForm" novalidate>
+                            <div class="form-group">
+                                <label for="agencyLicense">Agency License Number / NIPT</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="text" id="agencyLicense" name="license" required>
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="agentFirstName">Agent First Name</label>
+                                    <div class="input-group">
+                                        <!-- Removed icon -->
+                                        <input type="text" id="agentFirstName" name="agentFirstName" required autocomplete="given-name">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="agentLastName">Agent Last Name</label>
+                                    <div class="input-group">
+                                        <!-- Removed icon -->
+                                        <input type="text" id="agentLastName" name="agentLastName" required autocomplete="family-name">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="agencyName">Agency Name</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="text" id="agencyName" name="agencyName" required autocomplete="organization">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="agencyEmail">Email Address</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="email" id="agencyEmail" name="email" required autocomplete="email">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="agencyPhone">Phone Number</label>
+                                <div class="input-group">
+                                    <!-- Removed icon -->
+                                    <input type="tel" id="agencyPhone" name="phone" required autocomplete="tel">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="agencyPassword">Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="agencyPassword" name="password" required autocomplete="new-password">
+                                    <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="agencyConfirmPassword">Confirm Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="agencyConfirmPassword" name="confirmPassword" required autocomplete="new-password">
+                                    <button type="button" class="password-toggle" aria-label="Toggle password visibility">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="form-options">
+                                <label class="checkbox-label" style="align-items: flex-start; gap: 0.5rem; width: 100%;">
+                                    <input type="checkbox" name="terms" required autocomplete="off">
+                                    <span class="checkmark"></span>
+                                    <span style="display: inline; font-size: 0.95em; color: #6b7280; font-weight: 400;">
+                                        Yes, I agree to the <a href="#" class="link">Terms of Service</a> and <a href="#" class="link">Privacy Policy</a>.
+                                    </span>
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span class="btn-text">Create Agency Account</span>
+                                <span class="btn-loading" style="display: none;">
+                                    <i class="fas fa-spinner fa-spin"></i>
+                                    Creating Account...
+                                </span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="login.js"></script>
+</body>
+</html> 

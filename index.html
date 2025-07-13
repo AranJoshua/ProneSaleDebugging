@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prone Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="loading-animation"></div>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Mobile Nav -->
+                <div class="d-flex w-100 align-items-center d-lg-none">
+                    <div class="navbar-mobile-left">
+                        <button class="navbar-toggler mobile-menu-open-trigger" type="button" aria-label="Open menu">
+                            <i class="fas fa-bars menu-icon"></i>
+                            <i class="fas fa-times close-icon" style="display:none;"></i>
+                        </button>
+                        <a class="navbar-brand" href="#">Prone Sale</a>
+                    </div>
+                    <div class="navbar-mobile-account ms-auto">
+                        <a href="login.html" class="btn btn-account">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="d-none d-lg-flex w-100 align-items-center justify-content-between">
+                    <a class="navbar-brand" href="#">Prone Sale</a>
+                    <div class="collapse navbar-collapse show" id="navbarNav">
+                        <ul class="navbar-nav me-auto" id="mainNavLinks"></ul>
+                        <div class="nav-separator d-none d-lg-block"></div>
+                        <div class="navbar-actions">
+                            <button class="btn btn-secondary">List Property</button>
+                            <a href="login.html" class="btn btn-account">
+                                <i class="fas fa-user"></i>
+                                Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-menu-overlay"></div>
+    <nav class="mobile-menu-panel">
+        <ul class="mobile-menu-list" id="mobileNavLinks"></ul>
+        <div class="mobile-menu-actions">
+            <button class="btn btn-secondary w-100">List Property</button>
+        </div>
+    </nav>
+    <section class="banner-container">
+        <div class="container banner-wide">
+            <div id="bannerCarousel" class="carousel slide banner-carousel" data-bs-ride="carousel" data-bs-interval="5000">
+                <div class="carousel-inner" id="bannerCarouselInner"></div>
+            </div>
+        </div>
+    </section>
+    <!-- BEGIN: Featured Listings Section -->
+    <section class="featured-section">
+        <div class="container">
+            <h2 class="section-title">Featured Properties</h2>
+            <div class="property-grid">
+                <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+                    <div class="property-image">
+                        <img src="img/thumbnail1.jpg" alt="Modern City Center Apartment" loading="lazy" width="400" height="400">
+                        <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price-row">
+                            <div class="property-price">For Sale $450,000 - $500,000</div>
+                            <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                                <i class="far fa-star" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="property-address">Tirana, City Center</div>
+                        <div class="property-specs-row">
+                            <div class="property-specs">
+                                <div class="property-spec">
+                                    <i class="fas fa-bed" aria-hidden="true"></i>
+                                    <span>2</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-bath" aria-hidden="true"></i>
+                                    <span>1</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-car" aria-hidden="true"></i>
+                                    <span>1</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                                    <span>85m²</span>
+                                </div>
+                                <div class="property-type-info">
+                                    <span class="bullet" aria-hidden="true">•</span>
+                                    <span>Apartment</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+                <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+                    <div class="property-banner">
+                        <div class="banner-brand">
+                            <div class="banner-logo">PE</div>
+                            <div class="banner-name">PrimeEstate</div>
+                        </div>
+                    </div>
+                    <div class="property-image">
+                        <img src="img/thumbnail1.jpg" alt="Luxury Villa with Pool" loading="lazy" width="400" height="400">
+                        <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                        <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="property-content">
+                        <div class="property-price-row">
+                            <div class="property-price">For Sale $750,000 - $850,000</div>
+                            <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                                <i class="far fa-star" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="property-address">Durrës, Beachfront</div>
+                        <div class="property-specs-row">
+                            <div class="property-specs">
+                                <div class="property-spec">
+                                    <i class="fas fa-bed" aria-hidden="true"></i>
+                                    <span>4</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-bath" aria-hidden="true"></i>
+                                    <span>3</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-car" aria-hidden="true"></i>
+                                    <span>2</span>
+                                </div>
+                                <div class="property-spec">
+                                    <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                                    <span>250m²</span>
+                                </div>
+                                <div class="property-type-info">
+                                    <span class="bullet" aria-hidden="true">•</span>
+                                    <span>Villa</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+    <!-- END: Featured Listings Section -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mb-4">
+                        <div class="footer-brand">Prone Sale</div>
+                        <p class="footer-description">
+                            Your trusted partner in finding the perfect property. We connect you with premium real estate opportunities across Albania.
+                        </p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tirana, Albania</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i>
+                                <span>+355 69 123 4567</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@pronesale.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Quick Links</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Properties</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">For Sale</a></li>
+                                <li><a href="#">For Rent</a></li>
+                                <li><a href="#">Send Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Follow Us</h6>
+                            <p class="footer-description" style="max-width:230px;margin-bottom:1rem;">
+                                Stay connected with us for the latest property updates and news.
+                            </p>
+                            <div class="social-links">
+                                <a href="#" class="social-link" aria-label="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        &copy; 2025 Prone Sale. All rights reserved.
+                    </p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="index.js"></script>
+    <script>
+    // Populate nav links in both desktop and mobile from a single source
+    const navLinks = [
+        { text: 'Home', href: 'index.html' },
+        { text: 'For Sale', href: '#' },
+        { text: 'For Rent', href: '#' },
+        { text: 'Agents', href: 'agents.html' },
+        { text: 'Blog', href: '#' },
+        { text: 'Contact', href: '#' }
+    ];
+    
+    // Get current page to highlight active nav item
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    
+    const mainNav = document.getElementById('mainNavLinks');
+    const mobileNav = document.getElementById('mobileNavLinks');
+    if (mainNav && mobileNav) {
+        mainNav.innerHTML = navLinks.map(link => {
+            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
+            return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
+        }).join('');
+        mobileNav.innerHTML = navLinks.map(link => {
+            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
+            return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
+        }).join('');
+    }
+    // Populate carousel items from a template
+    const bannerData = [
+        {
+            slideClass: 'banner-slide-1',
+            h1: 'Find Your Perfect Home',
+            p: 'Explore a wide range of properties for sale and rent throughout Albania.'
+        },
+        {
+            slideClass: 'banner-slide-2',
+            h1: 'Discover Dream Properties',
+            p: 'From cozy apartments to luxury villas, find the perfect space for your lifestyle.'
+        },
+        {
+            slideClass: 'banner-slide-3',
+            h1: 'Your New Home Awaits',
+            p: 'Connect with trusted agents and explore verified properties in prime locations.'
+        }
+    ];
+    const bannerCarouselInner = document.getElementById('bannerCarouselInner');
+    if (bannerCarouselInner) {
+        bannerCarouselInner.innerHTML = bannerData.map((item, idx) => `
+            <div class="carousel-item${idx === 0 ? ' active' : ''}">
+                <div class="banner-slide ${item.slideClass}">
+                    <div class="banner-content">
+                        <h1>${item.h1}</h1>
+                        <p>${item.p}</p>
+                        <div class="search-form search-form-tabs">
+                            <div class="search-tabs" id="searchTabs${idx}">
+                                <button class="search-tab${idx === 0 ? ' active' : ''}" data-tab="buy" type="button">Buy</button>
+                                <button class="search-tab" data-tab="rent" type="button">Rent</button>
+                                <button class="search-tab" data-tab="agents" type="button">Agents</button>
+                                <div class="tab-underline"></div>
+                            </div>
+                            <div class="search-bar-group">
+                                <input type="text" class="form-control search-input" placeholder="Search suburb, postcode or state">
+                                <!-- Desktop buttons -->
+                                <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
+                                <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                                <!-- Mobile buttons -->
+                                <div class="search-buttons-row">
+                                    <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
+                                    <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    // Add tab switching logic for all search bars in all slides
+    (function() {
+        document.addEventListener('DOMContentLoaded', function() {
+            const allTabs = document.querySelectorAll('.search-tabs');
+            allTabs.forEach((tabsContainer) => {
+                const tabs = tabsContainer.querySelectorAll('.search-tab');
+                const underline = tabsContainer.querySelector('.tab-underline');
+                const barGroup = tabsContainer.parentElement.querySelector('.search-bar-group');
+                const input = barGroup.querySelector('.search-input');
+                const filtersBtn = barGroup.querySelector('.search-filters');
+                const mobileFiltersBtn = barGroup.querySelector('.search-buttons-row .search-filters');
+                function moveUnderline(idx) {
+                    if (underline) {
+                        underline.style.transform = `translateX(${idx * 100}%)`;
+                    }
+                }
+                tabs.forEach((tab, idx) => {
+                    tab.addEventListener('click', function() {
+                        tabs.forEach(t => t.classList.remove('active'));
+                        this.classList.add('active');
+                        moveUnderline(idx);
+                        // Update input placeholder and filters button (desktop & mobile)
+                        if (tab.dataset.tab === 'agents') {
+                            input.placeholder = 'Search for agents by name, location, or agency';
+                            if (filtersBtn) filtersBtn.style.display = 'none';
+                            if (mobileFiltersBtn) mobileFiltersBtn.style.display = 'none';
+                        } else {
+                            input.placeholder = 'Search suburb, postcode or state';
+                            if (filtersBtn) filtersBtn.style.display = '';
+                            if (mobileFiltersBtn) mobileFiltersBtn.style.display = '';
+                        }
+                    });
+                });
+                // Set initial state
+                moveUnderline(0);
+                input.placeholder = 'Search suburb, postcode or state';
+                if (filtersBtn) filtersBtn.style.display = '';
+                if (mobileFiltersBtn) mobileFiltersBtn.style.display = '';
+            });
+        });
+    })();
+    </script>
+</body>
+</html>
