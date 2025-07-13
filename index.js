@@ -32,8 +32,12 @@
 
     // Use event delegation for search button microanimation
     document.addEventListener('click', function(e) {
+<<<<<<< HEAD
         // Only trigger for .search-btn, not .search-filters
         const btn = e.target.closest('.search-form .search-btn');
+=======
+        const btn = e.target.closest('.search-form .btn');
+>>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
         if (btn) {
             const input = btn.closest('.search-form').querySelector('.form-control');
             if (input.value.trim() === '') {
@@ -41,8 +45,13 @@
                 input.focus();
                 setTimeout(() => input.style.borderColor = '#e5e7eb', 2000);
             } else {
+<<<<<<< HEAD
                 btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Search';
                 setTimeout(() => btn.innerHTML = '<i class="fas fa-search"></i> Search', 2000);
+=======
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>Searching...';
+                setTimeout(() => btn.innerHTML = '<i class="fas fa-search"></i>Search', 2000);
+>>>>>>> 80532c70f6867b3a4dc841d6f072c032165b1719
             }
         }
     });
