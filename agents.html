@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Find Agents - Prone Sale</title>
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -11,179 +12,11 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="index.css">
-    <style>
-        .agents-section {
-            padding: 2.5rem 0 0.5rem 0;
-            background: #f8f9fa;
-        }
-        .agents-section .section-title {
-            font-size: 2.2rem;
-            margin-top: 0.5rem;
-            margin-bottom: 3.5rem;
-        }
-        .premium-agents {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 2rem;
-            justify-content: center;
-            margin-bottom: 2rem;
-        }
-        .regular-agents {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1.5rem;
-            justify-content: center;
-        }
-        .agents-divider {
-            width: 100%;
-            height: 1px;
-            background: linear-gradient(to right, transparent, #d1d5db, transparent);
-            margin: 2rem 0;
-        }
-        .agent-card {
-            background: #fff;
-            border-radius: 18px;
-            box-shadow: 0 4px 24px rgba(30,58,138,0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: box-shadow .3s, transform .3s;
-            position: relative;
-        }
-        .agent-card:hover {
-            transform: translateY(-4px) scale(1.03);
-        }
-        /* Premium Agent Cards */
-        .agent-card.premium {
-            width: 360px;
-            padding: 0 2rem 1.8rem 2rem;
-            box-shadow: 0 6px 32px rgba(30,58,138,0.12), 0 0 0 1px rgba(79,70,229,0.1);
-        }
-        .agent-card.premium:hover {
-            box-shadow: 0 12px 48px rgba(30,58,138,0.2), 0 0 0 1px rgba(79,70,229,0.15);
-        }
-        .agency-banner {
-            width: calc(100% + 4rem);
-            height: 55px;
-            background: linear-gradient(135deg, #1e3a8a, #3b82f6);
-            border-radius: 18px 18px 0 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin: -18px -2rem 1.5rem -2rem;
-        }
-        /* Regular Agent Cards */
-        .agent-card.regular {
-            width: 360px;
-            padding: 2.2rem 2rem 1.8rem 2rem;
-        }
-        .agent-card.regular:hover {
-            box-shadow: 0 8px 32px rgba(30,58,138,0.16);
-        }
-        .agent-avatar {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            overflow: hidden;
-            border: 4px solid #e5e7eb;
-            margin-bottom: 1.3rem;
-            background: #f3f4f6;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-        }
-        .agent-card.premium {
-            position: relative;
-            border: 1px solid #d1d5db;
-            border-radius: 20px;
-        }
-        .agent-card.regular .agent-avatar {
-            width: 120px;
-            height: 120px;
-        }
-        .agent-avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .agent-name {
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 1.4rem;
-            color: #1a1a1a;
-            margin-bottom: 0.3rem;
-            text-align: center;
-        }
-        .agent-card.regular .agent-name {
-            font-size: 1.2rem;
-        }
-        .agent-company {
-            font-size: 1.1rem;
-            color: #374151;
-            margin-bottom: 1rem;
-            text-align: center;
-        }
-        .agent-card.regular .agent-company {
-            font-size: 1rem;
-        }
-        .agent-properties {
-            background: #e0e7ff;
-            color: #1e3a8a;
-            font-weight: 600;
-            border-radius: 8px;
-            padding: 0.7rem 1.5rem;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            display: inline-block;
-        }
-        .agent-card.regular .agent-properties {
-            font-size: 1rem;
-            padding: 0.6rem 1.2rem;
-        }
-        .agent-contact {
-            margin-top: 0.7rem;
-            display: flex;
-            gap: 1.2rem;
-            justify-content: center;
-        }
-        .agent-contact a {
-            color: #1e3a8a;
-            font-size: 1.2rem;
-            transition: color .2s;
-        }
-        .agent-contact a:hover {
-            color: #2563eb;
-        }
-        @media (max-width: 900px) {
-            .premium-agents { gap: 1.5rem; }
-            .regular-agents { gap: 1.5rem; }
-            .agent-card.premium { width: 90vw; max-width: 360px; }
-            .agent-card.regular { width: 90vw; max-width: 340px; }
-            .premium-agents .agent-card.premium { margin-bottom: 1.5rem; }
-        }
-        @media (max-width: 600px) {
-            .agents-section { padding: 2rem 0 1rem 0; }
-            .agent-card.premium { padding: 0 1.5rem 1.5rem 1.5rem; width: 90vw; max-width: 340px; }
-            .agent-card.regular { padding: 1.8rem 1.5rem 1.3rem 1.5rem; width: 90vw; max-width: 320px; }
-            .agent-avatar { width: 120px; height: 120px; }
-            .agent-card.regular .agent-avatar { width: 105px; height: 105px; }
-            .agent-name { font-size: 1.25rem; }
-            .agent-card.regular .agent-name { font-size: 1.1rem; }
-            .agency-banner { 
-                height: 50px; 
-                font-size: 1rem; 
-                width: calc(100% + 3rem);
-                margin: -18px -1.5rem 1.5rem -1.5rem;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="agents.css">
 </head>
 <body>
     <div class="loading-animation"></div>
+    
     <header class="header">
         <nav class="navbar navbar-expand-lg">
             <div class="container">
@@ -201,6 +34,7 @@
                         </a>
                     </div>
                 </div>
+                
                 <div class="d-none d-lg-flex w-100 align-items-center justify-content-between">
                     <a class="navbar-brand" href="index.html">Prone Sale</a>
                     <div class="collapse navbar-collapse show" id="navbarNav">
@@ -218,6 +52,7 @@
             </div>
         </nav>
     </header>
+    
     <div class="mobile-menu-overlay"></div>
     <nav class="mobile-menu-panel">
         <ul class="mobile-menu-list" id="mobileNavLinks"></ul>
@@ -225,6 +60,7 @@
             <button class="btn btn-secondary w-100">List Property</button>
         </div>
     </nav>
+    
     <section class="banner-container" style="padding: 2.2rem 0 1.2rem 0; min-height: unset;">
         <div class="container banner-wide">
             <div class="banner-carousel" style="border-radius: 2rem; overflow: hidden;">
@@ -233,6 +69,7 @@
                         <div class="banner-content" style="width: 100%; max-width: 700px; margin: 0 auto; text-align: center; color: #fff;">
                             <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.7rem;">Find Agents</h1>
                             <p style="font-size: 1.1rem; margin-bottom: 2rem;">Connect with trusted real estate agents across Albania.</p>
+                            
                             <div class="search-form search-form-tabs" style="background: #fff; border-radius: 1.2rem; box-shadow: 0 4px 32px rgba(30,58,138,0.10); padding: 0.5rem 0.7rem 0.7rem 0.7rem; max-width: 650px; margin: 0 auto;">
                                 <div class="search-tabs" id="agentsSearchTabs">
                                     <button class="search-tab" data-tab="buy" type="button">Buy</button>
@@ -242,10 +79,8 @@
                                 </div>
                                 <div class="search-bar-group">
                                     <input type="text" class="form-control search-input" placeholder="Search for agents by name, location, or agency">
-                                    <!-- Desktop buttons -->
                                     <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
                                     <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
-                                    <!-- Mobile buttons -->
                                     <div class="search-buttons-row">
                                         <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
                                         <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
@@ -258,19 +93,22 @@
             </div>
         </div>
     </section>
+    
     <section class="agents-section featured-section" style="margin-top: -1.2rem;">
         <div class="container">
-            <!-- Premium Agents -->
             <div class="premium-agents">
-                <div class="agent-card premium">
-                    <div class="agency-banner">Real Estate Block</div>
-                    <div class="agent-avatar">
-                        <img src="img/agent1.jpg" alt="Gabriel Esposito">
+                <a href="agent-profile.html" style="text-decoration: none; color: inherit;">
+                    <div class="agent-card premium">
+                        <div class="agency-banner">Real Estate Block</div>
+                        <div class="agent-avatar">
+                            <img src="img/agent1.jpg" alt="Gabriel Esposito">
+                        </div>
+                        <div class="agent-name">Gabriel Esposito</div>
+                        <div class="agent-company">Senior Agent</div>
+                        <div class="agent-properties">12 Properties Sold</div>
                     </div>
-                    <div class="agent-name">Gabriel Esposito</div>
-                    <div class="agent-company">Senior Agent</div>
-                    <div class="agent-properties">12 Properties Sold</div>
-                </div>
+                </a>
+                
                 <div class="agent-card premium">
                     <div class="agency-banner" style="background: linear-gradient(135deg, #059669, #10b981);">MCV Properties</div>
                     <div class="agent-avatar">
@@ -280,6 +118,7 @@
                     <div class="agent-company">Lead Agent</div>
                     <div class="agent-properties">15 Properties Sold</div>
                 </div>
+                
                 <div class="agent-card premium">
                     <div class="agency-banner" style="background: linear-gradient(135deg, #7c3aed, #a855f7);">Elite Realty</div>
                     <div class="agent-avatar">
@@ -291,10 +130,8 @@
                 </div>
             </div>
             
-            <!-- Divider -->
             <div class="agents-divider"></div>
             
-            <!-- Regular Agents -->
             <div class="regular-agents">
                 <div class="agent-card regular">
                     <div class="agent-avatar">
@@ -304,6 +141,7 @@
                     <div class="agent-company">Scott's Agency</div>
                     <div class="agent-properties">8 Properties Sold</div>
                 </div>
+                
                 <div class="agent-card regular">
                     <div class="agent-avatar">
                         <img src="img/agent5.webp" alt="Sarah Johnson">
@@ -312,6 +150,7 @@
                     <div class="agent-company">Anderson Properties</div>
                     <div class="agent-properties">4 Properties Sold</div>
                 </div>
+                
                 <div class="agent-card regular">
                     <div class="agent-avatar">
                         <img src="img/agent6.jpg" alt="Mike Anderson">
@@ -320,10 +159,10 @@
                     <div class="agent-company">Johnson Realty</div>
                     <div class="agent-properties">6 Properties Sold</div>
                 </div>
-
             </div>
         </div>
     </section>
+    
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -337,10 +176,6 @@
                             <div class="contact-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Tirana, Albania</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span>+355 69 123 4567</span>
                             </div>
                             <div class="contact-item">
                                 <i class="fas fa-envelope"></i>
@@ -407,80 +242,256 @@
             </div>
         </div>
     </footer>
+    
+    <div class="filters-modal" style="display:none;">
+        <div class="filters-container">
+            <div class="filters-header">
+                <h2 class="filters-title">Filters</h2>
+                <button class="filters-close-btn" type="button">&times;</button>
+            </div>
+            <div class="filters-content">
+                <div class="filter-tabs">
+                    <button class="filter-tab active" data-tab="buy" type="button">Buy</button>
+                    <button class="filter-tab" data-tab="rent" type="button">Rent</button>
+                    <div class="tab-underline"></div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Property type</h3>
+                    <div class="property-types-container">
+                        <div class="property-category">
+                            <div class="category-header">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+                                <div class="category-title">Residential Properties</div>
+                            </div>
+                            <div class="property-options">
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="apartment">
+                                    <label class="filters-form-check-label" for="apartment">Apartment</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="house">
+                                    <label class="filters-form-check-label" for="house">House</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="villa">
+                                    <label class="filters-form-check-label" for="villa">Villa</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="parking">
+                                    <label class="filters-form-check-label" for="parking">Parking</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="property-category">
+                            <div class="category-header">
+                                <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                                <div class="category-title">Commercial Properties</div>
+                            </div>
+                            <div class="property-options">
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="factory">
+                                    <label class="filters-form-check-label" for="factory">Factory & Warehouse</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="office">
+                                    <label class="filters-form-check-label" for="office">Office</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="retail">
+                                    <label class="filters-form-check-label" for="retail">Shops & Retail</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="hotel">
+                                    <label class="filters-form-check-label" for="hotel">Hotel</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="farm">
+                                    <label class="filters-form-check-label" for="farm">Farm</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="land">
+                                    <label class="filters-form-check-label" for="land">Land & Development</label>
+                                </div>
+                                <div class="filters-form-check">
+                                    <input class="filters-form-check-input" type="checkbox" id="others">
+                                    <label class="filters-form-check-label" for="others">Others</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Price</h3>
+                    <div class="price-row">
+                        <div class="input-group">
+                            <label class="input-label">Min</label>
+                            <div class="select-wrapper">
+                                <select class="filters-form-select">
+                                    <option value="">Any</option>
+                                    <option value="25000">€25,000</option>
+                                    <option value="50000">€50,000</option>
+                                    <option value="75000">€75,000</option>
+                                    <option value="100000">€100,000</option>
+                                    <option value="125000">€125,000</option>
+                                    <option value="150000">€150,000</option>
+                                    <option value="175000">€175,000</option>
+                                    <option value="200000">€200,000</option>
+                                    <option value="250000">€250,000</option>
+                                    <option value="300000">€300,000</option>
+                                    <option value="350000">€350,000</option>
+                                    <option value="400000">€400,000</option>
+                                    <option value="450000">€450,000</option>
+                                    <option value="500000">€500,000</option>
+                                    <option value="600000">€600,000</option>
+                                    <option value="700000">€700,000</option>
+                                    <option value="800000">€800,000</option>
+                                    <option value="900000">€900,000</option>
+                                    <option value="1000000">€1,000,000</option>
+                                    <option value="1100000">€1,100,000</option>
+                                    <option value="1200000">€1,200,000</option>
+                                    <option value="1300000">€1,300,000</option>
+                                    <option value="1400000">€1,400,000</option>
+                                    <option value="1500000">€1,500,000</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Max</label>
+                            <div class="select-wrapper">
+                                <select class="filters-form-select">
+                                    <option value="">Any</option>
+                                    <option value="25000">€25,000</option>
+                                    <option value="50000">€50,000</option>
+                                    <option value="75000">€75,000</option>
+                                    <option value="100000">€100,000</option>
+                                    <option value="125000">€125,000</option>
+                                    <option value="150000">€150,000</option>
+                                    <option value="175000">€175,000</option>
+                                    <option value="200000">€200,000</option>
+                                    <option value="250000">€250,000</option>
+                                    <option value="300000">€300,000</option>
+                                    <option value="350000">€350,000</option>
+                                    <option value="400000">€400,000</option>
+                                    <option value="450000">€450,000</option>
+                                    <option value="500000">€500,000</option>
+                                    <option value="600000">€600,000</option>
+                                    <option value="700000">€700,000</option>
+                                    <option value="800000">€800,000</option>
+                                    <option value="900000">€900,000</option>
+                                    <option value="1000000">€1,000,000</option>
+                                    <option value="1100000">€1,100,000</option>
+                                    <option value="1200000">€1,200,000</option>
+                                    <option value="1300000">€1,300,000</option>
+                                    <option value="1400000">€1,400,000</option>
+                                    <option value="1500000">€1,500,000</option>
+                                    <option value="2000000">€2,000,000+</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Bedrooms</h3>
+                    <div class="single-dropdown">
+                        <div class="select-wrapper">
+                            <select class="filters-form-select">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                                <option value="6">6+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Bathrooms</h3>
+                    <div class="single-dropdown">
+                        <div class="select-wrapper">
+                            <select class="filters-form-select">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Car spaces</h3>
+                    <div class="single-dropdown">
+                        <div class="select-wrapper">
+                            <select class="filters-form-select">
+                                <option value="">Any</option>
+                                <option value="1">1+</option>
+                                <option value="2">2+</option>
+                                <option value="3">3+</option>
+                                <option value="4">4+</option>
+                                <option value="5">5+</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="checkbox-row">
+                        <div class="filters-form-check">
+                            <input class="filters-form-check-input" type="checkbox" id="tenanted">
+                            <label class="filters-form-check-label" for="tenanted">Tenanted Investment</label>
+                        </div>
+                        <div class="filters-form-check">
+                            <input class="filters-form-check-input" type="checkbox" id="vacant">
+                            <label class="filters-form-check-label" for="vacant">Vacant Possession</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Land area</h3>
+                    <div class="area-row">
+                        <div class="input-group">
+                            <label class="input-label">Min (m²)</label>
+                            <input type="number" class="filters-form-control" placeholder="Any" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Max (m²)</label>
+                            <input type="number" class="filters-form-control" placeholder="Any" min="0">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <h3 class="filters-section-title">Floor area</h3>
+                    <div class="area-row">
+                        <div class="input-group">
+                            <label class="input-label">Min (m²)</label>
+                            <input type="number" class="filters-form-control" placeholder="Any" min="0">
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Max (m²)</label>
+                            <input type="number" class="filters-form-control" placeholder="Any" min="0">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filters-footer">
+                <button class="clear-filters-btn" type="button">Clear filters</button>
+                <button class="filters-search-btn" type="button">Search</button>
+            </div>
+        </div>
+    </div>
+    
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="index.js"></script>
-    <script>
-    // Populate nav links in both desktop and mobile from a single source
-    const navLinks = [
-        { text: 'Home', href: 'index.html' },
-        { text: 'For Sale', href: '#' },
-        { text: 'For Rent', href: '#' },
-        { text: 'Agents', href: 'agents.html' },
-        { text: 'Blog', href: '#' },
-        { text: 'Contact', href: '#' }
-    ];
-    
-    // Get current page to highlight active nav item
-    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
-    
-    const mainNav = document.getElementById('mainNavLinks');
-    const mobileNav = document.getElementById('mobileNavLinks');
-    if (mainNav && mobileNav) {
-        mainNav.innerHTML = navLinks.map(link => {
-            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
-            return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
-        }).join('');
-        mobileNav.innerHTML = navLinks.map(link => {
-            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
-            return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
-        }).join('');
-    }
-    
-    // Add tab switching logic for agents search bar
-    (function() {
-        document.addEventListener('DOMContentLoaded', function() {
-            const tabsContainer = document.getElementById('agentsSearchTabs');
-            if (tabsContainer) {
-                const tabs = tabsContainer.querySelectorAll('.search-tab');
-                const underline = tabsContainer.querySelector('.tab-underline');
-                const barGroup = tabsContainer.parentElement.querySelector('.search-bar-group');
-                const input = barGroup.querySelector('.search-input');
-                const filtersBtn = barGroup.querySelector('.search-filters');
-                const mobileFiltersBtn = barGroup.querySelector('.search-buttons-row .search-filters');
-                
-                function moveUnderline(idx) {
-                    if (underline) {
-                        underline.style.transform = `translateX(${idx * 100}%)`;
-                    }
-                }
-                
-                tabs.forEach((tab, idx) => {
-                    tab.addEventListener('click', function() {
-                        tabs.forEach(t => t.classList.remove('active'));
-                        this.classList.add('active');
-                        moveUnderline(idx);
-                        
-                        // Update input placeholder and filters button (desktop & mobile)
-                        if (tab.dataset.tab === 'agents') {
-                            input.placeholder = 'Search for agents by name, location, or agency';
-                            if (filtersBtn) filtersBtn.style.display = 'none';
-                            if (mobileFiltersBtn) mobileFiltersBtn.style.display = 'none';
-                        } else {
-                            input.placeholder = 'Search suburb, postcode or state';
-                            if (filtersBtn) filtersBtn.style.display = '';
-                            if (mobileFiltersBtn) mobileFiltersBtn.style.display = '';
-                        }
-                    });
-                });
-                
-                // Set initial state (Agents tab is active by default)
-                moveUnderline(2); // Agents is the third tab (index 2)
-                input.placeholder = 'Search for agents by name, location, or agency';
-                if (filtersBtn) filtersBtn.style.display = 'none';
-                if (mobileFiltersBtn) mobileFiltersBtn.style.display = 'none';
-            }
-        });
-    })();
-    </script>
+    <script src="agents.js"></script>
 </body>
 </html>

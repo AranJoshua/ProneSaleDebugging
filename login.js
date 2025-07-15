@@ -1,7 +1,7 @@
 (function() {
     'use strict';
 
-    // Configuration
+    // App configuration
     const CONFIG = {
         ANIMATION_DURATION: 400,
         LOADING_DELAY: 1000,
@@ -13,7 +13,7 @@
         PHONE_REGEX: /^[\+]?[0-9\s\-\(\)]{8,}$/
     };
 
-    // State management
+    // Application state
     const state = {
         currentStep: 1,
         selectedUserType: null,
@@ -39,7 +39,6 @@
         5: { back: 2 }
     };
 
-    // Initialize the application
     function init() {
         cacheElements();
         hideLoadingAnimation();
@@ -49,7 +48,6 @@
         addAnimations();
     }
 
-    // Cache DOM elements for better performance
     function cacheElements() {
         elements.loadingAnimation = document.querySelector('.loading-animation');
         elements.authSteps = document.querySelectorAll('.auth-step');
@@ -58,7 +56,6 @@
         elements.backBtns = document.querySelectorAll('.back-btn');
     }
 
-    // Hide loading animation
     function hideLoadingAnimation() {
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => {
@@ -77,24 +74,17 @@
         }
     }
 
-    // Setup event listeners with delegation for better performance
     function setupEventListeners() {
-        // Use event delegation for auth option buttons
         document.addEventListener('click', handleAuthOptionClick);
         
-        // Form submissions
         elements.forms.forEach(form => {
             form.addEventListener('submit', handleFormSubmit);
         });
 
-        // Back button clicks
         document.addEventListener('click', handleBackClick);
-        
-        // Password toggle functionality
         document.addEventListener('click', handlePasswordToggle);
     }
 
-    // Handle auth option button clicks with event delegation
     function handleAuthOptionClick(e) {
         const btn = e.target.closest('.auth-option-btn');
         if (!btn) return;
@@ -115,7 +105,6 @@
         }
     }
 
-    // Handle back button clicks with event delegation
     function handleBackClick(e) {
         const backBtn = e.target.closest('.back-btn');
         if (!backBtn) return;
@@ -131,7 +120,6 @@
         }
     }
 
-    // Handle password toggle functionality
     function handlePasswordToggle(e) {
         const toggleBtn = e.target.closest('.password-toggle');
         if (!toggleBtn) return;
@@ -144,7 +132,6 @@
         
         if (!passwordInput || !icon) return;
 
-        // Toggle password visibility
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
             icon.className = 'fas fa-eye-slash';
@@ -156,37 +143,31 @@
         }
     }
 
-    // Enhanced step navigation with history support
     function navigateToStep(step, pushState = true) {
         if (state.isSubmitting || step === state.currentStep) return;
 
-        // Hide current step
         const currentStepElement = document.querySelector(`[data-step="${state.currentStep}"]`);
         if (currentStepElement) {
             currentStepElement.style.display = 'none';
         }
 
-        // Show target step
         const targetStepElement = document.querySelector(`[data-step="${step}"]`);
         if (targetStepElement) {
             targetStepElement.style.display = 'block';
             state.currentStep = step;
             state.stepHistory.push(step);
             
-            // Add animation class
             targetStepElement.classList.add('fade-in');
             setTimeout(() => {
                 targetStepElement.classList.remove('fade-in');
             }, CONFIG.ANIMATION_DURATION);
         }
 
-        // Update browser history
         if (pushState) {
             history.pushState({ step }, '', '');
         }
     }
 
-    // Handle form submissions
     function handleFormSubmit(e) {
         e.preventDefault();
         
@@ -195,19 +176,15 @@
         const form = e.currentTarget;
         const formId = form.id;
         
-        // Validate form
         if (!validateForm(form)) {
             return;
         }
 
-        // Show loading state
         setFormLoadingState(form, true);
 
-        // Simulate API call
         setTimeout(() => {
             setFormLoadingState(form, false);
             
-            // Handle different form types
             switch (formId) {
                 case 'loginForm':
                     handleLoginSuccess();
@@ -222,22 +199,19 @@
         }, CONFIG.SUBMIT_DELAY);
     }
 
-    // Validate form with improved error handling
     function validateForm(form) {
         const inputs = form.querySelectorAll('input[required]');
         let isValid = true;
 
-        // Clear all previous errors first
         inputs.forEach(input => clearInputError(input));
 
-        // Validate each input
         inputs.forEach(input => {
             if (!validateInput(input)) {
                 isValid = false;
             }
         });
 
-        // Additional validation for password confirmation
+        // Password confirmation validation
         const passwordInputs = form.querySelectorAll('input[type="password"]');
         if (passwordInputs.length === 2) {
             const password = passwordInputs[0].value;
@@ -252,12 +226,10 @@
         return isValid;
     }
 
-    // Validate individual input with comprehensive validation
     function validateInput(input) {
         const type = input.type;
         const name = input.name;
 
-        // Special handling for checkboxes
         if (type === 'checkbox') {
             if (input.hasAttribute('required') && !input.checked) {
                 showInputError(input, 'You must agree to the terms of service');
@@ -268,16 +240,13 @@
 
         const value = input.value.trim();
 
-        // Required validation for non-checkbox inputs
         if (input.hasAttribute('required') && !value) {
             showInputError(input, 'This field is required');
             return false;
         }
 
-        // Skip further validation if empty and not required
         if (!value) return true;
 
-        // Email validation
         if (type === 'email') {
             if (!CONFIG.EMAIL_REGEX.test(value)) {
                 showInputError(input, 'Please enter a valid email address');
@@ -285,7 +254,6 @@
             }
         }
 
-        // Phone validation
         if (name === 'phone') {
             if (!CONFIG.PHONE_REGEX.test(value)) {
                 showInputError(input, 'Please enter a valid phone number');
@@ -293,13 +261,11 @@
             }
         }
 
-        // Password validation
         if (type === 'password') {
             if (value.length < CONFIG.MIN_PASSWORD_LENGTH) {
                 showInputError(input, `Password must be at least ${CONFIG.MIN_PASSWORD_LENGTH} characters long`);
                 return false;
             }
-            // Require at least one symbol
             if (!/[!@#$%^&*(),.?":{}|<>\[\]\\/~`_+=;'\-]/.test(value)) {
                 showInputError(input, 'Password must contain at least one symbol (e.g., !@#$%)');
                 return false;
@@ -309,14 +275,11 @@
         return true;
     }
 
-    // Show input error with improved styling
     function showInputError(input, message) {
         const formGroup = input.closest('.form-group');
         if (!formGroup) return;
 
-        // Handle checkbox errors differently
         if (input.type === 'checkbox') {
-            // For checkboxes, we don't change border color, just show error message
             const existingError = formGroup.querySelector('.error-message');
             if (existingError) {
                 existingError.remove();
@@ -333,16 +296,13 @@
             `;
             formGroup.appendChild(errorDiv);
         } else {
-            // For regular inputs, apply red border
             input.style.borderColor = '#ef4444';
             
-            // Remove existing error message
             const existingError = formGroup.querySelector('.error-message');
             if (existingError) {
                 existingError.remove();
             }
 
-            // Add error message
             const errorDiv = document.createElement('div');
             errorDiv.className = 'error-message';
             errorDiv.textContent = message;
@@ -356,14 +316,11 @@
         }
     }
 
-    // Clear input error
     function clearInputError(input) {
         const formGroup = input.closest('.form-group');
         if (!formGroup) return;
 
-        // For checkboxes, don't reset border color
         if (input.type !== 'checkbox') {
-            // Reset to default border color
             input.style.borderColor = '#e5e7eb';
         }
         
@@ -373,7 +330,6 @@
         }
     }
 
-    // Set form loading state
     function setFormLoadingState(form, loading) {
         const submitBtn = form.querySelector('.btn-submit');
         const btnText = submitBtn.querySelector('.btn-text');
@@ -395,21 +351,18 @@
         }
     }
 
-    // Handle login success
     function handleLoginSuccess() {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, CONFIG.SUCCESS_DELAY);
     }
 
-    // Handle signup success
     function handleSignupSuccess(userType) {
         setTimeout(() => {
             window.location.href = 'index.html';
         }, CONFIG.SUCCESS_DELAY);
     }
 
-    // Show success message (kept for potential future use)
     function showSuccessMessage(message) {
         const successDiv = document.createElement('div');
         successDiv.className = 'success-message';
@@ -437,17 +390,14 @@
         }, CONFIG.SUCCESS_DISPLAY_TIME);
     }
 
-    // Setup form validation with optimized event handling
     function setupFormValidation() {
         const inputs = document.querySelectorAll('input');
         
         inputs.forEach(input => {
-            // Use passive listeners for better performance
             input.addEventListener('blur', () => {
                 validateInput(input);
             }, { passive: true });
             
-            // Handle different input types
             if (input.type === 'checkbox') {
                 input.addEventListener('change', () => {
                     clearInputError(input);
@@ -460,21 +410,17 @@
         });
     }
 
-    // Setup history handling
     function setupHistoryHandling() {
-        // Set initial state
         history.replaceState({ step: 1 }, '', '');
 
-        // Handle browser back/forward
         window.addEventListener('popstate', (event) => {
             const step = event.state && event.state.step ? event.state.step : 1;
             navigateToStep(step, false);
         });
     }
 
-    // Add CSS animations
     function addAnimations() {
-        if (document.querySelector('#login-animations')) return; // Prevent duplicate
+        if (document.querySelector('#login-animations')) return;
 
         const style = document.createElement('style');
         style.id = 'login-animations';
@@ -519,14 +465,13 @@
         document.head.appendChild(style);
     }
 
-    // Initialize when DOM is ready
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
-    // Make functions globally available for debugging
+    // Expose for debugging
     window.loginApp = {
         navigateToStep,
         validateForm,

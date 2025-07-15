@@ -1,4 +1,5 @@
 (function() {
+    // DOM element references
     const header = document.querySelector('.header');
     const loadingAnimation = document.querySelector('.loading-animation');
     const carousel = document.getElementById('bannerCarousel');
@@ -17,22 +18,24 @@
         }
     }
 
+    // Header scroll effect
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     });
 
+    // Hide loading animation
     window.addEventListener('load', () => {
         setTimeout(() => loadingAnimation.style.display = 'none', 1000);
     });
 
+    // Nav link hover effects
     navLinks.forEach(e => {
         e.addEventListener('mouseenter', () => e.style.transform = 'translateY(-1px)');
         e.addEventListener('mouseleave', () => e.style.transform = 'translateY(0)');
     });
 
-    // Use event delegation for search button microanimation
+    // Search button validation and loading states
     document.addEventListener('click', function(e) {
-        // Only trigger for .search-btn, not .search-filters
         const btn = e.target.closest('.search-form .search-btn');
         if (btn) {
             const input = btn.closest('.search-form').querySelector('.form-control');
@@ -47,10 +50,12 @@
         }
     });
 
+    // Mobile menu toggle
     navbarToggler.addEventListener('click', function () {
         this.classList.toggle('active');
     });
 
+    // Dynamic placeholder rotation
     const placeholderSets = [
         [
             'Enter location, property type, or postal code',
@@ -81,6 +86,7 @@
         }, 3000 + 500 * index);
     });
 
+    // Carousel pause on hover
     if (carousel) {
         carousel.addEventListener('mouseenter', () => {
             const c = bootstrap.Carousel.getInstance(carousel);
@@ -92,19 +98,22 @@
         });
     }
 
-    // --- Featured Listings Section Logic (from ftlistings.html) ---
+    // Property listings functionality
     window.ftlistings = (function() {
         'use strict';
-        // Utility functions
+        
         const $ = (selector) => document.querySelector(selector);
         const $$ = (selector) => document.querySelectorAll(selector);
-        // Image navigation state
+        
+        // Image navigation state management
         const imageIndices = new Map();
+        
         function initializeImageIndices() {
             $$('.property-card').forEach((card, index) => {
                 imageIndices.set(card, 0);
             });
         }
+        
         function getImagesArray(propertyCard) {
             try {
                 const imagesData = propertyCard.getAttribute('data-images');
@@ -114,17 +123,22 @@
                 return [];
             }
         }
+        
         function updateImageWithSlide(propertyCard, newIndex, direction) {
             const images = getImagesArray(propertyCard);
             if (images.length === 0) return;
+            
             const img = propertyCard.querySelector('.property-image img');
             if (!img) return;
+            
             imageIndices.set(propertyCard, newIndex);
             const slideOutClass = direction === 'next' ? 'slide-out-left' : 'slide-out-right';
             const slideInClass = direction === 'next' ? 'slide-in-right' : 'slide-in-left';
+            
             img.classList.add('sliding');
             img.classList.remove('slide-out-left', 'slide-out-right', 'slide-in-left', 'slide-in-right', 'slide-active');
             img.classList.add(slideOutClass);
+            
             requestAnimationFrame(() => {
                 img.src = images[newIndex];
                 img.classList.remove(slideOutClass);
@@ -138,11 +152,13 @@
                 });
             });
         }
+        
         function previousImage(button) {
             try {
                 const propertyCard = button.closest('.property-card');
                 const images = getImagesArray(propertyCard);
                 if (images.length <= 1) return;
+                
                 const currentIndex = imageIndices.get(propertyCard) || 0;
                 const newIndex = currentIndex === 0 ? images.length - 1 : currentIndex - 1;
                 updateImageWithSlide(propertyCard, newIndex, 'prev');
@@ -150,11 +166,13 @@
                 console.warn('Error in previousImage:', error);
             }
         }
+        
         function nextImage(button) {
             try {
                 const propertyCard = button.closest('.property-card');
                 const images = getImagesArray(propertyCard);
                 if (images.length <= 1) return;
+                
                 const currentIndex = imageIndices.get(propertyCard) || 0;
                 const newIndex = currentIndex === images.length - 1 ? 0 : currentIndex + 1;
                 updateImageWithSlide(propertyCard, newIndex, 'next');
@@ -162,6 +180,7 @@
                 console.warn('Error in nextImage:', error);
             }
         }
+        
         function toggleFavorite(button) {
             try {
                 const icon = button.querySelector('i');
@@ -169,12 +188,14 @@
                 icon.classList.toggle('far', isActive);
                 icon.classList.toggle('fas', !isActive);
                 button.classList.toggle('active', !isActive);
+                
                 const propertyId = button.closest('.property-card').dataset.propertyId || 'default';
                 console.log(`Property ${propertyId} favorited:`, !isActive);
             } catch (error) {
                 console.warn('Error toggling favorite:', error);
             }
         }
+        
         function initializeAnimations() {
             if (!('IntersectionObserver' in window)) {
                 $$('.property-card').forEach(card => {
@@ -183,6 +204,7 @@
                 });
                 return;
             }
+            
             const observer = new IntersectionObserver(entries => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -195,8 +217,10 @@
                 threshold: 0.1,
                 rootMargin: '0px 0px -50px 0px'
             });
+            
             $$('.property-card').forEach(card => observer.observe(card));
         }
+        
         function optimizeImages() {
             $$('img[loading="lazy"]').forEach(img => {
                 img.addEventListener('load', function() {
@@ -208,21 +232,13 @@
                 });
             });
         }
-        function initializeApp() {
-            initializeImageIndices();
-            initializeAnimations();
-            optimizeImages();
-            initializeKeyboardNavigation();
-            window.ftlistings.toggleFavorite = toggleFavorite;
-            window.ftlistings.previousImage = previousImage;
-            window.ftlistings.nextImage = nextImage;
-            console.log('Property listings initialized with slide animation');
-        }
+        
         function initializeKeyboardNavigation() {
             document.addEventListener('keydown', (event) => {
                 const activeElement = document.activeElement;
                 const propertyCard = activeElement && activeElement.closest && activeElement.closest('.property-card');
                 if (!propertyCard) return;
+                
                 switch (event.key) {
                     case 'ArrowLeft':
                         event.preventDefault();
@@ -236,6 +252,7 @@
                         break;
                 }
             });
+            
             $$('.property-card').forEach(card => {
                 card.setAttribute('tabindex', '0');
                 card.addEventListener('focus', () => {
@@ -247,11 +264,27 @@
                 });
             });
         }
+        
+        function initializeApp() {
+            initializeImageIndices();
+            initializeAnimations();
+            optimizeImages();
+            initializeKeyboardNavigation();
+            
+            // Expose functions globally
+            window.ftlistings.toggleFavorite = toggleFavorite;
+            window.ftlistings.previousImage = previousImage;
+            window.ftlistings.nextImage = nextImage;
+            
+            console.log('Property listings initialized');
+        }
+        
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', initializeApp);
         } else {
             initializeApp();
         }
+        
         return {
             toggleFavorite,
             previousImage,
@@ -259,19 +292,21 @@
         };
     })();
 
-    // Mobile menu open/close logic
+    // Mobile menu functionality
     function openMobileMenu() {
         mobileMenuPanel.classList.add('active');
         openMenuBtn.classList.add('menu-open');
         if (mobileMenuOverlay) mobileMenuOverlay.classList.add('active');
         document.body.style.overflow = 'hidden';
     }
+    
     function closeMobileMenu() {
         mobileMenuPanel.classList.remove('active');
         openMenuBtn.classList.remove('menu-open');
         if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
         document.body.style.overflow = '';
     }
+    
     if (openMenuBtn && mobileMenuPanel) {
         openMenuBtn.addEventListener('click', function() {
             if (mobileMenuPanel.classList.contains('active')) {
@@ -281,10 +316,93 @@
             }
         });
     }
+    
     if (mobileMenuOverlay) {
         mobileMenuOverlay.addEventListener('click', closeMobileMenu);
     }
+    
     mobileMenuPanel.addEventListener('click', function(e) {
         if (e.target.tagName === 'A') closeMobileMenu();
+    });
+
+    // Filter modal functionality
+    document.addEventListener('DOMContentLoaded', function() {
+        window.filtersModal = (function() {
+            const modal = document.querySelector('.filters-modal');
+            if (!modal) return;
+            
+            const closeBtn = modal.querySelector('.filters-close-btn');
+            const clearBtn = modal.querySelector('.clear-filters-btn');
+            const searchBtn = modal.querySelector('.filters-search-btn');
+            const tabs = modal.querySelectorAll('.filter-tab');
+            const underline = modal.querySelector('.tab-underline');
+            
+            function open() {
+                const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+                document.body.style.overflow = 'hidden';
+                if (scrollbarWidth > 0) {
+                    document.body.style.paddingRight = scrollbarWidth + 'px';
+                }
+                modal.style.display = 'flex';
+                setTimeout(() => {
+                    const activeTab = modal.querySelector('.filter-tab.active');
+                    updateUnderlinePosition(activeTab);
+                }, 10);
+            }
+            
+            function close() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }
+            
+            function clear() {
+                modal.querySelectorAll('.filters-form-check-input, .filters-form-select, .filters-form-control').forEach(input => {
+                    if (input.type === 'checkbox') input.checked = false;
+                    else input.value = '';
+                });
+            }
+            
+            function updateUnderlinePosition(tab) {
+                if (!tab || !underline) return;
+                const tabRect = tab.getBoundingClientRect();
+                const tabsRect = tab.parentElement.getBoundingClientRect();
+                const left = tabRect.left - tabsRect.left;
+                const width = tabRect.width;
+                underline.style.left = `${left}px`;
+                underline.style.width = `${width}px`;
+            }
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    updateUnderlinePosition(this);
+                });
+            });
+            
+            window.addEventListener('resize', () => {
+                const activeTab = modal.querySelector('.filter-tab.active');
+                updateUnderlinePosition(activeTab);
+            });
+            
+            closeBtn.addEventListener('click', close);
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) close();
+            });
+            clearBtn.addEventListener('click', clear);
+            searchBtn.addEventListener('click', close);
+            
+            // Open modal on filter button clicks
+            document.addEventListener('click', function(e) {
+                const btn = e.target.closest('.search-filters');
+                if (btn) {
+                    e.preventDefault();
+                    open();
+                }
+            });
+            
+            return { open, close, clear };
+        })();
     });
 })();

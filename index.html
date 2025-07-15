@@ -64,7 +64,7 @@
             </div>
         </div>
     </section>
-    <!-- BEGIN: Featured Listings Section -->
+    <!-- Featured Properties Section -->
     <section class="featured-section">
         <div class="container">
             <h2 class="section-title">Featured Properties</h2>
@@ -174,7 +174,6 @@
             </div>
         </div>
     </section>
-    <!-- END: Featured Listings Section -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -188,10 +187,6 @@
                             <div class="contact-item">
                                 <i class="fas fa-map-marker-alt"></i>
                                 <span>Tirana, Albania</span>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <span>+355 69 123 4567</span>
                             </div>
                             <div class="contact-item">
                                 <i class="fas fa-envelope"></i>
@@ -261,7 +256,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="index.js"></script>
     <script>
-    // Populate nav links in both desktop and mobile from a single source
+    // Navigation links configuration
     const navLinks = [
         { text: 'Home', href: 'index.html' },
         { text: 'For Sale', href: '#' },
@@ -271,7 +266,7 @@
         { text: 'Contact', href: '#' }
     ];
     
-    // Get current page to highlight active nav item
+    // Set active navigation state
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     
     const mainNav = document.getElementById('mainNavLinks');
@@ -286,7 +281,8 @@
             return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
         }).join('');
     }
-    // Populate carousel items from a template
+    
+    // Banner carousel data
     const bannerData = [
         {
             slideClass: 'banner-slide-1',
@@ -304,6 +300,8 @@
             p: 'Connect with trusted agents and explore verified properties in prime locations.'
         }
     ];
+    
+    // Initialize banner carousel
     const bannerCarouselInner = document.getElementById('bannerCarouselInner');
     if (bannerCarouselInner) {
         bannerCarouselInner.innerHTML = bannerData.map((item, idx) => `
@@ -321,10 +319,8 @@
                             </div>
                             <div class="search-bar-group">
                                 <input type="text" class="form-control search-input" placeholder="Search suburb, postcode or state">
-                                <!-- Desktop buttons -->
                                 <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
                                 <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
-                                <!-- Mobile buttons -->
                                 <div class="search-buttons-row">
                                     <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
                                     <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
@@ -336,7 +332,8 @@
             </div>
         `).join('');
     }
-    // Add tab switching logic for all search bars in all slides
+    
+    // Search tab functionality
     (function() {
         document.addEventListener('DOMContentLoaded', function() {
             const allTabs = document.querySelectorAll('.search-tabs');
@@ -347,17 +344,19 @@
                 const input = barGroup.querySelector('.search-input');
                 const filtersBtn = barGroup.querySelector('.search-filters');
                 const mobileFiltersBtn = barGroup.querySelector('.search-buttons-row .search-filters');
+                
                 function moveUnderline(idx) {
                     if (underline) {
                         underline.style.transform = `translateX(${idx * 100}%)`;
                     }
                 }
+                
                 tabs.forEach((tab, idx) => {
                     tab.addEventListener('click', function() {
                         tabs.forEach(t => t.classList.remove('active'));
                         this.classList.add('active');
                         moveUnderline(idx);
-                        // Update input placeholder and filters button (desktop & mobile)
+                        
                         if (tab.dataset.tab === 'agents') {
                             input.placeholder = 'Search for agents by name, location, or agency';
                             if (filtersBtn) filtersBtn.style.display = 'none';
@@ -369,7 +368,7 @@
                         }
                     });
                 });
-                // Set initial state
+                
                 moveUnderline(0);
                 input.placeholder = 'Search suburb, postcode or state';
                 if (filtersBtn) filtersBtn.style.display = '';
@@ -378,5 +377,556 @@
         });
     })();
     </script>
+    <!-- Filter Modal Styles -->
+    <style>
+    .filters-modal {
+        position: fixed !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background: rgba(0,0,0,0.5) !important;
+        justify-content: center !important;
+        align-items: center !important;
+        z-index: 10500 !important;
+    }
+    .filters-modal[style*='display: none'] { display: none !important; }
+    .filters-modal .filters-container {
+        background: #fff !important;
+        border-radius: 16px !important;
+        width: 90vw !important;
+        max-width: 500px !important;
+        max-height: 90vh !important;
+        display: flex !important;
+        flex-direction: column !important;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2) !important;
+        overflow: hidden !important;
+    }
+    .filters-modal .filters-header {
+        padding: 16px 24px 4px !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        display: flex !important;
+        justify-content: center !important;
+        align-items: center !important;
+        position: relative !important;
+        flex-shrink: 0 !important;
+        min-height: 56px !important;
+    }
+    .filters-modal .filters-title {
+        font-size: 22px !important;
+        font-weight: 600 !important;
+        margin: 0 auto !important;
+        color: #1a1a1a !important;
+        line-height: 1.2 !important;
+        display: flex !important;
+        align-items: center !important;
+        height: 100%;
+    }
+    .filters-modal .filters-close-btn {
+        position: absolute !important;
+        right: 20px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        background: none !important;
+        border: none !important;
+        font-size: 24px !important;
+        cursor: pointer !important;
+        padding: 6px !important;
+        color: #666 !important;
+        width: 36px !important;
+        height: 36px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: color 0.2s ease !important;
+    }
+    .filters-modal .filters-close-btn:hover { color: #1e3a8a !important; }
+    .filters-modal .filters-content {
+        flex: 1 1 auto !important;
+        overflow-y: auto !important;
+        padding: 0 24px 20px !important;
+        min-height: 0 !important;
+        height: auto !important;
+    }
+    .filters-modal .filter-tabs {
+        display: flex !important;
+        border-bottom: 1px solid #f0f0f0 !important;
+        margin: 8px 0 20px !important;
+        position: relative !important;
+    }
+    .filters-modal .filter-tab {
+        flex: 1 !important;
+        padding: 12px 0 !important;
+        text-align: center !important;
+        background: none !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-weight: 500 !important;
+        font-size: 14px !important;
+        position: relative !important;
+        transition: all 0.2s ease !important;
+        color: #666 !important;
+    }
+    .filters-modal .filter-tab.active {
+        font-weight: 600 !important;
+        color: #1e3a8a !important;
+    }
+    .filters-modal .tab-underline {
+        position: absolute !important;
+        bottom: -1px !important;
+        height: 2px !important;
+        background: #1e3a8a !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+        border-radius: 1px !important;
+    }
+    .filters-modal .filter-section { margin-bottom: 28px !important; }
+    .filters-modal .filters-section-title {
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        margin-bottom: 16px !important;
+        color: #1a1a1a !important;
+        text-align: left !important;
+    }
+    .filters-modal .property-types-container {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 24px !important;
+        min-height: 180px !important;
+    }
+    .filters-modal .property-category {
+        background: #f8f9fa !important;
+        border-radius: 12px !important;
+        padding: 20px !important;
+        border: 1px solid #e9ecef !important;
+    }
+    .filters-modal .category-header {
+        display: flex !important;
+        align-items: center !important;
+        margin-bottom: 16px !important;
+    }
+    .filters-modal .category-icon {
+        width: 20px !important;
+        height: 20px !important;
+        margin-right: 10px !important;
+        opacity: 0.7 !important;
+    }
+    .filters-modal .category-title {
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        color: #2d3748 !important;
+    }
+    .filters-modal .property-options {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    .filters-modal .filters-form-check {
+        display: flex !important;
+        align-items: center !important;
+        margin-bottom: 0 !important;
+        padding: 8px 0 !important;
+    }
+    .filters-modal .filters-form-check-input {
+        width: 18px !important;
+        height: 18px !important;
+        margin-right: 10px !important;
+        margin-top: 0 !important;
+        border: 1.5px solid #d0d0d0 !important;
+        border-radius: 3px !important;
+        background: white !important;
+        cursor: pointer !important;
+        appearance: none !important;
+        transition: all 0.2s ease !important;
+    }
+    .filters-modal .filters-form-check-input:checked {
+        background-color: #1e3a8a !important;
+        border-color: #1e3a8a !important;
+        background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 9.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e") !important;
+    }
+    .filters-modal .filters-form-check-label {
+        font-size: 13px !important;
+        cursor: pointer !important;
+        color: #4a5568 !important;
+        font-weight: 400 !important;
+        line-height: 1.3 !important;
+    }
+    .filters-modal .price-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+        margin-bottom: 16px !important;
+    }
+    .filters-modal .input-group {
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    .filters-modal .input-label {
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        margin-bottom: 8px !important;
+        color: #4a4a4a !important;
+    }
+    .filters-modal .select-wrapper {
+        position: relative !important;
+        display: inline-block !important;
+        width: 100% !important;
+    }
+    .filters-modal .filters-form-select {
+        padding: 12px 40px 12px 14px !important;
+        border: 1.5px solid #e0e0e0 !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        background-color: white !important;
+        transition: border-color 0.2s ease !important;
+        font-family: inherit !important;
+        width: 100% !important;
+        appearance: none !important;
+        background: none !important;
+        cursor: pointer !important;
+        box-sizing: border-box !important;
+    }
+    .filters-modal .filters-form-control {
+        padding: 12px 14px !important;
+        border: 1.5px solid #e0e0e0 !important;
+        border-radius: 8px !important;
+        font-size: 14px !important;
+        background-color: white !important;
+        transition: border-color 0.2s ease !important;
+        font-family: inherit !important;
+        width: 100% !important;
+        appearance: none !important;
+        background: none !important;
+        cursor: text !important;
+        box-sizing: border-box !important;
+    }
+    .filters-modal .filters-form-select:focus, .filters-modal .filters-form-control:focus {
+        outline: none !important;
+        border-color: #1e3a8a !important;
+    }
+    .filters-modal .select-wrapper::after {
+        content: '' !important;
+        position: absolute !important;
+        right: 14px !important;
+        top: 50% !important;
+        transform: translateY(-50%) !important;
+        width: 0 !important;
+        height: 0 !important;
+        border-left: 5px solid transparent !important;
+        border-right: 5px solid transparent !important;
+        border-top: 6px solid #1e3a8a !important;
+        pointer-events: none !important;
+        transition: border-top-color 0.2s ease !important;
+        z-index: 2 !important;
+    }
+    .filters-modal .select-wrapper:hover::after { border-top-color: #1e40af !important; }
+    .filters-modal .dropdown-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+        margin-bottom: 24px !important;
+    }
+    .filters-modal .single-dropdown {
+        display: flex !important;
+        flex-direction: column !important;
+        margin-bottom: 24px !important;
+    }
+    .filters-modal .checkbox-row {
+        display: flex !important;
+        flex-direction: row !important;
+        gap: 24px !important;
+        margin-bottom: 24px !important;
+        justify-content: flex-start !important;
+        align-items: center !important;
+    }
+    .filters-modal .area-row {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 16px !important;
+        margin-bottom: 16px !important;
+    }
+    .filters-modal .filters-footer {
+        padding: 16px 24px !important;
+        border-top: 1px solid #f0f0f0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        background: white !important;
+        flex-shrink: 0 !important;
+    }
+    .filters-modal .clear-filters-btn {
+        background: none !important;
+        border: none !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        cursor: pointer !important;
+        padding: 8px 16px !important;
+        border-radius: 6px !important;
+        transition: background-color 0.2s ease !important;
+        color: #666 !important;
+    }
+    .filters-modal .clear-filters-btn:hover { background-color: #f5f5f5 !important; }
+    .filters-modal .filters-search-btn {
+        background: #1e3a8a !important;
+        color: white !important;
+        border: none !important;
+        padding: 12px 24px !important;
+        border-radius: 6px !important;
+        font-weight: 600 !important;
+        cursor: pointer !important;
+        transition: background-color 0.2s ease !important;
+        font-size: 14px !important;
+    }
+    .filters-modal .filters-search-btn:hover { background: #1e40af !important; }
+    @media (max-width: 768px) {
+        .filters-modal .filters-container { width: 95vw !important; max-height: 95vh !important; }
+        .filters-modal .filters-header { padding: 12px 20px 8px !important; }
+        .filters-modal .filters-close-btn { right: 16px !important; width: 32px !important; height: 32px !important; font-size: 20px !important; }
+        .filters-modal .filters-content { padding: 0 20px 16px !important; }
+        .filters-modal .filter-tabs { margin: 12px 0 16px !important; }
+        .filters-modal .filters-footer { padding: 12px 20px !important; }
+        .filters-modal .price-row, .filters-modal .dropdown-row, .filters-modal .area-row { grid-template-columns: 1fr !important; gap: 12px !important; }
+        .filters-modal .property-options { grid-template-columns: 1fr !important; }
+        .filters-modal .checkbox-row { flex-direction: column !important; gap: 12px !important; }
+    }
+    </style>
+    <div class="filters-modal" style="display:none;">
+      <div class="filters-container">
+        <div class="filters-header">
+          <h2 class="filters-title">Filters</h2>
+          <button class="filters-close-btn" type="button">&times;</button>
+        </div>
+        <div class="filters-content">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-tab="buy" type="button">Buy</button>
+            <button class="filter-tab" data-tab="rent" type="button">Rent</button>
+            <div class="tab-underline"></div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Property type</h3>
+            <div class="property-types-container">
+              <div class="property-category">
+                <div class="category-header">
+                  <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+                  <div class="category-title">Residential Properties</div>
+                </div>
+                <div class="property-options">
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="apartment">
+                    <label class="filters-form-check-label" for="apartment">Apartment</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="house">
+                    <label class="filters-form-check-label" for="house">House</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="villa">
+                    <label class="filters-form-check-label" for="villa">Villa</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="parking">
+                    <label class="filters-form-check-label" for="parking">Parking</label>
+                  </div>
+                </div>
+              </div>
+              <div class="property-category">
+                <div class="category-header">
+                  <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                  <div class="category-title">Commercial Properties</div>
+                </div>
+                <div class="property-options">
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="factory">
+                    <label class="filters-form-check-label" for="factory">Factory & Warehouse</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="office">
+                    <label class="filters-form-check-label" for="office">Office</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="retail">
+                    <label class="filters-form-check-label" for="retail">Shops & Retail</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="hotel">
+                    <label class="filters-form-check-label" for="hotel">Hotel</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="farm">
+                    <label class="filters-form-check-label" for="farm">Farm</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="land">
+                    <label class="filters-form-check-label" for="land">Land & Development</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="others">
+                    <label class="filters-form-check-label" for="others">Others</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Price</h3>
+            <div class="price-row">
+              <div class="input-group">
+                <label class="input-label">Min</label>
+                <div class="select-wrapper">
+                  <select class="filters-form-select">
+                    <option value="">Any</option>
+                    <option value="25000">€25,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="125000">€125,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="175000">€175,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="350000">€350,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="450000">€450,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="700000">€700,000</option>
+                    <option value="800000">€800,000</option>
+                    <option value="900000">€900,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1100000">€1,100,000</option>
+                    <option value="1200000">€1,200,000</option>
+                    <option value="1300000">€1,300,000</option>
+                    <option value="1400000">€1,400,000</option>
+                    <option value="1500000">€1,500,000</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max</label>
+                <div class="select-wrapper">
+                  <select class="filters-form-select">
+                    <option value="">Any</option>
+                    <option value="25000">€25,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="125000">€125,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="175000">€175,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="350000">€350,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="450000">€450,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="700000">€700,000</option>
+                    <option value="800000">€800,000</option>
+                    <option value="900000">€900,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1100000">€1,100,000</option>
+                    <option value="1200000">€1,200,000</option>
+                    <option value="1300000">€1,300,000</option>
+                    <option value="1400000">€1,400,000</option>
+                    <option value="1500000">€1,500,000</option>
+                    <option value="2000000">€2,000,000+</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Bedrooms</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                  <option value="6">6+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Bathrooms</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Car spaces</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <div class="checkbox-row">
+              <div class="filters-form-check">
+                <input class="filters-form-check-input" type="checkbox" id="tenanted">
+                <label class="filters-form-check-label" for="tenanted">Tenanted Investment</label>
+              </div>
+              <div class="filters-form-check">
+                <input class="filters-form-check-input" type="checkbox" id="vacant">
+                <label class="filters-form-check-label" for="vacant">Vacant Possession</label>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Land area</h3>
+            <div class="area-row">
+              <div class="input-group">
+                <label class="input-label">Min (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Floor area</h3>
+            <div class="area-row">
+              <div class="input-group">
+                <label class="input-label">Min (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filters-footer">
+          <button class="clear-filters-btn" type="button">Clear filters</button>
+          <button class="filters-search-btn" type="button">Search</button>
+        </div>
+      </div>
+    </div>
+
 </body>
 </html>
