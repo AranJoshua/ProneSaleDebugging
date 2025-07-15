@@ -344,16 +344,24 @@
                     document.body.style.paddingRight = scrollbarWidth + 'px';
                 }
                 modal.style.display = 'flex';
+                // Add animation class to content after a tick
                 setTimeout(() => {
+                    const content = modal.querySelector('.filters-container');
+                    if (content) content.classList.add('filters-container-animate-in');
                     const activeTab = modal.querySelector('.filter-tab.active');
                     updateUnderlinePosition(activeTab);
                 }, 10);
             }
             
             function close() {
-                modal.style.display = 'none';
-                document.body.style.overflow = '';
-                document.body.style.paddingRight = '';
+                // Remove animation class from content, then hide after transition
+                const content = modal.querySelector('.filters-container');
+                if (content) content.classList.remove('filters-container-animate-in');
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = '';
+                    document.body.style.paddingRight = '';
+                }, 320); // match CSS transition duration
             }
             
             function clear() {

@@ -1423,3 +1423,24 @@ body {
     margin-top: 0.5rem;
     margin-bottom: 3.2rem;
 }
+
+/* Microanimation for filter modal open */
+.filters-modal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+    pointer-events: auto;
+}
+
+/* Microanimation for filter modal content open */
+.filters-modal .filters-container {
+    opacity: 0;
+    transform: scale(0.97) translateY(30px);
+    transition: opacity 0.32s cubic-bezier(0.4,0,0.2,1), transform 0.32s cubic-bezier(0.4,0,0.2,1);
+    pointer-events: none;
+}
+.filters-modal .filters-container.filters-container-animate-in {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}

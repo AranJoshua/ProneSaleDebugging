@@ -81,12 +81,22 @@ function initializeFilterModal() {
     
     function showFilterModal() {
         filterModal.style.display = 'flex';
+        // Add animation class to content after a tick
+        setTimeout(() => {
+            const content = filterModal.querySelector('.filters-container');
+            if (content) content.classList.add('filters-container-animate-in');
+        }, 10);
         document.body.style.overflow = 'hidden';
     }
     
     function hideFilterModal() {
-        filterModal.style.display = 'none';
-        document.body.style.overflow = '';
+        // Remove animation class from content, then hide after transition
+        const content = filterModal.querySelector('.filters-container');
+        if (content) content.classList.remove('filters-container-animate-in');
+        setTimeout(() => {
+            filterModal.style.display = 'none';
+            document.body.style.overflow = '';
+        }, 320); // match CSS transition duration
     }
     
     function moveFilterTabUnderline(idx) {
@@ -235,9 +245,14 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         function close() {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
-            document.body.style.paddingRight = '';
+            // Remove animation class from content, then hide after transition
+            const content = modal.querySelector('.filters-container');
+            if (content) content.classList.remove('filters-container-animate-in');
+            setTimeout(() => {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                document.body.style.paddingRight = '';
+            }, 320); // match CSS transition duration
         }
         
         function clear() {
