@@ -210,9 +210,93 @@ function initializeSearch() {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+    // --- Filter Modal Logic (copied and adapted from index.js for pixel-perfect underline and modal behavior) ---
+    window.filtersModal = (function() {
+        const modal = document.querySelector('.filters-modal');
+        if (!modal) return;
+        
+        const closeBtn = modal.querySelector('.filters-close-btn');
+        const clearBtn = modal.querySelector('.clear-filters-btn');
+        const searchBtn = modal.querySelector('.filters-search-btn');
+        const tabs = modal.querySelectorAll('.filter-tab');
+        const underline = modal.querySelector('.tab-underline');
+        
+        function open() {
+            const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = 'hidden';
+            if (scrollbarWidth > 0) {
+                document.body.style.paddingRight = scrollbarWidth + 'px';
+            }
+            modal.style.display = 'flex';
+            setTimeout(() => {
+                const activeTab = modal.querySelector('.filter-tab.active');
+                updateUnderlinePosition(activeTab);
+            }, 10);
+        }
+        
+        function close() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+            document.body.style.paddingRight = '';
+        }
+        
+        function clear() {
+            modal.querySelectorAll('.filters-form-check-input, .filters-form-select, .filters-form-control').forEach(input => {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+        }
+        
+        function updateUnderlinePosition(tab) {
+            if (!tab || !underline) return;
+            const tabRect = tab.getBoundingClientRect();
+            const tabsRect = tab.parentElement.getBoundingClientRect();
+            const left = tabRect.left - tabsRect.left;
+            const width = tabRect.width;
+            underline.style.left = `${left}px`;
+            underline.style.width = `${width}px`;
+        }
+        
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function() {
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                updateUnderlinePosition(this);
+            });
+        });
+        
+        window.addEventListener('resize', () => {
+            const activeTab = modal.querySelector('.filter-tab.active');
+            updateUnderlinePosition(activeTab);
+        });
+        
+        if (closeBtn) closeBtn.addEventListener('click', close);
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) close();
+        });
+        if (clearBtn) clearBtn.addEventListener('click', clear);
+        if (searchBtn) searchBtn.addEventListener('click', close);
+        
+        // Open modal on filter button clicks
+        document.addEventListener('click', function(e) {
+            const btn = e.target.closest('.search-filters');
+            if (btn) {
+                e.preventDefault();
+                open();
+            }
+        });
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                close();
+            }
+        });
+        
+        return { open, close, clear };
+    })();
     initializeNavigation();
     initializeSearchTabs();
-    initializeFilterModal();
     initializeAgentCards();
     initializeSearch();
 });
