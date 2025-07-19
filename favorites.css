@@ -1,4 +1,8 @@
+/* Favorites Tab Styles - Uniform with Dashboard & Homepage */
+
+/* Collections Section */
 .collections-section {
+  /* Remove card styles to match My Listings */
   background: none;
   border-radius: 0;
   box-shadow: none;
@@ -120,6 +124,7 @@
   color: #b91c1c;
 }
 
+/* Collection View Header */
 #collectionViewHeader {
   display: flex;
   align-items: center;
@@ -149,12 +154,14 @@
   color: #1a1a1a;
 }
 
+/* Property Grid (Favorites) - Match homepage */
 .property-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
   gap: 1.5rem;
 }
 
+/* Property Card - Match homepage */
 .property-card {
   background: #fff;
   border-radius: 16px;
@@ -309,6 +316,7 @@
   color: #ffc107;
 }
 .favorite-btn.active {
+  /* Optional: add a subtle background or border if desired */
 }
 .property-address {
   color: #666;
@@ -346,6 +354,7 @@
   font-size: 0.7rem;
 }
 
+/* Empty State */
 .favorites-empty-state {
   display: flex;
   flex-direction: column;
@@ -386,6 +395,7 @@
   background: #1e40af;
 }
 
+/* Confirmation Dialog */
 .favorites-confirm-dialog {
   position: fixed;
   top: 0; left: 0; right: 0; bottom: 0;
@@ -437,6 +447,7 @@
   background: #1e40af;
 }
 
+/* Responsive Design - Match homepage */
 @media (max-width: 900px) {
   .property-grid { grid-template-columns: repeat(2, 1fr); }
   .property-image { height: 300px; }
