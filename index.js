@@ -1,5 +1,4 @@
 (function() {
-    // DOM element references
     const header = document.querySelector('.header');
     const loadingAnimation = document.querySelector('.loading-animation');
     const carousel = document.getElementById('bannerCarousel');
@@ -18,23 +17,19 @@
         }
     }
 
-    // Header scroll effect
     window.addEventListener('scroll', () => {
         header.classList.toggle('scrolled', window.scrollY > 50);
     });
 
-    // Hide loading animation
     window.addEventListener('load', () => {
         setTimeout(() => loadingAnimation.style.display = 'none', 1000);
     });
 
-    // Nav link hover effects
     navLinks.forEach(e => {
         e.addEventListener('mouseenter', () => e.style.transform = 'translateY(-1px)');
         e.addEventListener('mouseleave', () => e.style.transform = 'translateY(0)');
     });
 
-    // Search button validation and loading states
     document.addEventListener('click', function(e) {
         const btn = e.target.closest('.search-form .search-btn');
         if (btn) {
@@ -50,12 +45,10 @@
         }
     });
 
-    // Mobile menu toggle
     navbarToggler.addEventListener('click', function () {
         this.classList.toggle('active');
     });
 
-    // Dynamic placeholder rotation
     const placeholderSets = [
         [
             'Enter location, property type, or postal code',
@@ -86,7 +79,6 @@
         }, 3000 + 500 * index);
     });
 
-    // Carousel pause on hover
     if (carousel) {
         carousel.addEventListener('mouseenter', () => {
             const c = bootstrap.Carousel.getInstance(carousel);
@@ -98,14 +90,12 @@
         });
     }
 
-    // Property listings functionality
     window.ftlistings = (function() {
         'use strict';
         
         const $ = (selector) => document.querySelector(selector);
         const $$ = (selector) => document.querySelectorAll(selector);
         
-        // Image navigation state management
         const imageIndices = new Map();
         
         function initializeImageIndices() {
@@ -271,7 +261,6 @@
             optimizeImages();
             initializeKeyboardNavigation();
             
-            // Expose functions globally
             window.ftlistings.toggleFavorite = toggleFavorite;
             window.ftlistings.previousImage = previousImage;
             window.ftlistings.nextImage = nextImage;
@@ -292,7 +281,6 @@
         };
     })();
 
-    // Mobile menu functionality
     function openMobileMenu() {
         mobileMenuPanel.classList.add('active');
         openMenuBtn.classList.add('menu-open');
@@ -325,7 +313,6 @@
         if (e.target.tagName === 'A') closeMobileMenu();
     });
 
-    // Filter modal functionality
     document.addEventListener('DOMContentLoaded', function() {
         window.filtersModal = (function() {
             const modal = document.querySelector('.filters-modal');
@@ -344,24 +331,23 @@
                     document.body.style.paddingRight = scrollbarWidth + 'px';
                 }
                 modal.style.display = 'flex';
-                // Add animation class to content after a tick
                 setTimeout(() => {
                     const content = modal.querySelector('.filters-container');
                     if (content) content.classList.add('filters-container-animate-in');
                     const activeTab = modal.querySelector('.filter-tab.active');
                     updateUnderlinePosition(activeTab);
+                    updateTenantedVacantVisibility();
                 }, 10);
             }
             
             function close() {
-                // Remove animation class from content, then hide after transition
                 const content = modal.querySelector('.filters-container');
                 if (content) content.classList.remove('filters-container-animate-in');
                 setTimeout(() => {
                     modal.style.display = 'none';
                     document.body.style.overflow = '';
                     document.body.style.paddingRight = '';
-                }, 320); // match CSS transition duration
+                }, 320);
             }
             
             function clear() {
@@ -380,18 +366,31 @@
                 underline.style.left = `${left}px`;
                 underline.style.width = `${width}px`;
             }
+
+            function updateTenantedVacantVisibility() {
+                const tenantedVacantRow = modal.querySelector('.tenanted-vacant-row');
+                const activeTab = modal.querySelector('.filter-tab.active');
+                if (!tenantedVacantRow || !activeTab) return;
+                if (activeTab.dataset.tab === 'rent') {
+                    tenantedVacantRow.style.display = 'none';
+                } else {
+                    tenantedVacantRow.style.display = '';
+                }
+            }
             
-            tabs.forEach(tab => {
+            tabs.forEach((tab, idx) => {
                 tab.addEventListener('click', function() {
                     tabs.forEach(t => t.classList.remove('active'));
                     this.classList.add('active');
                     updateUnderlinePosition(this);
+                    updateTenantedVacantVisibility();
                 });
             });
             
             window.addEventListener('resize', () => {
                 const activeTab = modal.querySelector('.filter-tab.active');
                 updateUnderlinePosition(activeTab);
+                updateTenantedVacantVisibility();
             });
             
             closeBtn.addEventListener('click', close);
@@ -401,7 +400,6 @@
             clearBtn.addEventListener('click', clear);
             searchBtn.addEventListener('click', close);
             
-            // Open modal on filter button clicks
             document.addEventListener('click', function(e) {
                 const btn = e.target.closest('.search-filters');
                 if (btn) {
@@ -410,7 +408,6 @@
                 }
             });
             
-            // Close modal on Escape key
             document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && modal.style.display === 'flex') {
                     close();
@@ -421,3 +418,141 @@
         })();
     });
 })();
+
+window.addEventListener('DOMContentLoaded', function() {
+    var agentInfoStr = localStorage.getItem('dashboardAgentInfo');
+    if (agentInfoStr) {
+        var agentInfo = JSON.parse(agentInfoStr);
+        var mobileAccount = document.querySelector('.navbar-mobile-account');
+        var desktopAccount = document.querySelector('.navbar-actions .btn-account');
+        var profileImg = document.createElement('img');
+        profileImg.src = agentInfo.img || 'img/agent1.jpg';
+        profileImg.alt = agentInfo.name || 'Agent Profile';
+        profileImg.title = agentInfo.name || 'Agent Profile';
+        profileImg.style.width = '40px';
+        profileImg.style.height = '40px';
+        profileImg.style.borderRadius = '50%';
+        profileImg.style.objectFit = 'cover';
+        profileImg.style.cursor = 'pointer';
+        profileImg.id = 'dashboardProfileImg';
+        if (mobileAccount) {
+            mobileAccount.innerHTML = '';
+            mobileAccount.appendChild(profileImg.cloneNode(true));
+        }
+        if (desktopAccount && desktopAccount.parentNode) {
+            var parent = desktopAccount.parentNode;
+            var img2 = profileImg.cloneNode(true);
+            parent.replaceChild(img2, desktopAccount);
+        }
+        localStorage.removeItem('dashboardAgentInfo');
+        var addProfileClick = function(img) {
+            img.addEventListener('click', function() {
+                window.location.href = 'agent-dashboard.html';
+            });
+        };
+        var imgs = document.querySelectorAll('#dashboardProfileImg');
+        imgs.forEach(addProfileClick);
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Demo login: clicking the Account button or submitting the login form logs in and redirects to dashboard
+  const accountBtn = document.querySelector('.btn-account, #accountBtn');
+  if (accountBtn) {
+    accountBtn.onclick = function(e) {
+      e.preventDefault();
+      window.location.href = 'agent-dashboard.html';
+    };
+  }
+  // If there is a login form, override its submit for demo
+  const loginForm = document.querySelector('form#loginForm, form.login-form');
+  if (loginForm) {
+    loginForm.onsubmit = function(e) {
+      e.preventDefault();
+      window.location.href = 'agent-dashboard.html';
+    };
+  }
+});
+
+function showSuccessNotification(message) {
+  let notif = document.getElementById('successNotification');
+  if (!notif) {
+    notif = document.createElement('div');
+    notif.id = 'successNotification';
+    notif.style.position = 'fixed';
+    notif.style.top = '32px';
+    notif.style.left = '50%';
+    notif.style.transform = 'translateX(-50%)';
+    notif.style.background = 'linear-gradient(90deg, #1e293b 60%, #334155 100%)';
+    notif.style.color = '#fff';
+    notif.style.fontWeight = '600';
+    notif.style.fontSize = '1.08rem';
+    notif.style.padding = '1rem 2.2rem';
+    notif.style.borderRadius = '12px';
+    notif.style.boxShadow = '0 4px 24px rgba(30,41,59,0.13)';
+    notif.style.zIndex = '10000';
+    notif.style.opacity = '0';
+    notif.style.transition = 'opacity 0.3s';
+    document.body.appendChild(notif);
+  }
+  notif.textContent = message;
+  notif.style.opacity = '1';
+  setTimeout(() => {
+    notif.style.opacity = '0';
+  }, 2000);
+}
+
+function showAddToCollectionModal(listingId, favoriteBtnRef) {
+  let collections = [];
+  try {
+    collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
+  } catch (e) {}
+  const existing = document.getElementById('addToCollectionModal');
+  if (existing) existing.remove();
+  const modal = document.createElement('div');
+  modal.id = 'addToCollectionModal';
+  modal.className = 'add-to-collection-modal-overlay';
+  modal.innerHTML = `
+    <div class="add-to-collection-modal">
+      <button id="closeAddToCollectionModal" class="close-btn" aria-label="Close">&times;</button>
+      <h2>Add to Collection</h2>
+      <div style="margin-bottom:1.2rem;">
+        <label for="collectionSelect">Choose a collection:</label>
+        <div class="add-to-collection-select-wrapper">
+          <select id="collectionSelect" class="add-to-collection-select">
+            ${collections.map(col => `<option value="${col.id}">${col.name}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+      <button id="confirmAddToCollectionBtn" class="add-btn">Add to Collection</button>
+    </div>
+  `;
+  document.body.appendChild(modal);
+  document.getElementById('closeAddToCollectionModal').onclick = () => modal.remove();
+  document.getElementById('confirmAddToCollectionBtn').onclick = () => {
+    // Robustly activate the star for this property card
+    if (favoriteBtnRef && favoriteBtnRef.querySelector) {
+      const icon = favoriteBtnRef.querySelector('i');
+      if (icon) {
+        icon.className = 'fas fa-star';
+        favoriteBtnRef.classList.add('active');
+      }
+    }
+    showSuccessNotification('Added to favorites!');
+    modal.remove();
+  };
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+}
+
+// Patch attachHomepageFavoriteModals to pass the button reference
+function attachHomepageFavoriteModals() {
+  document.querySelectorAll('.favorite-btn, .property-card-star').forEach(btn => {
+    btn.onclick = function(e) {
+      e.preventDefault();
+      let card = btn.closest('.property-card, article');
+      let listingId = card ? (card.getAttribute('data-id') || card.getAttribute('data-listing-id') || card.id || '') : '';
+      showAddToCollectionModal(listingId, btn);
+    };
+  });
+}
+document.addEventListener('DOMContentLoaded', attachHomepageFavoriteModals);

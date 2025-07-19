@@ -1,7 +1,6 @@
 (function() {
     'use strict';
 
-    // App configuration
     const CONFIG = {
         ANIMATION_DURATION: 400,
         LOADING_DELAY: 1000,
@@ -13,7 +12,6 @@
         PHONE_REGEX: /^[\+]?[0-9\s\-\(\)]{8,}$/
     };
 
-    // Application state
     const state = {
         currentStep: 1,
         selectedUserType: null,
@@ -21,7 +19,6 @@
         stepHistory: [1]
     };
 
-    // Cached DOM elements
     const elements = {
         loadingAnimation: null,
         authSteps: null,
@@ -30,7 +27,6 @@
         backBtns: null
     };
 
-    // Step navigation mapping
     const stepNavigation = {
         1: { login: 3, signup: 2 },
         2: { private: 4, agency: 5 },
@@ -470,6 +466,16 @@
     } else {
         init();
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginForm = document.querySelector('form#loginForm, form.login-form, form');
+      if (loginForm) {
+        loginForm.onsubmit = function(e) {
+          e.preventDefault();
+          window.location.href = 'agent-dashboard.html';
+        };
+      }
+    });
 
     // Expose for debugging
     window.loginApp = {

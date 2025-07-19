@@ -1,6 +1,3 @@
-// Agent Profile JavaScript
-
-// Navigation setup
 const navLinks = [
     { text: 'Home', href: 'index.html' },
     { text: 'For Sale', href: '#' },
@@ -10,7 +7,6 @@ const navLinks = [
     { text: 'Contact', href: '#' }
 ];
 
-// Initialize navigation
 function initializeNavigation() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
     const mainNav = document.getElementById('mainNavLinks');
@@ -37,7 +33,6 @@ function initializeNavigation() {
     }
 }
 
-// Property filter dropdown functionality
 function initializePropertyFilter() {
     const dropdown = document.getElementById('propertyDropdown');
     const btn = document.getElementById('propertyDropdownBtn');
@@ -101,7 +96,6 @@ function initializePropertyFilter() {
     updatePropertyCount();
 }
 
-// Property image navigation
 function initializePropertyImageNavigation() {
     const imageIndices = new Map();
     
@@ -167,7 +161,6 @@ function initializePropertyImageNavigation() {
     document.querySelectorAll('.property-listing-card').forEach(setupCard);
 }
 
-// Smooth scroll functionality
 function initializeSmoothScroll() {
     const infoLink = document.querySelector('.btn-info-link');
     if (infoLink) {
@@ -181,7 +174,6 @@ function initializeSmoothScroll() {
     }
 }
 
-// Leaflet.js integration for property locations
 let leafletMap;
 let leafletMarkers = [];
 
@@ -237,7 +229,6 @@ function initializeLeafletMap() {
     updateLeafletMapMarkers();
 }
 
-// Patch property filter to update map markers
 const originalUpdatePropertyCount = initializePropertyFilter;
 initializePropertyFilter = function() {
     originalUpdatePropertyCount();
@@ -254,7 +245,6 @@ initializePropertyFilter = function() {
     triggerMapUpdate();
 };
 
-// Contact Modal Logic
 (function() {
   const emailBtn = document.querySelector('.btn-email');
   const modal = document.getElementById('contactModal');

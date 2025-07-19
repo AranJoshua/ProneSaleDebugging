@@ -1,5 +1,3 @@
-// AGENTS PAGE JAVASCRIPT
-
 const navLinks = [
     { text: 'Home', href: 'index.html' },
     { text: 'For Sale', href: '#' },
@@ -69,101 +67,6 @@ function initializeSearchTabs() {
     
     moveUnderline(2);
     updateSearchInterface('agents');
-}
-
-function initializeFilterModal() {
-    const filterModal = document.querySelector('.filters-modal');
-    const filterTabs = filterModal.querySelectorAll('.filter-tab');
-    const tabUnderline = filterModal.querySelector('.tab-underline');
-    const closeBtn = filterModal.querySelector('.filters-close-btn');
-    const clearBtn = filterModal.querySelector('.clear-filters-btn');
-    const searchBtn = filterModal.querySelector('.filters-search-btn');
-    
-    function showFilterModal() {
-        filterModal.style.display = 'flex';
-        // Add animation class to content after a tick
-        setTimeout(() => {
-            const content = filterModal.querySelector('.filters-container');
-            if (content) content.classList.add('filters-container-animate-in');
-        }, 10);
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function hideFilterModal() {
-        // Remove animation class from content, then hide after transition
-        const content = filterModal.querySelector('.filters-container');
-        if (content) content.classList.remove('filters-container-animate-in');
-        setTimeout(() => {
-            filterModal.style.display = 'none';
-            document.body.style.overflow = '';
-        }, 320); // match CSS transition duration
-    }
-    
-    function moveFilterTabUnderline(idx) {
-        if (tabUnderline) {
-            tabUnderline.style.transform = `translateX(${idx * 100}%)`;
-        }
-    }
-    
-    function clearFilters() {
-        const checkboxes = filterModal.querySelectorAll('input[type="checkbox"]');
-        const selects = filterModal.querySelectorAll('select');
-        const inputs = filterModal.querySelectorAll('input[type="number"]');
-        
-        checkboxes.forEach(checkbox => checkbox.checked = false);
-        selects.forEach(select => select.selectedIndex = 0);
-        inputs.forEach(input => input.value = '');
-    }
-    
-    function handleFilterSearch() {
-        const filterData = {
-            propertyTypes: [],
-            priceMin: filterModal.querySelector('.price-row select:first-child').value,
-            priceMax: filterModal.querySelector('.price-row select:last-child').value,
-            bedrooms: filterModal.querySelector('.single-dropdown select').value,
-            bathrooms: filterModal.querySelectorAll('.single-dropdown select')[1]?.value || '',
-            carSpaces: filterModal.querySelectorAll('.single-dropdown select')[2]?.value || '',
-            tenanted: filterModal.querySelector('#tenanted').checked,
-            vacant: filterModal.querySelector('#vacant').checked,
-            landAreaMin: filterModal.querySelectorAll('.area-row input')[0]?.value || '',
-            landAreaMax: filterModal.querySelectorAll('.area-row input')[1]?.value || '',
-            floorAreaMin: filterModal.querySelectorAll('.area-row input')[2]?.value || '',
-            floorAreaMax: filterModal.querySelectorAll('.area-row input')[3]?.value || ''
-        };
-        
-        const propertyCheckboxes = filterModal.querySelectorAll('.property-options input[type="checkbox"]:checked');
-        propertyCheckboxes.forEach(checkbox => {
-            filterData.propertyTypes.push(checkbox.id);
-        });
-        
-        console.log('Filter search data:', filterData);
-        hideFilterModal();
-    }
-    
-    filterTabs.forEach((tab, idx) => {
-        tab.addEventListener('click', function() {
-            filterTabs.forEach(t => t.classList.remove('active'));
-            this.classList.add('active');
-            moveFilterTabUnderline(idx);
-        });
-    });
-    
-    if (closeBtn) closeBtn.addEventListener('click', hideFilterModal);
-    if (clearBtn) clearBtn.addEventListener('click', clearFilters);
-    if (searchBtn) searchBtn.addEventListener('click', handleFilterSearch);
-    
-    filterModal.addEventListener('click', function(e) {
-        if (e.target === filterModal) hideFilterModal();
-    });
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && filterModal.style.display === 'flex') {
-            hideFilterModal();
-        }
-    });
-    
-    const searchFilterBtns = document.querySelectorAll('.search-filters');
-    searchFilterBtns.forEach(btn => btn.addEventListener('click', showFilterModal));
 }
 
 function initializeAgentCards() {
@@ -241,6 +144,7 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 const activeTab = modal.querySelector('.filter-tab.active');
                 updateUnderlinePosition(activeTab);
+                updateTenantedVacantVisibility();
             }, 10);
         }
         
@@ -271,18 +175,31 @@ document.addEventListener('DOMContentLoaded', function() {
             underline.style.left = `${left}px`;
             underline.style.width = `${width}px`;
         }
+
+        function updateTenantedVacantVisibility() {
+            const tenantedVacantRow = modal.querySelector('.tenanted-vacant-row');
+            const activeTab = modal.querySelector('.filter-tab.active');
+            if (!tenantedVacantRow || !activeTab) return;
+            if (activeTab.dataset.tab === 'rent') {
+                tenantedVacantRow.style.display = 'none';
+            } else {
+                tenantedVacantRow.style.display = '';
+            }
+        }
         
         tabs.forEach(tab => {
             tab.addEventListener('click', function() {
                 tabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 updateUnderlinePosition(this);
+                updateTenantedVacantVisibility();
             });
         });
         
         window.addEventListener('resize', () => {
             const activeTab = modal.querySelector('.filter-tab.active');
             updateUnderlinePosition(activeTab);
+            updateTenantedVacantVisibility();
         });
         
         if (closeBtn) closeBtn.addEventListener('click', close);
