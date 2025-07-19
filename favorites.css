@@ -484,4 +484,15 @@
     border-radius: 14px;
     box-shadow: 0 2px 12px rgba(30, 34, 90, 0.06);
   }
+  .collections-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.7rem;
+  }
+  .add-collection-btn {
+    width: 100%;
+    font-size: 1.08rem;
+    padding: 0.7rem 0;
+    justify-content: center;
+  }
 } 
