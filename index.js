@@ -502,11 +502,128 @@ function showSuccessNotification(message) {
   }, 2000);
 }
 
+function showErrorNotification(message) {
+  let notif = document.getElementById('errorNotification');
+  if (!notif) {
+    notif = document.createElement('div');
+    notif.id = 'errorNotification';
+    notif.style.position = 'fixed';
+    notif.style.top = '32px';
+    notif.style.left = '50%';
+    notif.style.transform = 'translateX(-50%)';
+    notif.style.background = 'linear-gradient(90deg, #dc2626 60%, #ef4444 100%)';
+    notif.style.color = '#fff';
+    notif.style.fontWeight = '600';
+    notif.style.fontSize = '1.08rem';
+    notif.style.padding = '1rem 2.2rem';
+    notif.style.borderRadius = '12px';
+    notif.style.boxShadow = '0 4px 24px rgba(220,38,38,0.13)';
+    notif.style.zIndex = '10000';
+    notif.style.opacity = '0';
+    notif.style.transition = 'opacity 0.3s';
+    document.body.appendChild(notif);
+  }
+  notif.textContent = message;
+  notif.style.opacity = '1';
+  setTimeout(() => {
+    notif.style.opacity = '0';
+  }, 3000);
+}
+
+function confirmRemoveFavorite(listingId, favoriteBtnRef) {
+  if (document.getElementById('favoritesConfirmDialog')) return;
+  const dialog = document.createElement('div');
+  dialog.className = 'favorites-confirm-dialog';
+  dialog.id = 'favoritesConfirmDialog';
+  dialog.innerHTML = `
+    <div class="favorites-confirm-card">
+      <div class="favorites-confirm-title">Are you sure you want to remove this listing from favorites?</div>
+      <div class="favorites-confirm-actions">
+        <button class="favorites-confirm-btn" onclick="removeFavorite('${listingId}', this)">Remove</button>
+        <button class="favorites-confirm-btn cancel" onclick="closeFavoritesConfirmDialog()">Cancel</button>
+      </div>
+    </div>
+  `;
+  // Store the button reference in the dialog for later use
+  dialog.favoriteBtnRef = favoriteBtnRef;
+  document.body.appendChild(dialog);
+}
+
+function closeFavoritesConfirmDialog() {
+  const dialog = document.getElementById('favoritesConfirmDialog');
+  if (dialog) {
+    dialog.classList.add('closing');
+    setTimeout(() => {
+      dialog.remove();
+    }, 250);
+  }
+}
+
+function removeFavorite(listingId, buttonElement) {
+  // Get the favorite button reference from the dialog
+  const dialog = document.getElementById('favoritesConfirmDialog');
+  const favoriteBtn = dialog ? dialog.favoriteBtnRef : null;
+  
+  if (favoriteBtn) {
+    // Remove the active class and change icon
+    favoriteBtn.classList.remove('active');
+    const icon = favoriteBtn.querySelector('i');
+    if (icon) {
+      icon.classList.remove('fas');
+      icon.classList.add('far');
+    }
+  }
+
+  // Remove from localStorage collections if it exists
+  try {
+    let collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
+    collections.forEach(collection => {
+      collection.listings = collection.listings.filter(listing => listing.id !== listingId);
+    });
+    localStorage.setItem('favoritesCollections', JSON.stringify(collections));
+  } catch (e) {
+    console.warn('Error removing from collections:', e);
+  }
+
+  showSuccessNotification('Removed from favorites!');
+  closeFavoritesConfirmDialog();
+}
+
 function showAddToCollectionModal(listingId, favoriteBtnRef) {
   let collections = [];
   try {
     collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
   } catch (e) {}
+  
+  // Ensure default collections exist if none are found
+  if (!collections || collections.length === 0) {
+    collections = [
+      {
+        id: Date.now().toString(),
+        name: 'Dream Homes',
+        listings: [
+          {
+            id: 'sample-listing-1',
+            title: 'Modern City Apartment',
+            address: '1405/61 Macquarie Street, Tirana',
+            bedrooms: 2,
+            bathrooms: 1,
+            parking: 1,
+            size: 85,
+            price: 450000,
+            img: 'thumbnail1.jpg',
+          }
+        ]
+      },
+      {
+        id: (Date.now() + 1).toString(),
+        name: 'Investment Properties',
+        listings: []
+      }
+    ];
+    localStorage.setItem('favoritesCollections', JSON.stringify(collections));
+  }
+  
   const existing = document.getElementById('addToCollectionModal');
   if (existing) existing.remove();
   const modal = document.createElement('div');
@@ -514,7 +631,7 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
   modal.className = 'add-to-collection-modal-overlay';
   modal.innerHTML = `
     <div class="add-to-collection-modal">
-      <button id="closeAddToCollectionModal" class="close-btn" aria-label="Close">&times;</button>
+      <button id="closeAddToCollectionModal" class="close-btn" aria-label="Close">&times;</button>       
       <h2>Add to Collection</h2>
       <div style="margin-bottom:1.2rem;">
         <label for="collectionSelect">Choose a collection:</label>
@@ -530,6 +647,51 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
   document.body.appendChild(modal);
   document.getElementById('closeAddToCollectionModal').onclick = () => modal.remove();
   document.getElementById('confirmAddToCollectionBtn').onclick = () => {
+    const selectedCollectionId = document.getElementById('collectionSelect').value;
+    if (!selectedCollectionId) {
+      showErrorNotification('Please select a collection');
+      return;
+    }
+    
+    // Get current collections
+    let collections = [];
+    try {
+      collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
+    } catch (e) {
+      collections = [];
+    }
+    
+    // Find the selected collection
+    const selectedCollection = collections.find(col => col.id === selectedCollectionId);
+    if (!selectedCollection) {
+      showErrorNotification('Collection not found');
+      return;
+    }
+    
+    // Create listing object from the current property card
+    const propertyCard = favoriteBtnRef.closest('.property-card');
+    let listing = {
+      id: listingId || `listing-${Date.now()}`,
+      title: propertyCard.querySelector('.property-price')?.textContent || 'Property',
+      address: propertyCard.querySelector('.property-address')?.textContent || '',
+      bedrooms: 2, // Default values - could be extracted from card if available
+      bathrooms: 1,
+      parking: 1,
+      size: 85,
+      price: '450,000 - 500,000',
+      img: 'thumbnail1.jpg',
+      type: 'Apartment',
+      location: 'Tirana, City Center',
+      images: ['thumbnail1.jpg', 'thumbnail2.jpg', 'thumbnail3.jpg']
+    };
+    
+    // Add listing to collection if not already present
+    const existingListing = selectedCollection.listings.find(l => l.id === listing.id);
+    if (!existingListing) {
+      selectedCollection.listings.push(listing);
+      localStorage.setItem('favoritesCollections', JSON.stringify(collections));
+    }
+    
     // Robustly activate the star for this property card
     if (favoriteBtnRef && favoriteBtnRef.querySelector) {
       const icon = favoriteBtnRef.querySelector('i');
@@ -538,11 +700,17 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
         favoriteBtnRef.classList.add('active');
       }
     }
-    showSuccessNotification('Added to favorites!');
+    
+    showSuccessNotification(`Added to ${selectedCollection.name}!`);
     modal.remove();
   };
   modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
 }
+
+// Expose functions globally for inline HTML handlers
+window.confirmRemoveFavorite = confirmRemoveFavorite;
+window.closeFavoritesConfirmDialog = closeFavoritesConfirmDialog;
+window.removeFavorite = removeFavorite;
 
 // Patch attachHomepageFavoriteModals to pass the button reference
 function attachHomepageFavoriteModals() {
@@ -551,7 +719,29 @@ function attachHomepageFavoriteModals() {
       e.preventDefault();
       let card = btn.closest('.property-card, article');
       let listingId = card ? (card.getAttribute('data-id') || card.getAttribute('data-listing-id') || card.id || '') : '';
-      showAddToCollectionModal(listingId, btn);
+      
+      // Check if the item is already favorited
+      const isAlreadyFavorited = btn.classList.contains('active') || 
+                                 btn.querySelector('i')?.classList.contains('fas');
+      
+      if (isAlreadyFavorited) {
+        // Show remove confirmation modal
+        if (typeof confirmRemoveFavorite === 'function') {
+          confirmRemoveFavorite(listingId, btn);
+        } else {
+          // Fallback: directly remove the favorite
+          btn.classList.remove('active');
+          const icon = btn.querySelector('i');
+          if (icon) {
+            icon.classList.remove('fas');
+            icon.classList.add('far');
+          }
+          showSuccessNotification('Removed from favorites!');
+        }
+      } else {
+        // Show add to collection modal
+        showAddToCollectionModal(listingId, btn);
+      }
     };
   });
 }

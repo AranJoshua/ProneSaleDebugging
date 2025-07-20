@@ -1586,3 +1586,122 @@ body {
     padding: 0.7rem 1.2rem;
   }
 }
+
+/* Remove Favorite Confirmation Modal Styles */
+.favorites-confirm-dialog {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(30, 34, 90, 0.18);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  animation: modalFadeIn 0.3s ease-out forwards;
+}
+
+.favorites-confirm-dialog.closing {
+  animation: modalFadeOut 0.25s ease-in forwards;
+}
+
+.favorites-confirm-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(30, 34, 90, 0.18);
+  padding: 2.2rem 2.5rem 2rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 350px;
+  width: 100%;
+  border: 2px solid #d1d5db;
+  transform: scale(0.9) translateY(20px);
+  opacity: 0;
+  animation: modalCardSlideIn 0.4s ease-out 0.1s forwards;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.favorites-confirm-dialog.closing .favorites-confirm-card {
+  animation: modalCardSlideOut 0.25s ease-in forwards;
+}
+
+.favorites-confirm-card:focus-within {
+  border-color: #2563eb;
+  box-shadow: 0 8px 32px rgba(30, 34, 90, 0.18), 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.favorites-confirm-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 1.1rem;
+  text-align: center;
+}
+
+.favorites-confirm-actions {
+  display: flex;
+  gap: 1.2rem;
+  margin-top: 1.2rem;
+}
+
+.favorites-confirm-btn {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 1.7rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.favorites-confirm-btn.cancel {
+  background: #e5e7eb;
+  color: #222;
+}
+
+.favorites-confirm-btn:hover:not(.cancel) {
+  background: #1e40af;
+}
+
+/* Modal Animation Keyframes */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalFadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes modalCardSlideIn {
+  from {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modalCardSlideOut {
+  from {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.9) translateY(20px);
+    opacity: 0;
+  }
+}
