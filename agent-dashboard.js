@@ -46,6 +46,15 @@ function showSection(sectionName) {
         initializeListingsTabs();
     }
 
+    // Scroll to top of the main content area
+    const mainContent = document.querySelector('.main-content');
+    if (mainContent) {
+        mainContent.scrollTo({
+            top: 0,
+            behavior: 'auto'
+        });
+    }
+
     // Close sidebar on mobile after navigation
     closeSidebarIfMobile();
 }
@@ -1441,6 +1450,7 @@ function showHighlightListingModal() {
   modal.style.alignItems = 'center';
   modal.style.justifyContent = 'center';
   modal.style.zIndex = '9999';
+  modal.style.padding = '20px';
   modal.innerHTML = `
     <div style="position:relative;">
       <section class="premium-card">
@@ -1454,10 +1464,95 @@ function showHighlightListingModal() {
         </ul>
         <button class="premium-cta">Highlight My Listing</button>
       </section>
-      <button id="closeHighlightListingModal" style="position:absolute;top:-18px;right:-18px;background:#fff;border:none;font-size:2rem;color:#888;cursor:pointer;z-index:1001;border-radius:50%;width:40px;height:40px;box-shadow:0 2px 8px rgba(30,34,90,0.12);">&times;</button>
+      <button id="closeHighlightListingModal" class="highlight-modal-close">&times;</button>
     </div>
   `;
   document.body.appendChild(modal);
+  
+  // Add mobile-responsive styles
+  const style = document.createElement('style');
+  style.textContent = `
+    .highlight-modal-container {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      margin: 0 auto;
+    }
+    
+    .highlight-modal-close {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: #fff;
+      border: none;
+      font-size: 1.8rem;
+      color: #888;
+      cursor: pointer;
+      z-index: 1001;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      box-shadow: 0 2px 8px rgba(30,34,90,0.12);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    
+    .highlight-modal-close:hover {
+      background: #f3f4f6;
+      color: #666;
+      transform: scale(1.1);
+    }
+    
+    @media (max-width: 600px) {
+      .highlight-modal-container {
+        max-width: 100%;
+        margin: 0 10px;
+      }
+      
+      .highlight-modal-close {
+        top: 8px;
+        right: 8px;
+        width: 36px;
+        height: 36px;
+        font-size: 1.5rem;
+      }
+      
+      #highlightListingModal {
+        padding: 10px;
+        align-items: flex-start;
+        padding-top: 60px;
+      }
+      
+      #highlightListingModal .premium-card {
+        padding: 24px 16px 20px 16px;
+        margin-top: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .highlight-modal-close {
+        top: 6px;
+        right: 6px;
+        width: 34px;
+        height: 34px;
+        font-size: 1.4rem;
+      }
+      
+      #highlightListingModal {
+        padding: 8px;
+        padding-top: 50px;
+      }
+      
+      #highlightListingModal .premium-card {
+        padding: 20px 12px 16px 12px;
+        margin-top: 16px;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+  
   // Close logic
   document.getElementById('closeHighlightListingModal').onclick = () => modal.remove();
   modal.onclick = (e) => { if (e.target === modal) modal.remove(); };

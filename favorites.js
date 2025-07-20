@@ -48,7 +48,7 @@ function ensureDefaultCollection() {
 }
 
 // --- Render Collections Grid (with thumbnail/placeholder logic) ---
-function renderCollections() {
+function renderCollections(newCollectionId = null) {
   collectionsGrid.innerHTML = '';
   if (collections.length === 0) {
     collectionsGrid.innerHTML = '<div style="color:#888;font-size:1.1rem;">No collections yet.</div>';
@@ -57,6 +57,12 @@ function renderCollections() {
   collections.forEach((col, idx) => {
     const card = document.createElement('div');
     card.className = 'collection-card';
+    
+    // Add animation class for new collection
+    if (newCollectionId && col.id === newCollectionId) {
+      card.classList.add('new-collection');
+    }
+    
     card.onclick = () => openCollection(col.id);
     // Thumbnail or placeholder
     if (col.listings && col.listings.length > 0) {
@@ -83,6 +89,16 @@ function renderCollections() {
     card.innerHTML += `<div class="collection-info"><span class="collection-title">${col.name}</span><button class="collection-delete-btn" title="Delete Collection" onclick="event.stopPropagation(); confirmDeleteCollection('${col.id}')"><i class="fas fa-trash"></i></button></div>`;
     collectionsGrid.appendChild(card);
   });
+  
+  // Remove animation class after animation completes
+  if (newCollectionId) {
+    setTimeout(() => {
+      const newCard = document.querySelector(`.collection-card.new-collection`);
+      if (newCard) {
+        newCard.classList.remove('new-collection');
+      }
+    }, 400); // Match the animation duration
+  }
 }
 
 // --- Add Collection Modal Logic ---
@@ -99,9 +115,10 @@ addCollectionForm.onsubmit = function(e) {
   e.preventDefault();
   const name = document.getElementById('collectionName').value.trim();
   if (!name) return;
-  collections.push({ id: Date.now().toString(), name, listings: [] });
+  const newCollectionId = Date.now().toString();
+  collections.push({ id: newCollectionId, name, listings: [] });
   saveCollections();
-  renderCollections();
+  renderCollections(newCollectionId);
   closeAddCollectionModal();
 };
 
@@ -110,21 +127,52 @@ function openCollection(id) {
   currentCollectionId = id;
   const col = collections.find(c => c.id === id);
   if (!col) return;
-  collectionViewHeader.style.display = 'flex';
-  selectedCollectionTitle.textContent = col.name;
-  collectionsGrid.parentElement.style.display = 'none';
-  renderFavorites(col.listings);
+  
+  // Animate collections section sliding out
+  const collectionsSection = collectionsGrid.parentElement;
+  collectionsSection.classList.add('sliding-out');
+  
+  setTimeout(() => {
+    // Hide collections and show collection view
+    collectionsSection.style.display = 'none';
+    collectionViewHeader.style.display = 'flex';
+    selectedCollectionTitle.textContent = col.name;
+    
+    // Clear and render favorites
+    favoritesGrid.innerHTML = '';
+    renderFavorites(col.listings);
+    
+    // Reset collections section for next time
+    collectionsSection.classList.remove('sliding-out');
+  }, 250); // Match the CSS transition duration
 }
+
 backToCollectionsBtn.onclick = function() {
   currentCollectionId = null;
+  
+  // Animate collection view sliding out
   collectionViewHeader.style.display = 'none';
-  collectionsGrid.parentElement.style.display = '';
   favoritesGrid.innerHTML = '';
+  
+  // Show collections section with slide-in animation
+  const collectionsSection = collectionsGrid.parentElement;
+  collectionsSection.style.display = '';
+  collectionsSection.classList.add('sliding-in');
+  
+  // Remove animation class after animation completes
+  setTimeout(() => {
+    collectionsSection.classList.remove('sliding-in');
+  }, 300); // Match the CSS animation duration
 };
 
 // --- Render Favorites in Collection ---
 function renderFavorites(listings) {
   favoritesGrid.innerHTML = '';
+  
+  // Reset animation state for the grid
+  favoritesGrid.style.animation = 'none';
+  favoritesGrid.offsetHeight; // Trigger reflow
+  
   // If viewing the first collection, show 3 sample cards for demo
   const isFirstCollection = collections.length > 0 && currentCollectionId === collections[0].id;
   if (isFirstCollection) {
@@ -176,14 +224,28 @@ function renderFavorites(listings) {
       }
     ];
     sampleListings.forEach(listing => renderPropertyCard(listing));
+    
+    // Trigger the slide-in animation
+    setTimeout(() => {
+      favoritesGrid.style.animation = 'favoritesGridSlideIn 0.3s ease-out forwards';
+    }, 30);
     return;
   }
   // Otherwise, show real listings for the selected collection
   if (!listings || listings.length === 0) {
     renderEmptyState();
+    // Trigger the slide-in animation for empty state
+    setTimeout(() => {
+      favoritesGrid.style.animation = 'favoritesGridSlideIn 0.3s ease-out forwards';
+    }, 30);
     return;
   }
   listings.forEach(listing => renderPropertyCard(listing));
+  
+  // Trigger the slide-in animation
+  setTimeout(() => {
+    favoritesGrid.style.animation = 'favoritesGridSlideIn 0.3s ease-out forwards';
+  }, 30);
 }
 
 function renderPropertyCard(listing) {
@@ -284,7 +346,12 @@ function confirmRemoveFavorite(listingId) {
 }
 function closeFavoritesConfirmDialog() {
   const dialog = document.getElementById('favoritesConfirmDialog');
-  if (dialog) dialog.remove();
+  if (dialog) {
+    dialog.classList.add('closing');
+    setTimeout(() => {
+      dialog.remove();
+    }, 250); // Match the animation duration
+  }
 }
 function removeFavorite(listingId) {
   // Find the card in the DOM
@@ -326,14 +393,19 @@ function confirmDeleteCollection(collectionId) {
 function deleteCollection(collectionId) {
   collections = collections.filter(c => c.id !== collectionId);
   saveCollections();
-  renderCollections();
+  renderCollections(null);
   closeFavoritesConfirmDialog();
 }
 
 // --- Initialization ---
 function initFavoritesTab() {
-  renderCollections();
+  renderCollections(null);
   collectionViewHeader.style.display = 'none';
+  
+  // Ensure collections section starts in the correct state
+  const collectionsSection = collectionsGrid.parentElement;
+  collectionsSection.classList.remove('sliding-out', 'sliding-in');
+  
   // Modal close logic
   document.getElementById('addCollectionModal').addEventListener('click', function(e) {
     if (e.target === this) closeAddCollectionModal();
