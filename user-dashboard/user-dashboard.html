@@ -1,0 +1,740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - Prone Sale</title>
+    <link rel="stylesheet" href="./user-dashboard.css">
+    <link rel="stylesheet" href="./logout-modal.css">
+    <link rel="stylesheet" href="./favorites.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="./premium-offers.css">
+</head>
+<body>
+    <!-- Top Header -->
+    <header class="dashboard-header">
+        <div class="header-left">
+            <div class="hamburger-menu">
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+                <div class="hamburger-line"></div>
+            </div>
+            <span class="header-title">Prone Sale</span>
+        </div>
+        <div class="header-right">
+            <button class="list-property-btn hide-mobile" onclick="showListPropertyModal()">+ List Property</button>
+            <button class="header-btn show-mobile" title="List Property" onclick="showListPropertyModal()">
+                <i class="fa fa-plus"></i>
+            </button>
+            <button class="header-btn" title="Notifications" id="notificationsBtn">
+                <i class="fa-regular fa-bell"></i>
+            </button>
+            <button class="header-btn" title="Home" id="dashboardHomeBtn">
+                <i class="fa-solid fa-house"></i>
+            </button>
+        </div>
+    </header>
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay"></div>
+    <!-- Notifications Modal -->
+    <div id="notificationsModal" class="notifications-modal" tabindex="-1" aria-modal="true" role="dialog" style="display: none;">
+        <div class="notifications-modal-content">
+            <div class="notifications-modal-header">
+                <span class="notifications-modal-title"><i class="fa fa-bell"></i> Notifications</span>
+                <button class="notifications-mark-all" onclick="markAllNotificationsRead()" tabindex="0">Mark all as read</button>
+                
+            </div>
+            <div class="notifications-list">
+                <div class="notification-item unread">
+                    <span class="notification-dot"></span>
+                    <div class="notification-icon"><i class="fa fa-envelope"></i></div>
+                    <div class="notification-content">
+                        <div class="notification-title">New Offer Received</div>
+                        <div class="notification-desc">You received an email offer for <strong>1405/61 Macquarie Street</strong>.</div>
+                        <div class="notification-time">2 minutes ago</div>
+                    </div>
+                </div>
+                <div class="notification-divider"></div>
+                <div class="notification-item">
+                    <div class="notification-icon"><i class="fa fa-newspaper"></i></div>
+                    <div class="notification-content">
+                        <div class="notification-title">Market News</div>
+                        <div class="notification-desc">"5 Tips for Selling Your Home Faster" - Read the latest from our blog.</div>
+                        <div class="notification-time">1 hour ago</div>
+                    </div>
+                </div>
+                <div class="notification-divider"></div>
+                <div class="notification-item">
+                    <div class="notification-icon"><i class="fa fa-user"></i></div>
+                    <div class="notification-content">
+                        <div class="notification-title">Profile Viewed</div>
+                        <div class="notification-desc">A potential buyer viewed your agent profile.</div>
+                        <div class="notification-time">Today</div>
+                    </div>
+                </div>
+                <div class="notification-divider"></div>
+                <div class="notification-item">
+                    <div class="notification-icon"><i class="fa fa-house"></i></div>
+                    <div class="notification-content">
+                        <div class="notification-title">Listing Status Update</div>
+                        <div class="notification-desc">Your listing <strong>3903/343-357 Pitt Street</strong> is now marked as Pending.</div>
+                        <div class="notification-time">Yesterday</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="user-profile" style="padding-bottom: 24px;">
+            <div id="sidebar-profile-img-wrapper">
+                <img src="../img/user1.jpeg" alt="User Profile" id="sidebar-profile-img" style="width: 100%; height: 100%; object-fit: cover;">
+                <input type="file" id="sidebar-profile-upload" accept="image/*" style="display: none;" onchange="sidebarProfileUpload(event)">
+            </div>
+            <div class="user-name">Ardit Hoxha</div>
+            <!-- Removed job title (agent-title) as requested -->
+        </div>
+        <div class="nav-menu">
+            <button class="nav-item active" onclick="showSection('listings')">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M19 3H14.82C14.4 1.84 13.3 1 12 1S9.6 1.84 9.18 3H5C3.9 3 3 3.9 3 5V19C3 20.1 3.9 21 5 21H19C20.1 21 21 20.1 21 19V5C21 3.9 20.1 3 19 3ZM12 3C12.55 3 13 3.45 13 4S12.55 5 12 5 11 4.55 11 4 11.45 3 12 3ZM7 7H17V9H7V7ZM7 11H17V13H7V11ZM7 15H14V17H7V15Z"/>
+                </svg>
+                My Listings
+            </button>
+            <!-- Favorites Option Added Below -->
+            <button class="nav-item" onclick="showSection('favorites')">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                </svg>
+                Favorites
+            </button>
+            <button class="nav-item" onclick="showSection('settings')">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                </svg>
+                Settings
+            </button>
+        </div>
+        <div class="bottom-nav" style="margin-bottom: 32px;">
+            <button class="nav-item" onclick="showSection('help-support')">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M11 18h2v-2h-2v2zm1-16C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm0-14c-2.21 0-4 1.79-4 4h2c0-1.1.9-2 2-2s2 .9 2 2c0 2-3 1.75-3 5h2c0-2.25 3-2.5 3-5 0-2.21-1.79-4-4-4z"/>
+                </svg>
+                Help & Support
+            </button>
+            <button class="nav-item logout-btn" onclick="openLogoutModal()">
+                <svg class="nav-icon" viewBox="0 0 24 24">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Log Out
+            </button>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="main-content" style="padding: 0;">
+        <!-- Discover Section -->
+        <div id="discover" class="content-section">
+            <div class="card-section">
+                <div class="dashboard-placeholder">
+                    <h2>Discover Properties</h2>
+                    <p>Property discovery features coming soon...</p>
+                </div>
+            </div>
+        </div>
+        <!-- My Listings Section -->
+        <div id="listings" class="content-section active">
+            <h1 class="page-title">My Listings</h1>
+            <div class="card-section" id="myListingsCardSection">
+                <div class="listings-tabs" style="margin-bottom: 1.5rem;">
+                    <button class="tab-btn active active-tab" onclick="switchTab('active')">Active</button>
+                    <button class="tab-btn" onclick="switchTab('pending')">Pending</button>
+                    <button class="tab-btn" onclick="switchTab('sold')">Sold</button>
+                </div>
+                
+                <!-- Active Listings -->
+                <div id="active-listings" class="listings-content active">
+                    <div class="property-list-vertical">
+                        <div class="property-listing-card" data-type="sale" data-images='["thumbnail1.jpg","thumbnail2.jpg","thumbnail3.jpg"]' data-property-id="active-1">
+                            <!-- Action Icons for Active Listing -->
+                            <div class="property-actions">
+                                <button class="highlight-listing-btn" title="Highlight Listing" type="button">
+                                    Highlight Listing
+                                </button>
+                                <button class="action-btn edit-btn" title="Edit Listing">
+                                    <i class="fas fa-pencil"></i>
+                                </button>
+                                <button class="action-btn delete-btn" title="Delete Listing" onclick="deleteProperty('active-1')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <div class="action-dropdown">
+                                    <button class="action-btn more-btn" title="More Options">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="action-dropdown-menu">
+                                        <button class="action-dropdown-item" onclick="changeStatus('active-1', 'pending')">
+                                            <i class="fas fa-clock"></i> Mark as Pending
+                                        </button>
+                                        <button class="action-dropdown-item" onclick="changeStatus('active-1', 'sold')">
+                                            <i class="fas fa-check-circle"></i> Mark as Sold
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-listing-image">
+                                <img class="property-listing-img" src="../img/thumbnail1.jpg" alt="Modern City Center Apartment">
+                                <button class="property-nav prev" type="button" aria-label="Previous image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="property-nav next" type="button" aria-label="Next image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="property-listing-info">
+                                <div class="property-listing-price">$450,000</div>
+                                <div class="property-listing-address">1405/61 Macquarie Street, Tirana</div>
+                                <div class="property-listing-specs">
+                                    <span><i class="fas fa-bed"></i> 2</span>
+                                    <span><i class="fas fa-bath"></i> 1</span>
+                                    <span><i class="fas fa-car"></i> 1</span>
+                                    <span><i class="fas fa-ruler-combined"></i> 85m²</span>
+                                    <span class="property-type-bullet">•</span>
+                                    <span>Apartment</span>
+                                </div>
+                                <div class="property-listing-date">Listed 20 Jun 2025</div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Pending Listings -->
+                <div id="pending-listings" class="listings-content">
+                    <div class="property-list-vertical">
+                        <div class="property-listing-card pending" data-type="sale" data-images='["thumbnail2.jpg","thumbnail3.jpg","banner1.jpg"]' data-property-id="pending-1">
+                            <!-- Action Icons for Pending Listing -->
+                            <div class="property-actions">
+                                <button class="action-btn edit-btn" title="Edit Listing">
+                                    <i class="fas fa-pencil"></i>
+                                </button>
+                                <button class="action-btn delete-btn" title="Delete Listing" onclick="deleteProperty('pending-1')">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                <div class="action-dropdown">
+                                    <button class="action-btn more-btn" title="More Options">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <div class="action-dropdown-menu">
+                                        <button class="action-dropdown-item" onclick="changeStatus('pending-1', 'active')">
+                                            <i class="fas fa-play-circle"></i> Mark as Active
+                                        </button>
+                                        <button class="action-dropdown-item" onclick="changeStatus('pending-1', 'sold')">
+                                            <i class="fas fa-check-circle"></i> Mark as Sold
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="property-listing-image">
+                                <img class="property-listing-img" src="../img/thumbnail2.jpg" alt="Luxury Villa with Pool">
+                                <button class="property-nav prev" type="button" aria-label="Previous image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="property-nav next" type="button" aria-label="Next image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="property-listing-info">
+                                <div class="property-listing-price">$1,155,000</div>
+                                <div class="property-listing-address">3903/343-357 Pitt Street, Tirana</div>
+                                <div class="property-listing-specs">
+                                    <span><i class="fas fa-bed"></i> 2</span>
+                                    <span><i class="fas fa-bath"></i> 2</span>
+                                    <span><i class="fas fa-car"></i> 1</span>
+                                    <span><i class="fas fa-ruler-combined"></i> 150m²</span>
+                                    <span class="property-type-bullet">•</span>
+                                    <span>Villa</span>
+                                </div>
+                                <div class="property-listing-date">Listed 15 Jun 2025</div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <!-- Sold Listings -->
+                <div id="sold-listings" class="listings-content">
+                    <div class="property-list-vertical">
+                        <div class="property-listing-card sold" data-type="sale" data-images='["thumbnail3.jpg","banner1.jpg","banner2.webp"]' data-property-id="sold-1">
+                            <!-- Sold Badge for Sold Listing -->
+                            <div class="sold-badge">
+                                <i class="fas fa-check-circle"></i>
+                                <span>SOLD</span>
+                            </div>
+                            <div class="property-listing-image">
+                                <img class="property-listing-img" src="../img/thumbnail3.jpg" alt="Cozy Family Home">
+                                <button class="property-nav prev" type="button" aria-label="Previous image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                                <button class="property-nav next" type="button" aria-label="Next image">
+                                    <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
+                                        <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                </button>
+                            </div>
+                            <div class="property-listing-info">
+                                <div class="property-listing-price">$2,400,000</div>
+                                <div class="property-listing-address">611/61-69 Macquarie Street, Tirana</div>
+                                <div class="property-listing-specs">
+                                    <span><i class="fas fa-bed"></i> 1</span>
+                                    <span><i class="fas fa-bath"></i> 1</span>
+                                    <span><i class="fas fa-car"></i> 1</span>
+                                    <span><i class="fas fa-ruler-combined"></i> 120m²</span>
+                                    <span class="property-type-bullet">•</span>
+                                    <span>Apartment</span>
+                                </div>
+                                <div class="property-listing-date">Sold 10 Jun 2025</div>
+                            </div>
+                        </div>
+                        
+
+                    </div>
+                </div>
+
+                <div class="create-listing-container">
+                    <div class="create-listing-card" onclick="showListPropertyModal()">
+                        <i class="fa fa-plus create-listing-icon"></i>
+                        <h3 class="create-listing-title">Create New Property Listing</h3>
+                        <p class="create-listing-subtitle">Add a new property to your listings</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Favorites Section -->
+        <div id="favorites" class="content-section">
+            <h1 class="page-title">My Favorites</h1>
+            <div class="card-section">
+                <div class="collections-section">
+                    <div class="collections-header">
+                        <h2 class="section-title">Collections</h2>
+                        <button class="add-collection-btn" onclick="showAddCollectionModal()">
+                            <i class="fas fa-plus"></i>
+                            Add Collection
+                        </button>
+                    </div>
+                    <div class="collections-grid" id="collectionsGrid">
+                        <!-- Collections will be dynamically populated -->
+                    </div>
+                </div>
+                <!-- Back to Collections and Collection Title (hidden by default) -->
+                <div id="collectionViewHeader" style="display: none; align-items: center; gap: 1.5rem; margin-bottom: 2rem;">
+                    <button id="backToCollectionsBtn" type="button" class="back-to-collections-btn" aria-label="Back to Collections">
+                        <i class="fas fa-arrow-left"></i> Back to Collections
+                    </button>
+                    <h2 id="selectedCollectionTitle" class="favorites-collection-title" style="margin: 0;"></h2>
+                </div>
+                <div class="property-grid" id="favoritesGrid">
+                    <!-- Properties will be dynamically populated when collection is clicked -->
+                </div>
+            </div>
+        </div>
+        <div id="profile" class="content-section">
+            <div class="card-section">
+                <div class="profile-display-grid">
+                    <div class="profile-display-card">
+                        <h3>Basic Information</h3>
+                        <div class="display-item">
+                            <span class="display-label">Name:</span>
+                            <span class="display-value" id="displayNameValue">Gabriel Esposito</span>
+                        </div>
+                        <div class="display-item">
+                            <span class="display-label">Email:</span>
+                            <span class="display-value" id="displayEmailValue">gabriel.esposito@realestate.com</span>
+                        </div>
+                        <div class="display-item">
+                            <span class="display-label">Phone:</span>
+                            <span class="display-value" id="displayPhoneValue">(555) 123-4567</span>
+                        </div>
+                    </div>
+                    <div class="profile-display-card">
+                        <h3>Professional Details</h3>
+                        <div class="display-item">
+                            <span class="display-label">Job Title:</span>
+                            <span class="display-value" id="displayJobTitleValue">Senior Agent</span>
+                        </div>
+                        <div class="display-item">
+                            <span class="display-label">License:</span>
+                            <span class="display-value" id="displayLicenseValue">RE-1234567890</span>
+                        </div>
+                        <div class="display-item">
+                            <span class="display-label">Experience:</span>
+                            <span class="display-value" id="displayExperienceValue">10 years</span>
+                        </div>
+                    </div>
+                    <div class="profile-display-card">
+                        <h3>Address</h3>
+                        <div class="display-item">
+                            <span class="display-label">Office:</span>
+                            <span class="display-value" id="displayAddressValue">123 Main St, Suite 456, Anytown, USA 12345</span>
+                        </div>
+                    </div>
+                    <div class="profile-display-card">
+                        <h3>Social Media</h3>
+                        <div class="profile-social-row" id="profileSocialRow">
+                            <!-- Social icons will be injected here by JS if links are present -->
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-edit-toggle">
+                    <button type="button" class="edit-profile-btn" onclick="toggleEditMode()">Edit Profile</button>
+                </div>
+            </div>
+            
+            <!-- Profile Edit Form -->
+            <div id="profileEditForm" class="profile-edit-form" style="display: none;">
+                <div class="card-section">
+                    <div class="profile-photo-section">
+                        <div class="profile-photo-upload">
+                            <img src="../img/agent1.jpg" alt="Profile Photo" id="modalProfileImg">
+                            <div class="photo-upload-overlay">
+                                <i class="fa fa-camera"></i>
+                                <span>Change Photo</span>
+                            </div>
+                            <input type="file" id="profilePhotoUpload" accept="image/*" onchange="updateProfilePhoto(event)">
+                        </div>
+                    </div>
+                    <form id="profileForm" class="profile-form">
+                        <div class="form-section">
+                            <h3>Basic Information</h3>
+                            <div class="form-group">
+                                <label for="displayName">Display Name</label>
+                                <input type="text" id="displayName" value="Gabriel Esposito" readonly>
+                                <small>Name cannot be changed</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="email">Email Address</label>
+                                <input type="email" id="email" value="gabriel.esposito@realestate.com" readonly>
+                                <small>Email cannot be changed here, please go to settings</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="phone">Phone Number</label>
+                                <input type="tel" id="phone" value="(555) 123-4567">
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Professional Information</h3>
+                            <div class="form-group">
+                                <label for="jobTitle">Job Title</label>
+                                <input type="text" id="jobTitle" value="Senior Agent">
+                            </div>
+                            <div class="form-group">
+                                <label for="licenseNumber">License Number</label>
+                                <input type="text" id="licenseNumber" value="RE-1234567890">
+                            </div>
+                            <div class="form-group">
+                                <label for="experience">Years of Experience</label>
+                                <input type="number" id="experience" value="10" min="0" max="50">
+                            </div>
+                            <div class="form-group">
+                                <label for="specialties">Specialties</label>
+                                <input type="text" id="specialties" value="Residential, Luxury Homes, Condos">
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Address Information</h3>
+                            <div class="form-group">
+                                <label for="streetAddress">Street Address</label>
+                                <input type="text" id="streetAddress" value="123 Main St, Suite 456">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="city">City</label>
+                                    <input type="text" id="city" value="Anytown">
+                                </div>
+                                <div class="form-group">
+                                    <label for="state">State</label>
+                                    <input type="text" id="state" value="USA">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="zipCode">ZIP Code</label>
+                                <input type="text" id="zipCode" value="12345">
+                            </div>
+                        </div>
+                        <div class="form-section">
+                            <h3>Social Media (Optional)</h3>
+                            <div class="form-group">
+                                <label for="facebook">Facebook</label>
+                                <input type="url" id="facebook" placeholder="https://facebook.com/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn</label>
+                                <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="x">X (Twitter)</label>
+                                <input type="url" id="x" placeholder="https://x.com/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="instagram">Instagram</label>
+                                <input type="url" id="instagram" placeholder="https://instagram.com/yourprofile">
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn-cancel" onclick="toggleEditMode(false)">Cancel</button>
+                            <button type="submit" class="btn-save">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- Settings Section -->
+        <div id="settings" class="content-section">
+            <iframe src="./account-settings.html" style="width:100%;height:100vh;border:none;"></iframe>
+        </div>
+        <!-- Help & Support Section -->
+        <div id="help-support" class="content-section">
+            <iframe src="./help-support.html" style="width:100%;height:100vh;border:none;"></iframe>
+        </div>
+
+    </div>
+
+    <!-- List Property Modal -->
+    <div id="listPropertyModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">List New Property</h2>
+                <button class="modal-close" onclick="closeListPropertyModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="listPropertyForm" class="modal-form">
+                <!-- Step 1: Basic Information -->
+                <div class="form-step active" id="step1">
+                    <div class="step-indicator">
+                        <div class="step-number active">1</div>
+                        <div class="step-line"></div>
+                        <div class="step-number">2</div>
+                        <div class="step-line"></div>
+                        <div class="step-number">3</div>
+                    </div>
+                    
+                    <h3 class="step-title">Basic Information</h3>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="listingType">I want to:</label>
+                            <div class="select-wrapper">
+                                <select id="listingType" name="listingType" required onchange="toggleSaleOptions()">
+                                    <option value="">Select listing type</option>
+                                    <option value="for-rent">For Rent</option>
+                                    <option value="for-sale">For Sale</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="propertyType">Property Type:</label>
+                            <div class="select-wrapper">
+                                <select id="propertyType" name="propertyType" required>
+                                    <option value="">Select property type</option>
+                                    <option value="apartment">Apartment</option>
+                                    <option value="villa">Villa</option>
+                                    <option value="house">House</option>
+                                    <option value="parking">Parking</option>
+                                    <option value="factory-warehouse">Factory & Warehouse</option>
+                                    <option value="shops-retail">Shops & Retail</option>
+                                    <option value="office">Office</option>
+                                    <option value="hotel">Hotel</option>
+                                    <option value="land-development">Land & Development</option>
+                                    <option value="farm">Farm</option>
+                                    <option value="others">Others</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="address">Address:</label>
+                        <input type="text" id="address" name="address" placeholder="Enter full property address" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bedrooms">Bedrooms:</label>
+                            <input type="number" id="bedrooms" name="bedrooms" min="0" max="20" placeholder="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bathrooms">Bathrooms:</label>
+                            <input type="number" id="bathrooms" name="bathrooms" min="0" max="20" placeholder="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="parkingSpaces">Parking Spaces:</label>
+                            <input type="number" id="parkingSpaces" name="parkingSpaces" min="0" max="20" placeholder="0" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="propertySize">Property Size (m²):</label>
+                            <input type="number" id="propertySize" name="propertySize" min="1" step="0.01" placeholder="e.g., 150.5" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="floorArea">Floor Area (m²):</label>
+                            <input type="number" id="floorArea" name="floorArea" min="1" step="0.01" placeholder="e.g., 120.3" required>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="saleOptionsGroup" style="display: none;">
+                        <label for="saleType">Sale Type:</label>
+                        <div class="select-wrapper">
+                            <select id="saleType" name="saleType">
+                                <option value="">Select sale type</option>
+                                <option value="vacant-possession">Vacant Possession</option>
+                                <option value="tenanted-investment">Tenanted Investment</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Step 2: Description & Price -->
+                <div class="form-step" id="step2">
+                    <div class="step-indicator">
+                        <div class="step-number completed">1</div>
+                        <div class="step-line completed"></div>
+                        <div class="step-number active">2</div>
+                        <div class="step-line"></div>
+                        <div class="step-number">3</div>
+                    </div>
+                    
+                    <h3 class="step-title">Description & Pricing</h3>
+                    
+                    <div class="form-group">
+                        <label for="description">Property Description:</label>
+                        <textarea id="description" name="description" rows="6" placeholder="Describe the property, its features, amenities, and any special highlights..." required></textarea>
+                        <div class="char-counter">
+                            <span id="charCount">0</span>/1000 characters
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="price">Price (€):</label>
+                        <div class="price-input-wrapper">
+                            <span class="currency-symbol">€</span>
+                            <input type="number" id="price" name="price" min="1" step="0.01" placeholder="Enter price in euros" required style="padding-left: 2.5rem;">
+                        </div>
+                    </div>
+                    
+                </div>
+                
+                <!-- Step 3: Photos -->
+                <div class="form-step" id="step3">
+                    <div class="step-indicator">
+                        <div class="step-number completed">1</div>
+                        <div class="step-line completed"></div>
+                        <div class="step-number completed">2</div>
+                        <div class="step-line completed"></div>
+                        <div class="step-number active">3</div>
+                    </div>
+                    
+                    <h3 class="step-title">Property Photos</h3>
+                    
+                    <div class="photo-upload-section">
+                        <div class="upload-instructions">
+                            <i class="fas fa-camera"></i>
+                            <h4>Upload Property Photos</h4>
+                            <p>Upload up to 20 high-quality photos of your property. First photo will be the main image.</p>
+                            <div class="upload-limits">
+                                <span>• Maximum 10 photos</span>
+                                <span>• File size: up to 5MB each</span>
+                                <span>• Formats: JPG, PNG, WebP</span>
+                            </div>
+                        </div>
+                        <div class="photo-upload-counter" id="photoUploadCounter" style="margin-bottom: 0.5rem; font-weight: 600; color: var(--color-gray-600); text-align: right; display: none;">0/10 photos uploaded</div>
+                        <div class="photo-upload-area" id="photoUploadArea">
+                            <div class="upload-placeholder" id="uploadPlaceholder">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <p>Drag & drop photos here or click to browse</p>
+                                <input type="file" id="photoInput" multiple accept="image/*" onchange="handlePhotoUpload(event)" style="display: none;">
+                                <button type="button" class="upload-btn" onclick="document.getElementById('photoInput').click()">
+                                    Choose Files
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="photo-preview-grid" id="photoPreviewGrid" style="display: none;">
+                            <!-- Photo previews and add button will be added here by JS -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Form Navigation -->
+                <div class="form-navigation">
+                    <button type="button" class="btn-secondary" id="prevBtn" onclick="previousStep()" style="display: none;">
+                        <i class="fas fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn-primary" id="nextBtn" onclick="nextStep()">
+                        Next <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button type="submit" class="btn-success" id="submitBtn" style="display: none;">
+                        <i class="fas fa-check"></i> List Property
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="./user-dashboard.js"></script>
+    <!-- Logout Modal -->
+    <div id="logoutModal" class="logout-modal-overlay" tabindex="-1" aria-modal="true" role="dialog" style="display: none;">
+      <div class="logout-modal-card">
+        <button class="logout-modal-close" aria-label="Close" onclick="closeLogoutModal()">
+          <i class="fas fa-times"></i>
+        </button>
+        <div class="logout-modal-icon">
+          <i class="fas fa-sign-out-alt"></i>
+        </div>
+        <h2 class="logout-modal-title">Log Out?</h2>
+        <p class="logout-modal-message">Are you sure you want to log out of your account?</p>
+        <div class="logout-modal-actions">
+          <button class="logout-modal-btn cancel" onclick="closeLogoutModal()">Cancel</button>
+          <button class="logout-modal-btn logout" onclick="confirmLogout()">Log Out</button>
+        </div>
+      </div>
+    </div>
+    <!-- Add Collection Modal -->
+    <div id="addCollectionModal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h2 class="modal-title">Create New Collection</h2>
+                <button class="modal-close" onclick="closeAddCollectionModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <form id="addCollectionForm" class="modal-form">
+                <div class="form-group">
+                    <label for="collectionName">Collection Name</label>
+                    <input type="text" id="collectionName" name="collectionName" required placeholder="Enter collection name">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeAddCollectionModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Create Collection</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="./favorites.js"></script>
+</body>
+</html>

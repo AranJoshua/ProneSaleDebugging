@@ -3,8 +3,7 @@ const navLinks = [
     { text: 'For Sale', href: '#' },
     { text: 'For Rent', href: '#' },
     { text: 'Agents', href: 'agents.html' },
-    { text: 'Blog', href: '#' },
-    { text: 'Contact', href: '#' }
+    { text: 'Blog', href: 'blog.html' }
 ];
 
 function initializeNavigation() {

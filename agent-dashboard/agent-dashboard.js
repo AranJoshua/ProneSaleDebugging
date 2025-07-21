@@ -360,8 +360,8 @@ function showErrorMessage(message) {
 function handlePhotoUpload(event) {
     const files = event.target.files;
     
-    if (files.length + uploadedPhotos.length > 10) {
-        showErrorMessage('Maximum 10 photos allowed. Please remove some photos first.');
+    if (files.length + uploadedPhotos.length > 20) {
+        showErrorMessage('Maximum 20 photos allowed. Please remove some photos first.');
         return;
     }
     
@@ -425,7 +425,7 @@ function updatePhotoPreviewGrid() {
     }
     
     // Add photo counter
-    photoUploadCounter.textContent = `${uploadedPhotos.length}/10 photos uploaded`;
+    photoUploadCounter.textContent = `${uploadedPhotos.length}/20 photos uploaded`;
     
     // Add photo items
     uploadedPhotos.forEach((photo, idx) => {
@@ -448,8 +448,8 @@ function updatePhotoPreviewGrid() {
         photoPreviewGrid.appendChild(photoItem);
     });
     
-    // Add plus button if less than 10 photos
-    if (uploadedPhotos.length < 10) {
+    // Add plus button if less than 20 photos
+    if (uploadedPhotos.length < 20) {
         const addBtn = document.createElement('div');
         addBtn.className = 'photo-preview-add';
         addBtn.title = 'Add more photos';
@@ -786,12 +786,39 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     const city = document.getElementById('city').value;
     const state = document.getElementById('state').value;
     const zipCode = document.getElementById('zipCode').value;
+    const facebook = document.getElementById('facebook').value;
+    const linkedin = document.getElementById('linkedin').value;
+    const x = document.getElementById('x').value;
+    const instagram = document.getElementById('instagram').value;
     
     // Update sidebar information
     document.querySelector('.agent-title').textContent = jobTitle;
     
     // Update display values
     updateDisplayValues();
+    
+    // Update display values for social media as icons
+    const socialRow = document.getElementById('profileSocialRow');
+    socialRow.innerHTML = '';
+    const socials = [
+        { id: 'facebook', url: facebook, icon: 'fab fa-facebook-f', label: 'Facebook' },
+        { id: 'linkedin', url: linkedin, icon: 'fab fa-linkedin-in', label: 'LinkedIn' },
+        { id: 'twitter', url: x, icon: 'fab fa-twitter', label: 'Twitter' },
+        { id: 'instagram', url: instagram, icon: 'fab fa-instagram', label: 'Instagram' }
+    ];
+    socials.forEach(social => {
+        if (social.url) {
+            const a = document.createElement('a');
+            a.href = social.url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.title = social.label;
+            a.setAttribute('aria-label', social.label);
+            a.className = 'profile-social-icon';
+            a.innerHTML = `<i class='${social.icon}'></i>`;
+            socialRow.appendChild(a);
+        }
+    });
     
     // Show success message
     showSuccessMessage('Profile updated successfully!');
@@ -928,7 +955,7 @@ function navigatePropertyImages(card, direction) {
         currentIndex = (currentIndex - 1 + images.length) % images.length;
     }
     
-    imgElement.src = 'img/' + images[currentIndex];
+    imgElement.src = '../img/' + images[currentIndex];
 }
 
 // Change property status

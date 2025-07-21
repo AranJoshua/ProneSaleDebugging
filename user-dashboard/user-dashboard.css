@@ -102,9 +102,14 @@ body {
 }
 
 .main-content {
-    opacity: 0;
-    transform: translateY(20px);
-    animation: mainContentSlideIn 0.3s ease-out 0.05s forwards;
+    flex: 1;
+    margin-left: var(--sidebar-width);
+    margin-top: var(--header-height);
+    padding: 1.25rem;
+    background: var(--bg-secondary);
+    transition: margin-left var(--transition-normal);
+    overflow-y: auto;
+    max-height: calc(100vh - var(--header-height));
 }
 
 /* Dashboard Load Animation Keyframes */
@@ -258,14 +263,14 @@ body {
     color: var(--color-white);
     padding: 1.25rem 0;
     position: fixed;
-    top: calc(var(--header-height) + var(--banner-height));
+    top: var(--header-height);
     left: 0;
-    height: calc(100vh - (var(--header-height) + var(--banner-height)));
+    height: calc(100vh - var(--header-height));
     z-index: var(--z-index-sidebar);
     transition: width var(--transition-normal);
 }
 
-.agent-profile {
+.user-profile {
     text-align: center;
     padding: 0 1rem 1.375rem;
     border-bottom: 1px solid var(--border-dark);
@@ -287,13 +292,13 @@ body {
     box-shadow: var(--shadow-md);
 }
 
-.agent-name {
-    font-size: 1rem;
+.user-name {
+    font-size: 1.25rem;
     font-weight: 600;
     margin-bottom: 0.1875rem;
 }
 
-.agent-title {
+.user-title {
     color: #888;
     font-size: 0.8125rem;
 }
@@ -373,15 +378,15 @@ body {
 .main-content {
     flex: 1;
     margin-left: var(--sidebar-width);
-    margin-top: calc(var(--header-height) + var(--banner-height));
+    margin-top: var(--header-height);
     padding: 1.25rem;
     background: var(--bg-secondary);
     transition: margin-left var(--transition-normal);
     overflow-y: auto;
-    max-height: calc(100vh - (var(--header-height) + var(--banner-height)));
+    max-height: calc(100vh - var(--header-height));
 }
 
-.agent-banner {
+.user-banner {
     background: var(--bg-banner);
     border-radius: var(--radius-xl);
     padding: 1.5625rem;
@@ -392,12 +397,12 @@ body {
     justify-content: space-between;
 }
 
-.agent-info {
+.user-info {
     display: flex;
     align-items: center;
 }
 
-.agent-banner-avatar {
+.user-banner-avatar {
     width: 5rem;
     height: 5rem;
     border-radius: var(--radius-full);
@@ -410,12 +415,12 @@ body {
     font-weight: bold;
 }
 
-.agent-details h2 {
+.user-details h2 {
     font-size: 1.5rem;
     margin-bottom: 0.3125rem;
 }
 
-.agent-details p {
+.user-details p {
     opacity: 0.9;
     margin-bottom: 0.1875rem;
 }
@@ -1438,7 +1443,7 @@ body {
     :root {
         --header-height: 54px;
     }
-    .agent-profile {
+    .user-profile {
         margin-bottom: 1rem;
     }
     .sidebar {
@@ -1465,7 +1470,7 @@ body {
         padding-top: 0;
         min-width: 0;
     }
-    .sidebar .agent-profile {
+    .sidebar .user-profile {
         margin-top: 2rem;
     }
     .sidebar-overlay {
@@ -3299,4 +3304,24 @@ body {
     position: relative;
     z-index: 2;
     transition: box-shadow 0.2s, border 0.2s;
+}
+
+.profile-social-row {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+.profile-social-icon {
+    font-size: 1.6rem;
+    color: #34343a;
+    transition: color 0.2s;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+}
+.profile-social-icon:hover {
+    color: #1e3a8a;
 }

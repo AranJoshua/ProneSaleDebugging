@@ -4,12 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agent Dashboard - Gabriel Esposito</title>
-    <link rel="stylesheet" href="agent-dashboard.css">
-    <link rel="stylesheet" href="logout-modal.css">
-    <link rel="stylesheet" href="favorites.css">
+    <link rel="stylesheet" href="./agent-dashboard.css">
+    <link rel="stylesheet" href="./logout-modal.css">
+    <link rel="stylesheet" href="./favorites.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="premium-offers.css">
+    <link rel="stylesheet" href="./premium-offers.css">
 </head>
 <body>
     <!-- Top Header -->
@@ -88,14 +88,14 @@
     <!-- Agent Banner Above Sidebar -->
     <div class="top-banner">
         <span class="agency-logo-banner">
-            <img src="img/logo1.webp" alt="Real Estate Block Logo" class="agency-logo"> Real Estate Block
+            <img src="../img/logo1.webp" alt="Real Estate Block Logo" class="agency-logo"> Real Estate Block
         </span>
     </div>
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="agent-profile" style="padding-bottom: 24px;">
             <div id="sidebar-profile-img-wrapper">
-                <img src="img/agent1.jpg" alt="Gabriel Esposito" id="sidebar-profile-img" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="../img/agent1.jpg" alt="Gabriel Esposito" id="sidebar-profile-img" style="width: 100%; height: 100%; object-fit: cover;">
                 <input type="file" id="sidebar-profile-upload" accept="image/*" style="display: none;" onchange="sidebarProfileUpload(event)">
             </div>
             <div class="agent-name">Gabriel Esposito</div>
@@ -197,7 +197,7 @@
                                 </div>
                             </div>
                             <div class="property-listing-image">
-                                <img class="property-listing-img" src="img/thumbnail1.jpg" alt="Modern City Center Apartment">
+                                <img class="property-listing-img" src="../img/thumbnail1.jpg" alt="Modern City Center Apartment">
                                 <button class="property-nav prev" type="button" aria-label="Previous image">
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
                                         <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
@@ -255,7 +255,7 @@
                                 </div>
                             </div>
                             <div class="property-listing-image">
-                                <img class="property-listing-img" src="img/thumbnail2.jpg" alt="Luxury Villa with Pool">
+                                <img class="property-listing-img" src="../img/thumbnail2.jpg" alt="Luxury Villa with Pool">
                                 <button class="property-nav prev" type="button" aria-label="Previous image">
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
                                         <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
@@ -296,7 +296,7 @@
                                 <span>SOLD</span>
                             </div>
                             <div class="property-listing-image">
-                                <img class="property-listing-img" src="img/thumbnail3.jpg" alt="Cozy Family Home">
+                                <img class="property-listing-img" src="../img/thumbnail3.jpg" alt="Cozy Family Home">
                                 <button class="property-nav prev" type="button" aria-label="Previous image">
                                     <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" width="24" height="24">
                                         <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
@@ -404,6 +404,12 @@
                             <span class="display-value" id="displayAddressValue">123 Main St, Suite 456, Anytown, USA 12345</span>
                         </div>
                     </div>
+                    <div class="profile-display-card">
+                        <h3>Social Media</h3>
+                        <div class="profile-social-row" id="profileSocialRow">
+                            <!-- Social icons will be injected here by JS if links are present -->
+                        </div>
+                    </div>
                 </div>
                 <div class="profile-edit-toggle">
                     <button type="button" class="edit-profile-btn" onclick="toggleEditMode()">Edit Profile</button>
@@ -415,7 +421,7 @@
                 <div class="card-section">
                     <div class="profile-photo-section">
                         <div class="profile-photo-upload">
-                            <img src="img/agent1.jpg" alt="Profile Photo" id="modalProfileImg">
+                            <img src="../img/agent1.jpg" alt="Profile Photo" id="modalProfileImg">
                             <div class="photo-upload-overlay">
                                 <i class="fa fa-camera"></i>
                                 <span>Change Photo</span>
@@ -481,6 +487,25 @@
                                 <input type="text" id="zipCode" value="12345">
                             </div>
                         </div>
+                        <div class="form-section">
+                            <h3>Social Media (Optional)</h3>
+                            <div class="form-group">
+                                <label for="facebook">Facebook</label>
+                                <input type="url" id="facebook" placeholder="https://facebook.com/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="linkedin">LinkedIn</label>
+                                <input type="url" id="linkedin" placeholder="https://linkedin.com/in/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="x">X (Twitter)</label>
+                                <input type="url" id="x" placeholder="https://x.com/yourprofile">
+                            </div>
+                            <div class="form-group">
+                                <label for="instagram">Instagram</label>
+                                <input type="url" id="instagram" placeholder="https://instagram.com/yourprofile">
+                            </div>
+                        </div>
                         <div class="form-actions">
                             <button type="button" class="btn-cancel" onclick="toggleEditMode(false)">Cancel</button>
                             <button type="submit" class="btn-save">Save Changes</button>
@@ -491,11 +516,11 @@
         </div>
         <!-- Settings Section -->
         <div id="settings" class="content-section">
-            <iframe src="account-settings.html" style="width:100%;height:100vh;border:none;"></iframe>
+            <iframe src="./account-settings.html" style="width:100%;height:100vh;border:none;"></iframe>
         </div>
         <!-- Help & Support Section -->
         <div id="help-support" class="content-section">
-            <iframe src="help-support.html" style="width:100%;height:100vh;border:none;"></iframe>
+            <iframe src="./help-support.html" style="width:100%;height:100vh;border:none;"></iframe>
         </div>
 
     </div>
@@ -644,7 +669,7 @@
                         <div class="upload-instructions">
                             <i class="fas fa-camera"></i>
                             <h4>Upload Property Photos</h4>
-                            <p>Upload up to 10 high-quality photos of your property. First photo will be the main image.</p>
+                            <p>Upload up to 20 high-quality photos of your property. First photo will be the main image.</p>
                             <div class="upload-limits">
                                 <span>• Maximum 10 photos</span>
                                 <span>• File size: up to 5MB each</span>
@@ -685,7 +710,7 @@
         </div>
     </div>
 
-    <script src="agent-dashboard.js"></script>
+    <script src="./agent-dashboard.js"></script>
     <!-- Logout Modal -->
     <div id="logoutModal" class="logout-modal-overlay" tabindex="-1" aria-modal="true" role="dialog" style="display: none;">
       <div class="logout-modal-card">
@@ -725,6 +750,6 @@
             </form>
         </div>
     </div>
-    <script src="favorites.js"></script>
+    <script src="./favorites.js"></script>
 </body>
 </html>

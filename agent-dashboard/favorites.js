@@ -68,13 +68,13 @@ function renderCollections(newCollectionId = null) {
     if (col.listings && col.listings.length > 0) {
       card.innerHTML += `
         <div class="collection-thumb filled-thumb">
-          <img src="img/${col.listings[0].img}" alt="${col.listings[0].title}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:14px 14px 0 0;">
+          <img src="../img/${col.listings[0].img}" alt="${col.listings[0].title}" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:14px 14px 0 0;">
         </div>
       `;
     } else if (idx === 0) {
       card.innerHTML += `
         <div class="collection-thumb filled-thumb">
-          <img src="img/thumbnail1.jpg" alt="Sample Listing" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:14px 14px 0 0;">
+          <img src="../img/thumbnail1.jpg" alt="Sample Listing" style="width:100%;height:100%;object-fit:cover;display:block;border-radius:14px 14px 0 0;">
         </div>
       `;
     } else {
@@ -264,7 +264,7 @@ function renderPropertyCard(listing) {
   }
   card.innerHTML += `
     <div class="property-image">
-      <img src="img/${listing.img}" alt="${listing.title}" loading="lazy" width="400" height="400">
+      <img src="../img/${listing.img}" alt="${listing.title}" loading="lazy" width="400" height="400">
       <button class="property-nav prev" type="button" aria-label="Previous image">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
           <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>

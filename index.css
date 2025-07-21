@@ -300,7 +300,7 @@ body {
     border-radius: 15px;
     padding: 1rem 1.5rem;
     box-shadow: 0 15px 40px rgba(0,0,0,.4);
-    animation: scaleIn .6s ease-out .4s both;
+    animation: scaleIn 0.35s ease-out 0s both;
     border: 2px solid rgba(255,255,255,.4);
     max-width: 600px;
     margin: 0 auto;

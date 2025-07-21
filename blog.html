@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prone Sale Blog</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="blog.css">
+</head>
+<body>
+    <div class="loading-animation"></div>
+    <!-- Header (copied from index.html) -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Mobile Nav -->
+                <div class="d-flex w-100 align-items-center d-lg-none">
+                    <div class="navbar-mobile-left">
+                        <button class="navbar-toggler mobile-menu-open-trigger" type="button" aria-label="Open menu">
+                            <i class="fas fa-bars menu-icon"></i>
+                            <i class="fas fa-times close-icon" style="display:none;"></i>
+                        </button>
+                        <a class="navbar-brand" href="index.html">Prone Sale</a>
+                    </div>
+                    <div class="navbar-mobile-account ms-auto">
+                        <a href="login.html" class="btn btn-account">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="d-none d-lg-flex w-100 align-items-center justify-content-between">
+                    <a class="navbar-brand" href="index.html">Prone Sale</a>
+                    <div class="collapse navbar-collapse show" id="navbarNav">
+                        <ul class="navbar-nav me-auto" id="mainNavLinks"></ul>
+                        <div class="nav-separator d-none d-lg-block"></div>
+                        <div class="navbar-actions">
+                            <button class="btn btn-secondary">List Property</button>
+                            <a href="login.html" class="btn btn-account">
+                                <i class="fas fa-user"></i>
+                                Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-menu-overlay"></div>
+    <nav class="mobile-menu-panel">
+        <ul class="mobile-menu-list" id="mobileNavLinks"></ul>
+        <div class="mobile-menu-actions">
+            <button class="btn btn-secondary w-100">List Property</button>
+        </div>
+    </nav>
+    <!-- Blog Section -->
+    <main class="blog-section">
+        <div class="container">
+            <div class="search-form search-form-tabs" id="blogSearchFormContainer">
+                <div class="search-tabs" id="blogSearchTabs">
+                    <button class="search-tab active" data-tab="articles" type="button">Articles</button>
+                    <button class="search-tab" data-tab="news" type="button">News</button>
+                    <button class="search-tab" data-tab="guides" type="button">Guides</button>
+                    <div class="tab-underline"></div>
+                </div>
+                <div class="search-bar-group">
+                    <input type="text" class="form-control search-input" placeholder="Search for articles, news, or guides">
+                    <button type="button" class="btn btn-outline-secondary search-filters" style="display:none;"><i class="fas fa-sliders-h"></i> Filters</button>
+                    <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                    <div class="search-buttons-row">
+                        <button type="button" class="btn btn-outline-secondary search-filters" style="display:none;"><i class="fas fa-sliders-h"></i> Filters</button>
+                        <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                    </div>
+                </div>
+            </div>
+            <div class="blog-grid">
+                <!-- Blog Post 1 -->
+                <article class="blog-card" id="blogCard1">
+                    <div class="blog-image">
+                        <img src="img/blog1.jpg" alt="2025 Market Trends" loading="lazy">
+                    </div>
+                    <div class="blog-content">
+                        <h2 class="blog-title">2025 Real Estate Market Trends: What to Expect</h2>
+                        <div class="blog-meta">
+                            <span class="blog-author"><i class="fas fa-user"></i> Sarah L.</span>
+                            <span class="blog-date"><i class="fas fa-calendar-alt"></i>July 10, 2025</span>
+                        </div>
+                        <p class="blog-excerpt">Stay ahead of the curve with our expert analysis of the 2025 real estate market. Discover key trends, price forecasts, and what buyers and sellers should know this year.</p>
+                        <a href="#" class="btn btn-primary blog-read-btn" id="readArticleBtn">Read Full Article</a>
+                    </div>
+                </article>
+                <!-- Blog Post 2 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="img/blog2.jpg" alt="Home Staging Tips" loading="lazy">
+                        
+                    </div>
+                    <div class="blog-content">
+                        <h2 class="blog-title">Simple Home Staging Tips to Sell Faster</h2>
+                        <div class="blog-meta">
+                            <span class="blog-author"><i class="fas fa-user"></i> Mark T.</span>
+                            <span class="blog-date"><i class="fas fa-calendar-alt"></i> Feb 22, 2025</span>
+                        </div>
+                        <p class="blog-excerpt">Make your home irresistible to buyers with these easy, budget-friendly staging tips. Learn how to highlight your property’s best features and close the deal quickly.</p>
+                        <a href="#" class="btn btn-primary blog-read-btn">Read Full Article</a>
+                    </div>
+                </article>
+                <!-- Blog Post 3 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="img/blog3.avif" alt="Company News" loading="lazy">
+                        
+                    </div>
+                    <div class="blog-content">
+                        <h2 class="blog-title">Prone Sale Expands: New Offices in 3 Cities</h2>
+                        <div class="blog-meta">
+                            <span class="blog-author"><i class="fas fa-user"></i> Admin</span>
+                            <span class="blog-date"><i class="fas fa-calendar-alt"></i> Jan 15, 2025</span>
+                        </div>
+                        <p class="blog-excerpt">We’re excited to announce the opening of new Prone Sale offices in Tirana, Durrës, and Vlorë. Find out how this expansion benefits our clients and partners.</p>
+                        <a href="#" class="btn btn-primary blog-read-btn">Read Full Article</a>
+                    </div>
+                </article>
+                <!-- Blog Post 4 -->
+                <article class="blog-card">
+                    <div class="blog-image">
+                        <img src="img/blog4.jpg" alt="Finance Tips" loading="lazy">
+                        
+                    </div>
+                    <div class="blog-content">
+                        <h2 class="blog-title">How to Finance Your First Home: A Beginner’s Guide</h2>
+                        <div class="blog-meta">
+                            <span class="blog-author"><i class="fas fa-user"></i> Elira K.</span>
+                            <span class="blog-date"><i class="fas fa-calendar-alt"></i> Jan 2, 2025</span>
+                        </div>
+                        <p class="blog-excerpt">Buying your first home? Learn about mortgages, down payments, and smart budgeting to make your dream a reality with confidence.</p>
+                        <a href="#" class="btn btn-primary blog-read-btn">Read Full Article</a>
+                    </div>
+                </article>
+            </div>
+            <!-- Article View Modal/Section (hidden by default) -->
+            <section class="blog-article-view" id="blogArticleView" style="display:none;">
+                <div class="blog-article-inner">
+                    <button class="btn btn-outline-secondary mb-3" id="backToBlogBtn"><i class="fas fa-arrow-left"></i> Back to Blog</button>
+                    <div class="article-header">
+                        <h1 class="article-title">2025 Real Estate Market Trends: What to Expect</h1>
+                        <div class="blog-meta">
+                            <span class="blog-author"><i class="fas fa-user"></i> Sarah L.</span>
+                            <span class="blog-date"><i class="fas fa-calendar-alt"></i> July 10, 2025</span>
+                        </div>
+                    </div>
+                    <div class="article-image mb-4">
+                        <img src="img/blog1.jpg" alt="2025 Market Trends">
+                    </div>
+                    <div class="article-content">
+                        <p>As we move into 2025, the real estate market is poised for significant changes. Our expert analysis covers the most important trends shaping the industry, from shifting buyer preferences to evolving price forecasts.</p>
+                        <h3>Key Trends to Watch</h3>
+                        <ul>
+                            <li><strong>Urban Growth:</strong> Major cities continue to attract buyers, but suburban and rural areas are seeing renewed interest due to remote work flexibility.</li>
+                            <li><strong>Price Forecasts:</strong> Home prices are expected to stabilize after rapid growth, with some regions experiencing modest increases.</li>
+                            <li><strong>Technology:</strong> Virtual tours, AI-driven property recommendations, and digital closings are becoming standard in the buying process.</li>
+                        </ul>
+                        <h3>Advice for Buyers & Sellers</h3>
+                        <p>Buyers should be prepared for competitive markets in popular areas, while sellers can benefit from strategic home improvements and effective online marketing. Staying informed and working with experienced agents will be key to success in 2025.</p>
+                        <p>For a deeper dive into these trends and more, stay tuned to our blog for regular updates and expert insights.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    <!-- Footer (EXACT copy from index.html for consistency) -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mb-4">
+                        <div class="footer-brand">Prone Sale</div>
+                        <p class="footer-description">
+                            Your trusted partner in finding the perfect property. We connect you with premium real estate opportunities across Albania.
+                        </p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tirana, Albania</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@pronesale.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Quick Links</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Properties</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">For Sale</a></li>
+                                <li><a href="#">For Rent</a></li>
+                                <li><a href="#">Send Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Follow Us</h6>
+                            <p class="footer-description" style="max-width:230px;margin-bottom:1rem;">
+                                Stay connected with us for the latest property updates and news.
+                            </p>
+                            <div class="social-links">
+                                <a href="#" class="social-link" aria-label="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        &copy; 2025 Prone Sale. All rights reserved.
+                    </p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="blog.js"></script>
+</body>
+</html> 

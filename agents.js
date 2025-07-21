@@ -3,8 +3,7 @@ const navLinks = [
     { text: 'For Sale', href: '#' },
     { text: 'For Rent', href: '#' },
     { text: 'Agents', href: 'agents.html' },
-    { text: 'Blog', href: '#' },
-    { text: 'Contact', href: '#' }
+    { text: 'Blog', href: 'blog.html' }
 ];
 
 function initializeNavigation() {
@@ -14,14 +13,12 @@ function initializeNavigation() {
     
     if (mainNav && mobileNav) {
         mainNav.innerHTML = navLinks.map(link => {
-            const isActive = link.href === currentPage || 
-                           (currentPage === 'index.html' && link.href === 'index.html');
+            const isActive = link.href === currentPage;
             return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
         }).join('');
         
         mobileNav.innerHTML = navLinks.map(link => {
-            const isActive = link.href === currentPage || 
-                           (currentPage === 'index.html' && link.href === 'index.html');
+            const isActive = link.href === currentPage;
             return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
         }).join('');
     }
