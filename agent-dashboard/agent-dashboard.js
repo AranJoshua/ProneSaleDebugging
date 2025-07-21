@@ -721,6 +721,11 @@ function toggleEditMode(show = true) {
         editForm.style.display = 'block';
         editBtn.textContent = 'Cancel Edit';
         editBtn.onclick = () => toggleEditMode(false);
+        // Add event listener for photo upload click
+        const photoUploadContainer = editForm.querySelector('.profile-photo-upload');
+        if (photoUploadContainer) {
+            photoUploadContainer.onclick = () => document.getElementById('profilePhotoUpload').click();
+        }
     } else {
         displayContent.style.display = 'block';
         editForm.style.display = 'none';
@@ -791,8 +796,14 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     const x = document.getElementById('x').value;
     const instagram = document.getElementById('instagram').value;
     
+    // Save profile photo to localStorage
+    const profileImgSrc = document.getElementById('modalProfileImg').src;
+    if (profileImgSrc) {
+        localStorage.setItem('agentProfilePhoto', profileImgSrc);
+    }
+
     // Update sidebar information
-    document.querySelector('.agent-title').textContent = jobTitle;
+    document.querySelector('.agent-name').textContent = document.getElementById('displayName').value;
     
     // Update display values
     updateDisplayValues();
@@ -1656,6 +1667,16 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeListingsTabs();
     attachEditListenersToAllCards();
 
+    // Load agent profile photo from localStorage
+    const savedPhoto = localStorage.getItem('agentProfilePhoto');
+    if (savedPhoto) {
+        document.getElementById('sidebar-profile-img').src = savedPhoto;
+        const modalImg = document.getElementById('modalProfileImg');
+        if (modalImg) {
+            modalImg.src = savedPhoto;
+        }
+    }
+
     // Notifications button logic
     const notificationsBtn = document.getElementById('notificationsBtn');
     if (notificationsBtn) {
@@ -1683,14 +1704,19 @@ window.addEventListener('DOMContentLoaded', function() {
             // Get agent info from sidebar
             var img = document.getElementById('sidebar-profile-img');
             var name = document.querySelector('.agent-name');
+            var imgSrc = img ? img.getAttribute('src') : '';
+            // Fix path if needed
+            if (imgSrc && imgSrc.startsWith('../img/')) {
+                imgSrc = imgSrc.replace('../img/', 'img/');
+            }
             var agentInfo = {
                 name: name ? name.textContent : '',
-                img: img ? img.getAttribute('src') : ''
+                img: imgSrc
             };
             // Store in localStorage
             localStorage.setItem('dashboardAgentInfo', JSON.stringify(agentInfo));
             // Redirect to homepage
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         });
     }
 });
@@ -1742,5 +1768,5 @@ function confirmLogout() {
     localStorage.clear();
     sessionStorage.clear();
     // Redirect to login page (or home page)
-    window.location.href = 'login.html';
+    window.location.href = '../index.html';
 }

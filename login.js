@@ -348,9 +348,22 @@
     }
 
     function handleLoginSuccess() {
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, CONFIG.SUCCESS_DELAY);
+        const emailInput = document.getElementById('loginEmail');
+        const passwordInput = document.getElementById('loginPassword');
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (email === 'privateuser@gmail.com' && password === 'abcd123!') {
+            localStorage.setItem('userType', 'private');
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.href = 'user-dashboard/user-dashboard.html';
+        } else if (email === 'agent@gmail.com' && password === 'abcd123!') {
+            localStorage.setItem('userType', 'agent');
+            localStorage.setItem('isLoggedIn', 'true');
+            window.location.href = 'agent-dashboard/agent-dashboard.html';
+        } else {
+            showInputError(passwordInput, 'Invalid credentials');
+        }
     }
 
     function handleSignupSuccess(userType) {
@@ -468,13 +481,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-      const loginForm = document.querySelector('form#loginForm, form.login-form, form');
-      if (loginForm) {
-        loginForm.onsubmit = function(e) {
-          e.preventDefault();
-          window.location.href = 'agent-dashboard.html';
-        };
-      }
+        // This logic is now handled in handleLoginSuccess
     });
 
     // Expose for debugging

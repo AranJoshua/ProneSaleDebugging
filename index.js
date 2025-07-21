@@ -421,14 +421,25 @@
 
 window.addEventListener('DOMContentLoaded', function() {
     var agentInfoStr = localStorage.getItem('dashboardAgentInfo');
+    var userInfoStr = localStorage.getItem('dashboardUserInfo');
+    var info = null;
+    var dashboardType = null;
     if (agentInfoStr) {
-        var agentInfo = JSON.parse(agentInfoStr);
+        info = JSON.parse(agentInfoStr);
+        dashboardType = 'agent';
+        localStorage.removeItem('dashboardAgentInfo');
+    } else if (userInfoStr) {
+        info = JSON.parse(userInfoStr);
+        dashboardType = 'user';
+        localStorage.removeItem('dashboardUserInfo');
+    }
+    if (info) {
         var mobileAccount = document.querySelector('.navbar-mobile-account');
         var desktopAccount = document.querySelector('.navbar-actions .btn-account');
         var profileImg = document.createElement('img');
-        profileImg.src = agentInfo.img || 'img/agent1.jpg';
-        profileImg.alt = agentInfo.name || 'Agent Profile';
-        profileImg.title = agentInfo.name || 'Agent Profile';
+        profileImg.src = info.img || 'img/agent1.jpg';
+        profileImg.alt = info.name || 'Profile';
+        profileImg.title = info.name || 'Profile';
         profileImg.style.width = '40px';
         profileImg.style.height = '40px';
         profileImg.style.borderRadius = '50%';
@@ -444,10 +455,13 @@ window.addEventListener('DOMContentLoaded', function() {
             var img2 = profileImg.cloneNode(true);
             parent.replaceChild(img2, desktopAccount);
         }
-        localStorage.removeItem('dashboardAgentInfo');
         var addProfileClick = function(img) {
             img.addEventListener('click', function() {
-                window.location.href = 'agent-dashboard.html';
+                if (dashboardType === 'agent') {
+                    window.location.href = 'agent-dashboard/agent-dashboard.html';
+                } else {
+                    window.location.href = 'user-dashboard/user-dashboard.html';
+                }
             });
         };
         var imgs = document.querySelectorAll('#dashboardProfileImg');

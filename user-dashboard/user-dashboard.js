@@ -721,6 +721,11 @@ function toggleEditMode(show = true) {
         editForm.style.display = 'block';
         editBtn.textContent = 'Cancel Edit';
         editBtn.onclick = () => toggleEditMode(false);
+        // Add event listener for photo upload click
+        const photoUploadContainer = editForm.querySelector('.profile-photo-upload');
+        if (photoUploadContainer) {
+            photoUploadContainer.onclick = () => document.getElementById('profilePhotoUpload').click();
+        }
     } else {
         displayContent.style.display = 'block';
         editForm.style.display = 'none';
@@ -735,22 +740,11 @@ function updateDisplayValues() {
         name: document.getElementById('displayName').value,
         email: document.getElementById('email').value,
         phone: document.getElementById('phone').value,
-        jobTitle: document.getElementById('jobTitle').value,
-        licenseNumber: document.getElementById('licenseNumber').value,
-        experience: document.getElementById('experience').value,
-        streetAddress: document.getElementById('streetAddress').value,
-        city: document.getElementById('city').value,
-        state: document.getElementById('state').value,
-        zipCode: document.getElementById('zipCode').value
     };
     
     document.getElementById('displayNameValue').textContent = formData.name;
     document.getElementById('displayEmailValue').textContent = formData.email;
     document.getElementById('displayPhoneValue').textContent = formData.phone;
-    document.getElementById('displayJobTitleValue').textContent = formData.jobTitle;
-    document.getElementById('displayLicenseValue').textContent = formData.licenseNumber;
-    document.getElementById('displayExperienceValue').textContent = formData.experience + ' years';
-    document.getElementById('displayAddressValue').textContent = `${formData.streetAddress}, ${formData.city}, ${formData.state} ${formData.zipCode}`;
 }
 
 function updateProfilePhoto(event) {
@@ -778,47 +772,18 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     
     // Get form values
     const phone = document.getElementById('phone').value;
-    const jobTitle = document.getElementById('jobTitle').value;
-    const licenseNumber = document.getElementById('licenseNumber').value;
-    const experience = document.getElementById('experience').value;
-    const specialties = document.getElementById('specialties').value;
-    const streetAddress = document.getElementById('streetAddress').value;
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
-    const zipCode = document.getElementById('zipCode').value;
-    const facebook = document.getElementById('facebook').value;
-    const linkedin = document.getElementById('linkedin').value;
-    const x = document.getElementById('x').value;
-    const instagram = document.getElementById('instagram').value;
+
+    // Save profile photo to localStorage
+    const profileImgSrc = document.getElementById('modalProfileImg').src;
+    if (profileImgSrc) {
+        localStorage.setItem('userProfilePhoto', profileImgSrc);
+    }
     
     // Update sidebar information
-    document.querySelector('.user-title').textContent = jobTitle;
+    document.querySelector('.user-name').textContent = document.getElementById('displayName').value;
     
     // Update display values
     updateDisplayValues();
-    
-    // Update display values for social media as icons
-    const socialRow = document.getElementById('profileSocialRow');
-    socialRow.innerHTML = '';
-    const socials = [
-        { id: 'facebook', url: facebook, icon: 'fab fa-facebook-f', label: 'Facebook' },
-        { id: 'linkedin', url: linkedin, icon: 'fab fa-linkedin-in', label: 'LinkedIn' },
-        { id: 'twitter', url: x, icon: 'fab fa-twitter', label: 'Twitter' },
-        { id: 'instagram', url: instagram, icon: 'fab fa-instagram', label: 'Instagram' }
-    ];
-    socials.forEach(social => {
-        if (social.url) {
-            const a = document.createElement('a');
-            a.href = social.url;
-            a.target = '_blank';
-            a.rel = 'noopener';
-            a.title = social.label;
-            a.setAttribute('aria-label', social.label);
-            a.className = 'profile-social-icon';
-            a.innerHTML = `<i class='${social.icon}'></i>`;
-            socialRow.appendChild(a);
-        }
-    });
     
     // Show success message
     showSuccessMessage('Profile updated successfully!');
@@ -1656,6 +1621,16 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeListingsTabs();
     attachEditListenersToAllCards();
 
+    // Load user profile photo from localStorage
+    const savedPhoto = localStorage.getItem('userProfilePhoto');
+    if (savedPhoto) {
+        document.getElementById('sidebar-profile-img').src = savedPhoto;
+        const modalImg = document.getElementById('modalProfileImg');
+        if (modalImg) {
+            modalImg.src = savedPhoto;
+        }
+    }
+
     // Notifications button logic
     const notificationsBtn = document.getElementById('notificationsBtn');
     if (notificationsBtn) {
@@ -1680,17 +1655,22 @@ window.addEventListener('DOMContentLoaded', function() {
     var homeBtn = document.getElementById('dashboardHomeBtn');
     if (homeBtn) {
         homeBtn.addEventListener('click', function() {
-            // Get agent info from sidebar
+            // Get user info from sidebar
             var img = document.getElementById('sidebar-profile-img');
             var name = document.querySelector('.user-name');
-            var agentInfo = {
+            var imgSrc = img ? img.getAttribute('src') : '';
+            // Fix path if needed
+            if (imgSrc && imgSrc.startsWith('../img/')) {
+                imgSrc = imgSrc.replace('../img/', 'img/');
+            }
+            var userInfo = {
                 name: name ? name.textContent : '',
-                img: img ? img.getAttribute('src') : ''
+                img: imgSrc
             };
-            // Store in localStorage
-            localStorage.setItem('dashboardAgentInfo', JSON.stringify(agentInfo));
+            // Store in localStorage (as dashboardUserInfo)
+            localStorage.setItem('dashboardUserInfo', JSON.stringify(userInfo));
             // Redirect to homepage
-            window.location.href = 'index.html';
+            window.location.href = '../index.html';
         });
     }
 });
@@ -1742,5 +1722,5 @@ function confirmLogout() {
     localStorage.clear();
     sessionStorage.clear();
     // Redirect to login page (or home page)
-    window.location.href = 'login.html';
+    window.location.href = '../index.html';
 }
