@@ -469,25 +469,6 @@ window.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-  // Demo login: clicking the Account button or submitting the login form logs in and redirects to dashboard
-  const accountBtn = document.querySelector('.btn-account, #accountBtn');
-  if (accountBtn) {
-    accountBtn.onclick = function(e) {
-      e.preventDefault();
-      window.location.href = 'agent-dashboard.html';
-    };
-  }
-  // If there is a login form, override its submit for demo
-  const loginForm = document.querySelector('form#loginForm, form.login-form');
-  if (loginForm) {
-    loginForm.onsubmit = function(e) {
-      e.preventDefault();
-      window.location.href = 'agent-dashboard.html';
-    };
-  }
-});
-
 function showSuccessNotification(message) {
   let notif = document.getElementById('successNotification');
   if (!notif) {
