@@ -3430,6 +3430,13 @@ body {
     border-radius: var(--radius-lg);
     padding: 0;
     overflow-y: auto;
+    position: relative;
+  }
+  .modal-container::after {
+    content: '';
+    display: block;
+    height: 2.5rem;
+    width: 100%;
   }
   .modal-form {
     padding: 0 1rem 1.5rem 1rem;
