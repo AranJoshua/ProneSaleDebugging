@@ -3299,7 +3299,7 @@ body {
     }
 }
 .property-listing-card.highlighted-listing {
-    border: 2.5px solid #ffd700 !important;
+    border: 2.5px solid #ffd700;
     box-shadow: 0 0 16px 0 #ffe066, 0 2px 8px rgba(30,58,138,0.10);
     position: relative;
     z-index: 2;

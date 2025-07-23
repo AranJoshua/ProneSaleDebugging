@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Property Details | Prone Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="for-sale.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="property-details.css">
+</head>
+<body>
+    <div class="loading-animation"></div>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Mobile Nav -->
+                <div class="d-flex w-100 align-items-center d-lg-none">
+                    <div class="navbar-mobile-left">
+                        <button class="navbar-toggler mobile-menu-open-trigger" type="button" aria-label="Open menu">
+                            <i class="fas fa-bars menu-icon"></i>
+                            <i class="fas fa-times close-icon" style="display:none;"></i>
+                        </button>
+                        <a class="navbar-brand" href="#">Prone Sale</a>
+                    </div>
+                    <div class="navbar-mobile-account ms-auto">
+                        <a href="login.html" class="btn btn-account">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="d-none d-lg-flex w-100 align-items-center justify-content-between">
+                    <a class="navbar-brand" href="#">Prone Sale</a>
+                    <div class="collapse navbar-collapse show" id="navbarNav">
+                        <ul class="navbar-nav me-auto" id="mainNavLinks"></ul>
+                        <div class="nav-separator d-none d-lg-block"></div>
+                        <div class="navbar-actions">
+                            <button class="btn btn-secondary">List Property</button>
+                            <a href="login.html" class="btn btn-account">
+                                <i class="fas fa-user"></i>
+                                Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-menu-overlay"></div>
+    <nav class="mobile-menu-panel">
+        <ul class="mobile-menu-list" id="mobileNavLinks"></ul>
+        <div class="mobile-menu-actions">
+            <button class="btn btn-secondary w-100">List Property</button>
+        </div>
+    </nav>
+    <main id="property-details-main">
+      <section class="property-details-hero">
+        <div class="container property-details-container">
+          <div class="row">
+            <!-- Gallery/Slider -->
+            <div class="col-lg-7 col-md-12 mb-4 mb-lg-0">
+              <div id="propertyGallery" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <img src="img/thumbnail1.jpg" class="d-block w-100" alt="Luxury Villa Photo 1">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/thumbnail2.jpg" class="d-block w-100" alt="Luxury Villa Photo 2">
+                  </div>
+                  <div class="carousel-item">
+                    <img src="img/thumbnail3.jpg" class="d-block w-100" alt="Luxury Villa Photo 3">
+                  </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#propertyGallery" data-bs-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#propertyGallery" data-bs-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="visually-hidden">Next</span>
+                </button>
+              </div>
+            </div>
+            <!-- Property Details -->
+            <div class="col-lg-5 col-md-12">
+              <div class="property-details-summary">
+                <div class="property-banner" style="background: linear-gradient(135deg, #059669, #10b981); margin-bottom: 1rem;">
+                  <div class="banner-brand">
+                    <div class="banner-logo">PE</div>
+                    <div class="banner-name">PrimeEstate</div>
+                  </div>
+                </div>
+                <h1 class="property-title">Luxury Villa with Pool</h1>
+                <div class="property-location mb-2"><i class="fas fa-map-marker-alt"></i> Durrës, Beachfront</div>
+                <div class="property-price mb-3">For Sale €750,000 - €850,000</div>
+                <ul class="property-spec-list mb-3">
+                  <li><i class="fas fa-bed"></i> 4 Bedrooms</li>
+                  <li><i class="fas fa-bath"></i> 3 Bathrooms</li>
+                  <li><i class="fas fa-car"></i> 2 Car Spaces</li>
+                  <li><i class="fas fa-ruler-combined"></i> 250m² Floor Area</li>
+                  <li><i class="fas fa-tree"></i> 600m² Lot Size</li>
+                  <li><i class="fas fa-home"></i> Villa</li>
+                </ul>
+                <div id="propertyMap" style="height: 220px; border-radius: 12px; overflow: hidden;"></div>
+              </div>
+            </div>
+          </div>
+          <div class="row mt-5">
+            <!-- Agent Info -->
+            <div class="col-lg-4 col-md-12 mb-4 mb-lg-0">
+              <div class="agent-info-card p-4 bg-white rounded-4 shadow-sm">
+                <div class="d-flex align-items-center mb-3">
+                  <img src="img/agent2.jpg" alt="Agent Photo" class="agent-photo rounded-circle me-3" width="64" height="64">
+                  <div>
+                    <div class="banner-brand mb-1">
+                      <div class="banner-logo">PE</div>
+                      <div class="banner-name">PrimeEstate</div>
+                    </div>
+                    <h5 class="mb-0">Arben Dervishi</h5>
+                    <div class="agent-role text-muted">Senior Real Estate Agent</div>
+                  </div>
+                </div>
+                <div class="agent-contact mb-2"><i class="fas fa-building"></i> PrimeEstate Office, Durrës</div>
+                <div class="agent-contact mb-2"><i class="fas fa-envelope"></i> arben@primeestate.com</div>
+                <div class="agent-contact"><i class="fas fa-phone"></i> +355 68 123 4567</div>
+              </div>
+            </div>
+            <!-- Property Description -->
+            <div class="col-lg-8 col-md-12">
+              <div class="property-description bg-white p-4 rounded-4 shadow-sm">
+                <h3>Property Description</h3>
+                <p>
+                  Experience luxury living in this stunning beachfront villa located in the heart of Durrës. Boasting 4 spacious bedrooms, 3 modern bathrooms, and a private pool, this property is perfect for families or those who love to entertain. The open-plan living and dining area features floor-to-ceiling windows with breathtaking sea views. Enjoy a gourmet kitchen, landscaped gardens, and direct beach access. The villa is situated in a secure, prestigious neighborhood close to top schools, restaurants, and shopping.
+                </p>
+                <ul>
+                  <li>Private swimming pool and sun deck</li>
+                  <li>Modern kitchen with premium appliances</li>
+                  <li>Landscaped gardens and outdoor entertaining area</li>
+                  <li>Secure parking for 2 cars</li>
+                  <li>Smart home features and security system</li>
+                  <li>Energy-efficient design</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mb-4">
+                        <div class="footer-brand">Prone Sale</div>
+                        <p class="footer-description">
+                            Your trusted partner in finding the perfect property. We connect you with premium real estate opportunities across Albania.
+                        </p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tirana, Albania</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@pronesale.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Quick Links</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Properties</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">For Sale</a></li>
+                                <li><a href="#">For Rent</a></li>
+                                <li><a href="#">Send Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Follow Us</h6>
+                            <p class="footer-description" style="max-width:230px;margin-bottom:1rem;">
+                                Stay connected with us for the latest property updates and news.
+                            </p>
+                            <div class="social-links">
+                                <a href="#" class="social-link" aria-label="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        &copy; 2025 Prone Sale. All rights reserved.
+                    </p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="property-details.js"></script>
+</body>
+</html> 

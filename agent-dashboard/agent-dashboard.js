@@ -155,10 +155,9 @@ function setupModalEventListeners() {
     document.getElementById('description').addEventListener('input', function() {
         const charCount = this.value.length;
         document.getElementById('charCount').textContent = charCount;
-        
-        if (charCount > 1000) {
-            this.value = this.value.substring(0, 1000);
-            document.getElementById('charCount').textContent = '1000';
+        if (charCount > 5000) {
+            this.value = this.value.substring(0, 5000);
+            document.getElementById('charCount').textContent = '5000';
         }
     });
     
@@ -221,14 +220,22 @@ function removeModalEventListeners() {
 function toggleSaleOptions() {
     const listingType = document.getElementById('listingType').value;
     const saleOptionsGroup = document.getElementById('saleOptionsGroup');
+    const pricePerMonthLabel = document.getElementById('pricePerMonthLabel');
     
     if (listingType === 'for-sale') {
         saleOptionsGroup.style.display = 'block';
         document.getElementById('saleType').required = true;
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
+    } else if (listingType === 'for-rent') {
+        saleOptionsGroup.style.display = 'none';
+        document.getElementById('saleType').required = false;
+        document.getElementById('saleType').value = '';
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'inline-block';
     } else {
         saleOptionsGroup.style.display = 'none';
         document.getElementById('saleType').required = false;
         document.getElementById('saleType').value = '';
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
     }
 }
 
@@ -439,12 +446,11 @@ function updatePhotoPreviewGrid() {
                 <button type="button" class="photo-remove-btn" onclick="removePhoto('${photo.id}')">
                     <i class="fas fa-times"></i>
                 </button>
+                <button type="button" class="photo-main-btn" onclick="setMainPhoto('${photo.id}')" ${photo.isMain ? 'disabled' : ''} title="Set as Main Photo">
+                    <i class="fas fa-star"></i>
+                </button>
             </div>
         `;
-        photoItem.addEventListener('click', function(e) {
-            if (e.target.closest('.photo-remove-btn')) return;
-            setMainPhoto(photo.id);
-        });
         photoPreviewGrid.appendChild(photoItem);
     });
     
@@ -530,7 +536,9 @@ function handleFormSubmission(event) {
         status: 'active',
         id: isEditMode && editingPropertyId ? editingPropertyId : 'property-' + Date.now()
     };
-    if (isEditMode && editingPropertyId) {
+    // Store edit/add state before resetting isEditMode
+    const wasEdit = isEditMode && editingPropertyId;
+    if (wasEdit) {
         updatePropertyListing(propertyData);
         isEditMode = false;
         editingPropertyId = null;
@@ -543,7 +551,7 @@ function handleFormSubmission(event) {
         mainContent.scrollTo({ top: 0, behavior: 'smooth' });
     }
     closeListPropertyModal();
-    showSuccessMessage(isEditMode ? 'Property updated successfully!' : 'Property listed successfully!', 'active');
+    showSuccessMessage(wasEdit ? 'Property edited successfully!' : 'Property listed successfully!', 'active');
 }
 
 function addPropertyToListings(propertyData) {
@@ -567,10 +575,15 @@ function createPropertyCard(propertyData) {
     card.setAttribute('data-type', propertyData.listingType);
     card.setAttribute('data-property-id', propertyData.id);
     card.setAttribute('data-images', JSON.stringify(propertyData.photos.map(p => p.src)));
+    // Store the full property data object on the card for robust editing
+    card._propertyData = { ...propertyData };
     card._photoArray = propertyData.photos.map(p => p.src);
     card._currentPhotoIndex = propertyData.photos.findIndex(p => p.isMain) || 0;
     const mainPhoto = propertyData.photos.find(p => p.isMain) || propertyData.photos[0];
     let priceFormatted = '€' + (Number.isInteger(propertyData.price) ? propertyData.price : propertyData.price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if (propertyData.listingType === 'for-rent') {
+        priceFormatted += '<span class="price-per-month">/month</span>';
+    }
     // Add highlight state
     const isHighlighted = propertyData.highlighted;
     if (isHighlighted) {
@@ -580,6 +593,14 @@ function createPropertyCard(propertyData) {
     let highlightBtnHTML = '';
     if (propertyData.status === 'active') {
         highlightBtnHTML = `<button class="highlight-listing-btn" title="Highlight Listing" type="button">Highlight Listing</button>`;
+    }
+    // Format date as 'day month year' (e.g., 23 Jul 2025)
+    function formatListingDate(dateStr) {
+        const date = new Date(dateStr);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
     }
     card.innerHTML = `
         <div class="property-actions">
@@ -628,7 +649,7 @@ function createPropertyCard(propertyData) {
                 <span class="property-type-bullet">•</span>
                 <span>${propertyData.propertyType.charAt(0).toUpperCase() + propertyData.propertyType.slice(1)}</span>
             </div>
-            <div class="property-listing-date">Listed ${new Date(propertyData.listedDate).toLocaleDateString()}</div>
+            <div class="property-listing-date">Listed ${formatListingDate(propertyData.listedDate)}</div>
         </div>
     `;
     // Add highlight button logic
@@ -637,7 +658,7 @@ function createPropertyCard(propertyData) {
         highlightBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
-            card.classList.toggle('highlighted-listing');
+            showHighlightListingModal();
         };
     }
     const imgEl = card.querySelector('.property-listing-img');
@@ -672,6 +693,13 @@ function updatePropertyListing(propertyData) {
 }
 
 function openEditPropertyModal(propertyData) {
+    // If this is a default template listing (no description and no saleType), set defaults
+    let isDefaultTemplate = !propertyData.description && !propertyData.saleType && propertyData.id && propertyData.id.startsWith('active-') || propertyData.id.startsWith('pending-');
+    if (isDefaultTemplate) {
+        propertyData.listingType = 'for-sale';
+        propertyData.saleType = 'tenanted-investment';
+        propertyData.description = 'Spacious and modern property ideal for families or investors. Features quality finishes, convenient location, and excellent amenities. Contact us for more details or to arrange an inspection.';
+    }
     isEditMode = true;
     editingPropertyId = propertyData.id;
     const modal = document.getElementById('listPropertyModal');
@@ -689,12 +717,19 @@ function openEditPropertyModal(propertyData) {
     document.getElementById('saleType').value = propertyData.saleType || '';
     document.getElementById('description').value = propertyData.description;
     document.getElementById('price').value = propertyData.price;
-    uploadedPhotos = propertyData.photos.map((p, idx) => ({ ...p, isMain: idx === 0 }));
+    uploadedPhotos = propertyData.photos.map((p, idx) => ({ ...p, isMain: !!p.isMain }));
     photoCounter = uploadedPhotos.length;
     updatePhotoPreviewGrid();
     document.getElementById('charCount').textContent = propertyData.description.length;
     document.getElementById('saleOptionsGroup').style.display = propertyData.listingType === 'for-sale' ? 'block' : 'none';
     document.getElementById('submitBtn').textContent = 'Save Changes';
+    // Update price label for edit mode
+    const pricePerMonthLabel = document.getElementById('pricePerMonthLabel');
+    if (propertyData.listingType === 'for-rent') {
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'inline-block';
+    } else {
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
+    }
     currentStep = 1;
     showStep(1);
     setupModalEventListeners();
@@ -958,7 +993,11 @@ function toggleSidebar(forceOpen = null) {
 function navigatePropertyImages(card, direction) {
     const images = JSON.parse(card.dataset.images);
     const imgElement = card.querySelector('.property-listing-img');
-    let currentIndex = images.indexOf(imgElement.src.split('/').pop());
+    // Normalize to just the filename for comparison
+    let currentIndex = images.findIndex(imgPath => {
+        return imgPath.split('/').pop() === imgElement.src.split('/').pop();
+    });
+    if (currentIndex === -1) currentIndex = 0; // fallback
     
     if (direction === 'next') {
         currentIndex = (currentIndex + 1) % images.length;
@@ -966,7 +1005,7 @@ function navigatePropertyImages(card, direction) {
         currentIndex = (currentIndex - 1 + images.length) % images.length;
     }
     
-    imgElement.src = '../img/' + images[currentIndex];
+    imgElement.src = '../img/' + images[currentIndex].split('/').pop();
 }
 
 // Change property status
@@ -1344,10 +1383,21 @@ function attachEditListenersToAllCards() {
 }
 
 function extractPropertyDataFromCard(card) {
+    // Always use the stored property data if available for best-practice reliability
+    if (card._propertyData) {
+        return { ...card._propertyData };
+    }
+    // fallback legacy extraction (should not be needed if all cards are created via createPropertyCard)
     try {
         const images = card.getAttribute('data-images') ? JSON.parse(card.getAttribute('data-images')) : [];
         const info = card.querySelector('.property-listing-info');
         const specs = info.querySelectorAll('.property-listing-specs span');
+        const processedImages = images.map((src, idx) => {
+            if (!src.startsWith('http') && !src.startsWith('https') && !src.startsWith('../img/')) {
+                src = '../img/' + src;
+            }
+            return { id: `photo-${idx+1}`, src, fileName: src.split('/').pop(), isMain: idx === 0 };
+        });
         return {
             id: card.getAttribute('data-property-id') || '',
             listingType: card.getAttribute('data-type') || '',
@@ -1361,7 +1411,7 @@ function extractPropertyDataFromCard(card) {
             saleType: '',
             description: '',
             price: parseFloat(info.querySelector('.property-listing-price')?.textContent.replace(/[^\d.]/g, '') || '0'),
-            photos: images.map((src, idx) => ({ id: `photo-${idx+1}`, src, fileName: src, isMain: idx === 0 })),
+            photos: processedImages,
             listedDate: '',
             status: 'active',
         };
@@ -1677,6 +1727,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // Load saved banner image
+    loadSavedBannerImage();
+
     // Notifications button logic
     const notificationsBtn = document.getElementById('notificationsBtn');
     if (notificationsBtn) {
@@ -1769,4 +1822,85 @@ function confirmLogout() {
     sessionStorage.clear();
     // Redirect to login page (or home page)
     window.location.href = '../index.html';
+}
+
+// Banner upload functionality
+function triggerBannerUpload() {
+    document.getElementById('banner-upload').click();
+}
+
+function handleBannerUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Please select an image smaller than 5MB.');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const bannerImage = document.getElementById('banner-image');
+            bannerImage.src = e.target.result;
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('agentBannerImage', e.target.result);
+            
+            // Show success message
+            showBannerUploadSuccess();
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function showBannerUploadSuccess() {
+    // Create a temporary success message
+    const successMessage = document.createElement('div');
+    successMessage.className = 'banner-upload-success';
+    successMessage.innerHTML = '<i class="fas fa-check"></i> Banner updated successfully!';
+    successMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideInRight 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(successMessage);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        successMessage.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => {
+            if (successMessage.parentNode) {
+                successMessage.parentNode.removeChild(successMessage);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Load saved banner image on page load
+function loadSavedBannerImage() {
+    const savedBanner = localStorage.getItem('agentBannerImage');
+    if (savedBanner) {
+        const bannerImage = document.getElementById('banner-image');
+        if (bannerImage) {
+            bannerImage.src = savedBanner;
+        }
+    }
 }

@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="./agent-dashboard.css">
     <link rel="stylesheet" href="./logout-modal.css">
     <link rel="stylesheet" href="./favorites.css">
+    <link rel="stylesheet" href="./premium-offers.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="premium-offers.css">
 </head>
 <body>
     <!-- Top Header -->
@@ -87,9 +87,14 @@
     </div>
     <!-- Agent Banner Above Sidebar -->
     <div class="top-banner">
-        <span class="agency-logo-banner">
-            <img src="../img/logo1.webp" alt="Real Estate Block Logo" class="agency-logo"> Real Estate Block
-        </span>
+        <div class="banner-upload-container" onclick="triggerBannerUpload()">
+            <img src="../img/agentbanner1.jpg" alt="Agent Banner" id="banner-image" class="banner-background">
+            <div class="banner-overlay">
+                <i class="fas fa-camera"></i>
+                <span>Click to change banner photo</span>
+            </div>
+        </div>
+        <input type="file" id="banner-upload" accept="image/*" style="display: none;" onchange="handleBannerUpload(event)">
     </div>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -170,7 +175,7 @@
                 <!-- Active Listings -->
                 <div id="active-listings" class="listings-content active">
                     <div class="property-list-vertical">
-                        <div class="property-listing-card" data-type="sale" data-images='["thumbnail1.jpg","thumbnail2.jpg","thumbnail3.jpg"]' data-property-id="active-1">
+                        <div class="property-listing-card" data-type="sale" data-images='["../img/thumbnail1.jpg","../img/thumbnail2.jpg","../img/thumbnail3.jpg"]' data-property-id="active-1">
                             <!-- Action Icons for Active Listing -->
                             <div class="property-actions">
                                 <button class="highlight-listing-btn" title="Highlight Listing" type="button">
@@ -231,7 +236,7 @@
                 <!-- Pending Listings -->
                 <div id="pending-listings" class="listings-content">
                     <div class="property-list-vertical">
-                        <div class="property-listing-card pending" data-type="sale" data-images='["thumbnail2.jpg","thumbnail3.jpg","banner1.jpg"]' data-property-id="pending-1">
+                        <div class="property-listing-card pending" data-type="sale" data-images='["../img/thumbnail2.jpg","../img/thumbnail3.jpg","../img/banner1.jpg"]' data-property-id="pending-1">
                             <!-- Action Icons for Pending Listing -->
                             <div class="property-actions">
                                 <button class="action-btn edit-btn" title="Edit Listing">
@@ -289,7 +294,7 @@
                 <!-- Sold Listings -->
                 <div id="sold-listings" class="listings-content">
                     <div class="property-list-vertical">
-                        <div class="property-listing-card sold" data-type="sale" data-images='["thumbnail3.jpg","banner1.jpg","banner2.webp"]' data-property-id="sold-1">
+                        <div class="property-listing-card sold" data-type="sale" data-images='["../img/thumbnail3.jpg","../img/banner1.jpg","../img/banner2.webp"]' data-property-id="sold-1">
                             <!-- Sold Badge for Sold Listing -->
                             <div class="sold-badge">
                                 <i class="fas fa-check-circle"></i>
@@ -639,7 +644,7 @@
                         <label for="description">Property Description:</label>
                         <textarea id="description" name="description" rows="6" placeholder="Describe the property, its features, amenities, and any special highlights..." required></textarea>
                         <div class="char-counter">
-                            <span id="charCount">0</span>/1000 characters
+                            <span id="charCount">0</span>/5000 characters
                         </div>
                     </div>
                     
@@ -648,6 +653,7 @@
                         <div class="price-input-wrapper">
                             <span class="currency-symbol">€</span>
                             <input type="number" id="price" name="price" min="1" step="0.01" placeholder="Enter price in euros" required style="padding-left: 2.5rem;">
+                            <span class="price-per-month" id="pricePerMonthLabel" style="display: none;">/month</span>
                         </div>
                     </div>
                     
@@ -671,7 +677,7 @@
                             <h4>Upload Property Photos</h4>
                             <p>Upload up to 20 high-quality photos of your property. First photo will be the main image.</p>
                             <div class="upload-limits">
-                                <span>• Maximum 10 photos</span>
+                                <span>• Maximum 20 photos</span>
                                 <span>• File size: up to 5MB each</span>
                                 <span>• Formats: JPG, PNG, WebP</span>
                             </div>

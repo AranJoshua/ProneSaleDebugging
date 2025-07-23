@@ -1,0 +1,966 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Sale | Prone Sale</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="for-sale.css">
+</head>
+<body>
+    <div class="loading-animation"></div>
+    <header class="header">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <!-- Mobile Nav -->
+                <div class="d-flex w-100 align-items-center d-lg-none">
+                    <div class="navbar-mobile-left">
+                        <button class="navbar-toggler mobile-menu-open-trigger" type="button" aria-label="Open menu">
+                            <i class="fas fa-bars menu-icon"></i>
+                            <i class="fas fa-times close-icon" style="display:none;"></i>
+                        </button>
+                        <a class="navbar-brand" href="#">Prone Sale</a>
+                    </div>
+                    <div class="navbar-mobile-account ms-auto">
+                        <a href="login.html" class="btn btn-account">
+                            <i class="fas fa-user"></i>
+                        </a>
+                    </div>
+                </div>
+                <!-- Desktop Nav -->
+                <div class="d-none d-lg-flex w-100 align-items-center justify-content-between">
+                    <a class="navbar-brand" href="#">Prone Sale</a>
+                    <div class="collapse navbar-collapse show" id="navbarNav">
+                        <ul class="navbar-nav me-auto" id="mainNavLinks"></ul>
+                        <div class="nav-separator d-none d-lg-block"></div>
+                        <div class="navbar-actions">
+                            <button class="btn btn-secondary">List Property</button>
+                            <a href="login.html" class="btn btn-account">
+                                <i class="fas fa-user"></i>
+                                Account
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="mobile-menu-overlay"></div>
+    <nav class="mobile-menu-panel">
+        <ul class="mobile-menu-list" id="mobileNavLinks"></ul>
+        <div class="mobile-menu-actions">
+            <button class="btn btn-secondary w-100">List Property</button>
+        </div>
+    </nav>
+    <!-- For Sale Hero Section -->
+    <main id="for-sale-main">
+      <section class="banner-container" style="padding: 2.2rem 0 1.2rem 0; min-height: unset;">
+        <div class="container banner-wide">
+          <div class="banner-carousel" style="border-radius: 2rem; overflow: hidden;">
+            <div class="carousel-item active">
+              <div class="banner-slide banner-slide-1" style="min-height: 240px; display: flex; align-items: center; justify-content: center; background: linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.45)), url('img/banner1.jpg') center/cover no-repeat;">
+                <div class="banner-content" style="width: 100%; max-width: 700px; margin: 0 auto; text-align: center; color: #fff;">
+                  <h1 style="font-size: 2.2rem; font-weight: 800; margin-bottom: 0.7rem;">Explore Top Properties</h1>
+                  <p style="font-size: 1.1rem; margin-bottom: 2rem;">Find exclusive listings and premium properties in your area.</p>
+                  <div class="search-form search-form-tabs" style="background: #fff; border-radius: 1.2rem; box-shadow: 0 4px 32px rgba(30,58,138,0.10); padding: 0.5rem 0.7rem 0.7rem 0.7rem; max-width: 650px; margin: 0 auto;">
+                    <div class="search-tabs" id="forSaleSearchTabs">
+                      <button class="search-tab active" data-tab="buy" type="button">Buy</button>
+                      <button class="search-tab" data-tab="rent" type="button">Rent</button>
+                      <button class="search-tab" data-tab="agents" type="button">Agents</button>
+                      <div class="tab-underline"></div>
+                    </div>
+                    <div class="search-bar-group">
+                      <input type="text" class="form-control search-input" placeholder="Search suburb, postcode or state" aria-label="Search properties">
+                      <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
+                      <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                      <div class="search-buttons-row">
+                        <button type="button" class="btn btn-outline-secondary search-filters"><i class="fas fa-sliders-h"></i> Filters</button>
+                        <button type="button" class="btn btn-primary search-btn"><i class="fas fa-search"></i> Search</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section id="for-sale-search"><!-- (Optional: extra filters can go here in the future) --></section>
+      <!-- For Sale Listings Section (remove property cards) -->
+      <section id="for-sale-listings">
+        <div class="container banner-wide">
+          <div class="property-grid">
+            <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+              <div class="property-image">
+                <img src="img/thumbnail1.jpg" alt="Modern City Center Apartment" loading="lazy" width="400" height="400">
+                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="property-content">
+                <div class="property-price-row">
+                  <div class="property-price">For Sale $450,000 - $500,000</div>
+                  <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                    <i class="far fa-star" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="property-address">Tirana, City Center</div>
+                <div class="property-specs-row">
+                  <div class="property-specs">
+                    <div class="property-spec">
+                      <i class="fas fa-bed" aria-hidden="true"></i>
+                      <span>2</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-bath" aria-hidden="true"></i>
+                      <span>1</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-car" aria-hidden="true"></i>
+                      <span>1</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                      <span>85m²</span>
+                    </div>
+                    <div class="property-type-info">
+                      <span class="bullet" aria-hidden="true">•</span>
+                      <span>Apartment</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <a href="property-details.html" class="property-card-link" style="text-decoration:none;color:inherit;display:block;">
+            <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+              <div class="property-banner">
+                <div class="banner-brand">
+                  <div class="banner-logo">PE</div>
+                  <div class="banner-name">PrimeEstate</div>
+                </div>
+              </div>
+              <div class="property-image">
+                <img src="img/thumbnail1.jpg" alt="Luxury Villa with Pool" loading="lazy" width="400" height="400">
+                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="property-content">
+                <div class="property-price-row">
+                  <div class="property-price">For Sale $750,000 - $850,000</div>
+                  <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                    <i class="far fa-star" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="property-address">Durrës, Beachfront</div>
+                <div class="property-specs-row">
+                  <div class="property-specs">
+                    <div class="property-spec">
+                      <i class="fas fa-bed" aria-hidden="true"></i>
+                      <span>4</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-bath" aria-hidden="true"></i>
+                      <span>3</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-car" aria-hidden="true"></i>
+                      <span>2</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                      <span>250m²</span>
+                    </div>
+                    <div class="property-type-info">
+                      <span class="bullet" aria-hidden="true">•</span>
+                      <span>Villa</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            </a>
+            <article class="property-card loading" data-images='["img/thumbnail2.jpg", "img/thumbnail3.jpg", "img/thumbnail1.jpg"]'>
+              <div class="property-image">
+                <img src="img/thumbnail2.jpg" alt="Cozy Suburban House" loading="lazy" width="400" height="400">
+                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="property-content">
+                <div class="property-price-row">
+                  <div class="property-price">For Sale $320,000 - $350,000</div>
+                  <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                    <i class="far fa-star" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="property-address">Tirana, Suburbs</div>
+                <div class="property-specs-row">
+                  <div class="property-specs">
+                    <div class="property-spec">
+                      <i class="fas fa-bed" aria-hidden="true"></i>
+                      <span>3</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-bath" aria-hidden="true"></i>
+                      <span>2</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-car" aria-hidden="true"></i>
+                      <span>1</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                      <span>120m²</span>
+                    </div>
+                    <div class="property-type-info">
+                      <span class="bullet" aria-hidden="true">•</span>
+                      <span>House</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+            <article class="property-card loading" data-images='["img/thumbnail3.jpg", "img/thumbnail1.jpg", "img/thumbnail2.jpg"]'>
+              <div class="property-banner" style="background: linear-gradient(135deg, #059669, #10b981);">
+                <div class="banner-brand">
+                  <div class="banner-logo">RE</div>
+                  <div class="banner-name">RealEstatePro</div>
+                </div>
+              </div>
+              <div class="property-image">
+                <img src="img/thumbnail3.jpg" alt="Downtown Penthouse" loading="lazy" width="400" height="400">
+                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                </button>
+              </div>
+              <div class="property-content">
+                <div class="property-price-row">
+                  <div class="property-price">For Sale $1,200,000 - $1,350,000</div>
+                  <button class="favorite-btn" type="button" aria-label="Add to favorites" onclick="window.ftlistings.toggleFavorite(this)">
+                    <i class="far fa-star" aria-hidden="true"></i>
+                  </button>
+                </div>
+                <div class="property-address">Tirana, Downtown</div>
+                <div class="property-specs-row">
+                  <div class="property-specs">
+                    <div class="property-spec">
+                      <i class="fas fa-bed" aria-hidden="true"></i>
+                      <span>5</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-bath" aria-hidden="true"></i>
+                      <span>4</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-car" aria-hidden="true"></i>
+                      <span>3</span>
+                    </div>
+                    <div class="property-spec">
+                      <i class="fas fa-ruler-combined" aria-hidden="true"></i>
+                      <span>320m²</span>
+                    </div>
+                    <div class="property-type-info">
+                      <span class="bullet" aria-hidden="true">•</span>
+                      <span>Office</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="row">
+                    <div class="col-lg-5 col-md-6 mb-4">
+                        <div class="footer-brand">Prone Sale</div>
+                        <p class="footer-description">
+                            Your trusted partner in finding the perfect property. We connect you with premium real estate opportunities across Albania.
+                        </p>
+                        <div class="contact-info">
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tirana, Albania</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i>
+                                <span>info@pronesale.com</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Quick Links</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">About Us</a></li>
+                                <li><a href="#">Contact</a></li>
+                                <li><a href="#">FAQ</a></li>
+                                <li><a href="#">Careers</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Properties</h6>
+                            <ul class="footer-links">
+                                <li><a href="#">For Sale</a></li>
+                                <li><a href="#">For Rent</a></li>
+                                <li><a href="#">Send Request</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="footer-section">
+                            <h6>Follow Us</h6>
+                            <p class="footer-description" style="max-width:230px;margin-bottom:1rem;">
+                                Stay connected with us for the latest property updates and news.
+                            </p>
+                            <div class="social-links">
+                                <a href="#" class="social-link" aria-label="Facebook">
+                                    <i class="fab fa-facebook-f"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Instagram">
+                                    <i class="fab fa-instagram"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="Twitter">
+                                    <i class="fab fa-twitter"></i>
+                                </a>
+                                <a href="#" class="social-link" aria-label="LinkedIn">
+                                    <i class="fab fa-linkedin-in"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-content">
+                    <p class="copyright">
+                        &copy; 2025 Prone Sale. All rights reserved.
+                    </p>
+                    <div class="footer-bottom-links">
+                        <a href="#">Privacy Policy</a>
+                        <a href="#">Terms of Service</a>
+                        <a href="#">Cookie Policy</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="index.js"></script>
+    <script src="for-sale.js"></script>
+    <script>
+    // Navigation links configuration
+    const navLinks = [
+        { text: 'Home', href: 'index.html' },
+        { text: 'For Sale', href: 'for-sale.html' },
+        { text: 'For Rent', href: '#' },
+        { text: 'Agents', href: 'agents.html' },
+        { text: 'Blog', href: 'blog.html' }
+    ];
+    // Set active navigation state
+    const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const mainNav = document.getElementById('mainNavLinks');
+    const mobileNav = document.getElementById('mobileNavLinks');
+    if (mainNav && mobileNav) {
+        mainNav.innerHTML = navLinks.map(link => {
+            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
+            return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
+        }).join('');
+        mobileNav.innerHTML = navLinks.map(link => {
+            const isActive = link.href === currentPage || (currentPage === 'index.html' && link.href === 'index.html');
+            return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
+        }).join('');
+    }
+    </script>
+    <style>
+.filters-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 10500;
+}
+.filters-modal[style*='display: none'] { display: none; }
+.filters-modal .filters-container {
+    background: #fff;
+    border-radius: 16px;
+    width: 90vw;
+    max-width: 500px;
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+    overflow: hidden;
+}
+.filters-modal .filters-header {
+    padding: 16px 24px 4px;
+    border-bottom: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    flex-shrink: 0;
+    min-height: 56px;
+}
+.filters-modal .filters-title {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 auto;
+    color: #1a1a1a;
+    line-height: 1.2;
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+.filters-modal .filters-close-btn {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 6px;
+    color: #666;
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.2s ease;
+}
+.filters-modal .filters-close-btn:hover { color: #1e3a8a; }
+.filters-modal .filters-content {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding: 0 24px 20px;
+    min-height: 0;
+    height: auto;
+}
+.filters-modal .filter-tabs {
+    display: flex;
+    border-bottom: 1px solid #f0f0f0;
+    margin: 8px 0 20px;
+    position: relative;
+}
+.filters-modal .filter-tab {
+    flex: 1;
+    padding: 12px 0;
+    text-align: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 14px;
+    position: relative;
+    transition: all 0.2s ease;
+    color: #666;
+}
+.filters-modal .filter-tab.active {
+    font-weight: 600;
+    color: #1e3a8a;
+}
+.filters-modal .tab-underline {
+    position: absolute;
+    bottom: -1px;
+    height: 2px;
+    background: #1e3a8a;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 1px;
+}
+.filters-modal .filter-section { margin-bottom: 28px; }
+.filters-modal .filters-section-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: #1a1a1a;
+    text-align: left;
+}
+.filters-modal .property-types-container {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    min-height: 180px;
+}
+.filters-modal .property-category {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e9ecef;
+}
+.filters-modal .category-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.filters-modal .category-icon {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    opacity: 0.7;
+}
+.filters-modal .category-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #2d3748;
+}
+.filters-modal .property-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+}
+.filters-modal .filters-form-check {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0;
+    padding: 8px 0;
+}
+.filters-modal .filters-form-check-input {
+    width: 18px;
+    height: 18px;
+    margin-right: 10px;
+    margin-top: 0;
+    border: 1.5px solid #d0d0d0;
+    border-radius: 3px;
+    background: white;
+    cursor: pointer;
+    appearance: none;
+    transition: all 0.2s ease;
+}
+.filters-modal .filters-form-check-input:checked {
+    background-color: #1e3a8a;
+    border-color: #1e3a8a;
+    background-image: url("data:image/svg+xml,%3csvg viewBox='0 0 16 16' fill='white' xmlns='http://www.w3.org/2000/svg'%3e%3cpath d='m13.854 3.646-7.5 7.5a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6 9.293l7.146-7.147a.5.5 0 0 1 .708.708z'/%3e%3c/svg%3e");
+}
+.filters-modal .filters-form-check-label {
+    font-size: 13px;
+    cursor: pointer;
+    color: #4a5568;
+    font-weight: 400;
+    line-height: 1.3;
+}
+.filters-modal .price-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.filters-modal .input-group {
+    display: flex;
+    flex-direction: column;
+}
+.filters-modal .input-label {
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #4a4a4a;
+}
+.filters-modal .select-wrapper {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+.filters-modal .filters-form-select {
+    padding: 12px 40px 12px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+    appearance: none;
+    background: none;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+.filters-modal .filters-form-control {
+    padding: 12px 14px;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: white;
+    transition: border-color 0.2s ease;
+    font-family: inherit;
+    width: 100%;
+    appearance: none;
+    background: none;
+    cursor: text;
+    box-sizing: border-box;
+}
+.filters-modal .filters-form-control:focus, .filters-modal .filters-form-select:focus {
+    outline: none;
+    border-color: #1e3a8a;
+}
+.filters-modal .select-wrapper::after {
+    content: '';
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 6px solid #1e3a8a;
+    pointer-events: none;
+    transition: border-top-color 0.2s ease;
+    z-index: 2;
+}
+.filters-modal .select-wrapper:hover::after { border-top-color: #1e40af; }
+.filters-modal .dropdown-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+}
+.filters-modal .single-dropdown {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 24px;
+}
+.filters-modal .checkbox-row {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    margin-bottom: 24px;
+    justify-content: flex-start;
+    align-items: center;
+}
+.filters-modal .area-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+.filters-modal .filters-footer {
+    padding: 16px 24px;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    flex-shrink: 0;
+}
+.filters-modal .clear-filters-btn {
+    background: none;
+    border: none;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 8px 16px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease;
+    color: #666;
+}
+.filters-modal .clear-filters-btn:hover { background-color: #f5f5f5; }
+.filters-modal .filters-search-btn {
+    background: #1e3a8a;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-size: 14px;
+}
+.filters-modal .filters-search-btn:hover { background: #1e40af; }
+@media (max-width: 768px) {
+    .filters-modal .filters-container { width: 95vw; max-height: 95vh; }
+    .filters-modal .filters-header { padding: 12px 20px 8px; }
+    .filters-modal .filters-close-btn { right: 16px; width: 32px; height: 32px; font-size: 20px; }
+    .filters-modal .filters-content { padding: 0 20px 16px; }
+    .filters-modal .filter-tabs { margin: 12px 0 16px; }
+    .filters-modal .filters-footer { padding: 12px 20px; }
+    .filters-modal .price-row, .filters-modal .dropdown-row, .filters-modal .area-row { grid-template-columns: 1fr; gap: 12px; }
+    .filters-modal .property-options { grid-template-columns: 1fr; }
+    .filters-modal .checkbox-row { flex-direction: column; gap: 12px; }
+}
+</style>
+    <div class="filters-modal" style="display:none;">
+      <div class="filters-container">
+        <div class="filters-header">
+          <h2 class="filters-title">Filters</h2>
+          <button class="filters-close-btn" type="button">&times;</button>
+        </div>
+        <div class="filters-content">
+          <div class="filter-tabs">
+            <button class="filter-tab active" data-tab="buy" type="button">Buy</button>
+            <button class="filter-tab" data-tab="rent" type="button">Rent</button>
+            <div class="tab-underline"></div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Property type</h3>
+            <div class="property-types-container">
+              <div class="property-category">
+                <div class="category-header">
+                  <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3L2 12h3v8h6v-6h2v6h6v-8h3L12 3z"/></svg>
+                  <div class="category-title">Residential Properties</div>
+                </div>
+                <div class="property-options">
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="apartment">
+                    <label class="filters-form-check-label" for="apartment">Apartment</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="house">
+                    <label class="filters-form-check-label" for="house">House</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="villa">
+                    <label class="filters-form-check-label" for="villa">Villa</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="parking">
+                    <label class="filters-form-check-label" for="parking">Parking</label>
+                  </div>
+                </div>
+              </div>
+              <div class="property-category">
+                <div class="category-header">
+                  <svg class="category-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 7V3H2v18h20V7H12zM6 19H4v-2h2v2zm0-4H4v-2h2v2zm0-4H4V9h2v2zm0-4H4V5h2v2zm4 12H8v-2h2v2zm0-4H8v-2h2v2zm0-4H8V9h2v2zm0-4H8V5h2v2zm10 12h-8v-2h2v-2h-2v-2h2v-2h-2V9h8v10zm-2-8h-2v2h2v-2zm0 4h-2v2h2v-2z"/></svg>
+                  <div class="category-title">Commercial Properties</div>
+                </div>
+                <div class="property-options">
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="factory">
+                    <label class="filters-form-check-label" for="factory">Factory & Warehouse</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="office">
+                    <label class="filters-form-check-label" for="office">Office</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="retail">
+                    <label class="filters-form-check-label" for="retail">Shops & Retail</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="hotel">
+                    <label class="filters-form-check-label" for="hotel">Hotel</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="farm">
+                    <label class="filters-form-check-label" for="farm">Farm</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="land">
+                    <label class="filters-form-check-label" for="land">Land & Development</label>
+                  </div>
+                  <div class="filters-form-check">
+                    <input class="filters-form-check-input" type="checkbox" id="others">
+                    <label class="filters-form-check-label" for="others">Others</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Price</h3>
+            <div class="price-row">
+              <div class="input-group">
+                <label class="input-label">Min</label>
+                <div class="select-wrapper">
+                  <select class="filters-form-select">
+                    <option value="">Any</option>
+                    <option value="25000">€25,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="125000">€125,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="175000">€175,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="350000">€350,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="450000">€450,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="700000">€700,000</option>
+                    <option value="800000">€800,000</option>
+                    <option value="900000">€900,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1100000">€1,100,000</option>
+                    <option value="1200000">€1,200,000</option>
+                    <option value="1300000">€1,300,000</option>
+                    <option value="1400000">€1,400,000</option>
+                    <option value="1500000">€1,500,000</option>
+                    <option value="2000000">€2,000,000+</option>
+                  </select>
+                </div>
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max</label>
+                <div class="select-wrapper">
+                  <select class="filters-form-select">
+                    <option value="">Any</option>
+                    <option value="25000">€25,000</option>
+                    <option value="50000">€50,000</option>
+                    <option value="75000">€75,000</option>
+                    <option value="100000">€100,000</option>
+                    <option value="125000">€125,000</option>
+                    <option value="150000">€150,000</option>
+                    <option value="175000">€175,000</option>
+                    <option value="200000">€200,000</option>
+                    <option value="250000">€250,000</option>
+                    <option value="300000">€300,000</option>
+                    <option value="350000">€350,000</option>
+                    <option value="400000">€400,000</option>
+                    <option value="450000">€450,000</option>
+                    <option value="500000">€500,000</option>
+                    <option value="600000">€600,000</option>
+                    <option value="700000">€700,000</option>
+                    <option value="800000">€800,000</option>
+                    <option value="900000">€900,000</option>
+                    <option value="1000000">€1,000,000</option>
+                    <option value="1100000">€1,100,000</option>
+                    <option value="1200000">€1,200,000</option>
+                    <option value="1300000">€1,300,000</option>
+                    <option value="1400000">€1,400,000</option>
+                    <option value="1500000">€1,500,000</option>
+                    <option value="2000000">€2,000,000+</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Bedrooms</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                  <option value="6">6+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Bathrooms</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Car spaces</h3>
+            <div class="single-dropdown">
+              <div class="select-wrapper">
+                <select class="filters-form-select">
+                  <option value="">Any</option>
+                  <option value="1">1+</option>
+                  <option value="2">2+</option>
+                  <option value="3">3+</option>
+                  <option value="4">4+</option>
+                  <option value="5">5+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section tenanted-vacant-row">
+            <div class="checkbox-row">
+              <div class="filters-form-check">
+                <input class="filters-form-check-input" type="checkbox" id="tenanted">
+                <label class="filters-form-check-label" for="tenanted">Tenanted Investment</label>
+              </div>
+              <div class="filters-form-check">
+                <input class="filters-form-check-input" type="checkbox" id="vacant">
+                <label class="filters-form-check-label" for="vacant">Vacant Possession</label>
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Land area</h3>
+            <div class="area-row">
+              <div class="input-group">
+                <label class="input-label">Min (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+            </div>
+          </div>
+          <div class="filter-section">
+            <h3 class="filters-section-title">Floor area</h3>
+            <div class="area-row">
+              <div class="input-group">
+                <label class="input-label">Min (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+              <div class="input-group">
+                <label class="input-label">Max (m²)</label>
+                <input type="number" class="filters-form-control" placeholder="Any" min="0">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="filters-footer">
+          <button class="clear-filters-btn" type="button">Clear filters</button>
+          <button class="filters-search-btn" type="button">Search</button>
+        </div>
+      </div>
+    </div>
+</body>
+</html> 

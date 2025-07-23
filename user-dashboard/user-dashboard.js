@@ -1460,7 +1460,9 @@ function showHighlightListingModal() {
     </div>
   `;
   document.body.appendChild(modal);
-  
+  // Set main-content overflow to visible to allow modal overlay
+  var mainContent = document.querySelector('.main-content');
+  if (mainContent) mainContent.style.overflow = 'visible';
   // Add mobile-responsive styles
   const style = document.createElement('style');
   style.textContent = `
@@ -1470,7 +1472,6 @@ function showHighlightListingModal() {
       max-width: 400px;
       margin: 0 auto;
     }
-    
     .highlight-modal-close {
       position: absolute;
       top: -12px;
@@ -1490,19 +1491,16 @@ function showHighlightListingModal() {
       justify-content: center;
       transition: all 0.2s ease;
     }
-    
     .highlight-modal-close:hover {
       background: #f3f4f6;
       color: #666;
       transform: scale(1.1);
     }
-    
     @media (max-width: 600px) {
       .highlight-modal-container {
         max-width: 100%;
         margin: 0 10px;
       }
-      
       .highlight-modal-close {
         top: 8px;
         right: 8px;
@@ -1510,19 +1508,16 @@ function showHighlightListingModal() {
         height: 36px;
         font-size: 1.5rem;
       }
-      
       #highlightListingModal {
         padding: 10px;
         align-items: flex-start;
         padding-top: 60px;
       }
-      
       #highlightListingModal .premium-card {
         padding: 24px 16px 20px 16px;
         margin-top: 20px;
       }
     }
-    
     @media (max-width: 480px) {
       .highlight-modal-close {
         top: 6px;
@@ -1531,12 +1526,10 @@ function showHighlightListingModal() {
         height: 34px;
         font-size: 1.4rem;
       }
-      
       #highlightListingModal {
         padding: 8px;
         padding-top: 50px;
       }
-      
       #highlightListingModal .premium-card {
         padding: 20px 12px 16px 12px;
         margin-top: 16px;
@@ -1544,10 +1537,14 @@ function showHighlightListingModal() {
     }
   `;
   document.head.appendChild(style);
-  
   // Close logic
-  document.getElementById('closeHighlightListingModal').onclick = () => modal.remove();
-  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
+  function closeModal() {
+    modal.remove();
+    if (mainContent) mainContent.style.overflow = '';
+    if (style && style.parentNode) style.parentNode.removeChild(style);
+  }
+  document.getElementById('closeHighlightListingModal').onclick = closeModal;
+  modal.onclick = (e) => { if (e.target === modal) closeModal(); };
 }
 // Attach to Highlight Listing button(s)
 document.addEventListener('DOMContentLoaded', function() {

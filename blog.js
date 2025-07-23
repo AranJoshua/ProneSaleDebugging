@@ -3,7 +3,7 @@
     // Navigation links configuration (copied from index.js)
     const navLinks = [
         { text: 'Home', href: 'index.html' },
-        { text: 'For Sale', href: '#' },
+        { text: 'For Sale', href: 'for-sale.html' },
         { text: 'For Rent', href: '#' },
         { text: 'Agents', href: 'agents.html' },
         { text: 'Blog', href: 'blog.html' }
