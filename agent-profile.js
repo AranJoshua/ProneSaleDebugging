@@ -1,32 +1,43 @@
 const navLinks = [
     { text: 'Home', href: 'index.html' },
     { text: 'For Sale', href: 'for-sale.html' },
-    { text: 'For Rent', href: '#' },
+    { text: 'For Rent', href: 'for-rent.html' },
     { text: 'Agents', href: 'agents.html' },
     { text: 'Blog', href: 'blog.html' }
 ];
 
 function initializeNavigation() {
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const forRentPages = ['for-rent.html', 'property-rent-details.html'];
     const mainNav = document.getElementById('mainNavLinks');
     const mobileNav = document.getElementById('mobileNavLinks');
     
     if (mainNav && mobileNav) {
         mainNav.innerHTML = navLinks.map(link => {
-            const isActive = (
-                link.href === currentPage ||
-                (currentPage === 'index.html' && link.href === 'index.html') ||
-                (link.href === 'agents.html' && (currentPage === 'agents.html' || currentPage === 'agent-profile.html'))
-            );
+            let isActive = false;
+            if (link.href === 'for-rent.html') {
+                isActive = forRentPages.includes(currentPage);
+            } else {
+                isActive = (
+                    link.href === currentPage ||
+                    (currentPage === 'index.html' && link.href === 'index.html') ||
+                    (link.href === 'agents.html' && (currentPage === 'agents.html' || currentPage === 'agent-profile.html'))
+                );
+            }
             return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
         }).join('');
         
         mobileNav.innerHTML = navLinks.map(link => {
-            const isActive = (
-                link.href === currentPage ||
-                (currentPage === 'index.html' && link.href === 'index.html') ||
-                (link.href === 'agents.html' && (currentPage === 'agents.html' || currentPage === 'agent-profile.html'))
-            );
+            let isActive = false;
+            if (link.href === 'for-rent.html') {
+                isActive = forRentPages.includes(currentPage);
+            } else {
+                isActive = (
+                    link.href === currentPage ||
+                    (currentPage === 'index.html' && link.href === 'index.html') ||
+                    (link.href === 'agents.html' && (currentPage === 'agents.html' || currentPage === 'agent-profile.html'))
+                );
+            }
             return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
         }).join('');
     }

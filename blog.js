@@ -4,21 +4,32 @@
     const navLinks = [
         { text: 'Home', href: 'index.html' },
         { text: 'For Sale', href: 'for-sale.html' },
-        { text: 'For Rent', href: '#' },
+        { text: 'For Rent', href: 'for-rent.html' },
         { text: 'Agents', href: 'agents.html' },
         { text: 'Blog', href: 'blog.html' }
     ];
     // Set active navigation state
     const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+    const forRentPages = ['for-rent.html', 'property-rent-details.html'];
     const mainNav = document.getElementById('mainNavLinks');
     const mobileNav = document.getElementById('mobileNavLinks');
     if (mainNav && mobileNav) {
         mainNav.innerHTML = navLinks.map(link => {
-            const isActive = link.text === 'Blog' || link.href === currentPage;
+            let isActive = false;
+            if (link.href === 'for-rent.html') {
+                isActive = forRentPages.includes(currentPage);
+            } else {
+                isActive = link.href === currentPage || (link.text === 'Blog' && currentPage === 'blog.html');
+            }
             return `<li class='nav-item'><a class='nav-link${isActive ? ' active' : ''}' href='${link.href}'>${link.text}</a></li>`;
         }).join('');
         mobileNav.innerHTML = navLinks.map(link => {
-            const isActive = link.text === 'Blog' || link.href === currentPage;
+            let isActive = false;
+            if (link.href === 'for-rent.html') {
+                isActive = forRentPages.includes(currentPage);
+            } else {
+                isActive = link.href === currentPage || (link.text === 'Blog' && currentPage === 'blog.html');
+            }
             return `<li><a href='${link.href}'${isActive ? ' class="active"' : ''}>${link.text}</a></li>`;
         }).join('');
     }

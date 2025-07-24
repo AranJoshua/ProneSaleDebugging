@@ -458,7 +458,7 @@ window.addEventListener('DOMContentLoaded', function() {
         var addProfileClick = function(img) {
             img.addEventListener('click', function() {
                 if (dashboardType === 'agent') {
-                    window.location.href = 'agent-dashboard/agent-dashboard.html';
+                    window.location.href = 'user-dashboard/user-dashboard.html';
                 } else {
                     window.location.href = 'user-dashboard/user-dashboard.html';
                 }

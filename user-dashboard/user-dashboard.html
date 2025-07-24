@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>User Dashboard - Prone Sale</title>
+    <title>User Dashboard - Arben Hoxha</title>
     <link rel="stylesheet" href="./user-dashboard.css">
     <link rel="stylesheet" href="./logout-modal.css">
     <link rel="stylesheet" href="./favorites.css">
+    <link rel="stylesheet" href="./premium-offers.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link rel="stylesheet" href="./premium-offers.css">
 </head>
 <body>
     <!-- Top Header -->
@@ -87,13 +87,13 @@
     </div>
     <!-- Sidebar -->
     <div class="sidebar">
-        <div class="user-profile" style="padding-bottom: 24px;">
+        <div class="agent-profile" style="padding-bottom: 24px;">
             <div id="sidebar-profile-img-wrapper">
-                <img src="../img/user1.jpeg" alt="User Profile" id="sidebar-profile-img" style="width: 100%; height: 100%; object-fit: cover;">
+                <img src="../img/user1.jpeg" alt="Arben Hoxha" id="sidebar-profile-img" style="width: 100%; height: 100%; object-fit: cover;">
                 <input type="file" id="sidebar-profile-upload" accept="image/*" style="display: none;" onchange="sidebarProfileUpload(event)">
             </div>
-            <div class="user-name">Ardit Hoxha</div>
-            <!-- Removed job title (agent-title) as requested -->
+            <div class="agent-name">Arben Hoxha</div>
+            <!-- Job title removed -->
         </div>
         <div class="nav-menu">
             <button class="nav-item active" onclick="showSection('listings')">
@@ -151,6 +151,7 @@
                     <button class="tab-btn" onclick="switchTab('pending')">Pending</button>
                     <button class="tab-btn" onclick="switchTab('sold')">Sold</button>
                 </div>
+                <!-- Statistics cards removed -->
                 
                 <!-- Active Listings -->
                 <div id="active-listings" class="listings-content active">
@@ -356,11 +357,11 @@
                         <h3>Basic Information</h3>
                         <div class="display-item">
                             <span class="display-label">Name:</span>
-                            <span class="display-value" id="displayNameValue">Ardit Hoxha</span>
+                            <span class="display-value" id="displayNameValue">Arben Hoxha</span>
                         </div>
                         <div class="display-item">
                             <span class="display-label">Email:</span>
-                            <span class="display-value" id="displayEmailValue">privateuser@gmail.com</span>
+                            <span class="display-value" id="displayEmailValue">arben.hoxha@email.com</span>
                         </div>
                         <div class="display-item">
                             <span class="display-label">Phone:</span>
@@ -391,12 +392,12 @@
                             <h3>Basic Information</h3>
                             <div class="form-group">
                                 <label for="displayName">Display Name</label>
-                                <input type="text" id="displayName" value="Ardit Hoxha" readonly>
+                                <input type="text" id="displayName" value="Arben Hoxha" readonly>
                                 <small>Name cannot be changed</small>
                             </div>
                             <div class="form-group">
                                 <label for="email">Email Address</label>
-                                <input type="email" id="email" value="privateuser@gmail.com" readonly>
+                                <input type="email" id="email" value="arben.hoxha@email.com" readonly>
                                 <small>Email cannot be changed here, please go to settings</small>
                             </div>
                             <div class="form-group">
@@ -537,7 +538,7 @@
                         <label for="description">Property Description:</label>
                         <textarea id="description" name="description" rows="6" placeholder="Describe the property, its features, amenities, and any special highlights..." required></textarea>
                         <div class="char-counter">
-                            <span id="charCount">0</span>/1000 characters
+                            <span id="charCount">0</span>/5000 characters
                         </div>
                     </div>
                     
@@ -546,6 +547,7 @@
                         <div class="price-input-wrapper">
                             <span class="currency-symbol">€</span>
                             <input type="number" id="price" name="price" min="1" step="0.01" placeholder="Enter price in euros" required style="padding-left: 2.5rem;">
+                            <span class="price-per-month" id="pricePerMonthLabel" style="display: none;">/month</span>
                         </div>
                     </div>
                     
@@ -569,7 +571,7 @@
                             <h4>Upload Property Photos</h4>
                             <p>Upload up to 20 high-quality photos of your property. First photo will be the main image.</p>
                             <div class="upload-limits">
-                                <span>• Maximum 10 photos</span>
+                                <span>• Maximum 20 photos</span>
                                 <span>• File size: up to 5MB each</span>
                                 <span>• Formats: JPG, PNG, WebP</span>
                             </div>

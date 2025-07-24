@@ -155,10 +155,9 @@ function setupModalEventListeners() {
     document.getElementById('description').addEventListener('input', function() {
         const charCount = this.value.length;
         document.getElementById('charCount').textContent = charCount;
-        
-        if (charCount > 1000) {
-            this.value = this.value.substring(0, 1000);
-            document.getElementById('charCount').textContent = '1000';
+        if (charCount > 5000) {
+            this.value = this.value.substring(0, 5000);
+            document.getElementById('charCount').textContent = '5000';
         }
     });
     
@@ -221,14 +220,22 @@ function removeModalEventListeners() {
 function toggleSaleOptions() {
     const listingType = document.getElementById('listingType').value;
     const saleOptionsGroup = document.getElementById('saleOptionsGroup');
+    const pricePerMonthLabel = document.getElementById('pricePerMonthLabel');
     
     if (listingType === 'for-sale') {
         saleOptionsGroup.style.display = 'block';
         document.getElementById('saleType').required = true;
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
+    } else if (listingType === 'for-rent') {
+        saleOptionsGroup.style.display = 'none';
+        document.getElementById('saleType').required = false;
+        document.getElementById('saleType').value = '';
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'inline-block';
     } else {
         saleOptionsGroup.style.display = 'none';
         document.getElementById('saleType').required = false;
         document.getElementById('saleType').value = '';
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
     }
 }
 
@@ -439,12 +446,11 @@ function updatePhotoPreviewGrid() {
                 <button type="button" class="photo-remove-btn" onclick="removePhoto('${photo.id}')">
                     <i class="fas fa-times"></i>
                 </button>
+                <button type="button" class="photo-main-btn" onclick="setMainPhoto('${photo.id}')" ${photo.isMain ? 'disabled' : ''} title="Set as Main Photo">
+                    <i class="fas fa-star"></i>
+                </button>
             </div>
         `;
-        photoItem.addEventListener('click', function(e) {
-            if (e.target.closest('.photo-remove-btn')) return;
-            setMainPhoto(photo.id);
-        });
         photoPreviewGrid.appendChild(photoItem);
     });
     
@@ -530,7 +536,9 @@ function handleFormSubmission(event) {
         status: 'active',
         id: isEditMode && editingPropertyId ? editingPropertyId : 'property-' + Date.now()
     };
-    if (isEditMode && editingPropertyId) {
+    // Store edit/add state before resetting isEditMode
+    const wasEdit = isEditMode && editingPropertyId;
+    if (wasEdit) {
         updatePropertyListing(propertyData);
         isEditMode = false;
         editingPropertyId = null;
@@ -543,7 +551,7 @@ function handleFormSubmission(event) {
         mainContent.scrollTo({ top: 0, behavior: 'smooth' });
     }
     closeListPropertyModal();
-    showSuccessMessage(isEditMode ? 'Property updated successfully!' : 'Property listed successfully!', 'active');
+    showSuccessMessage(wasEdit ? 'Property edited successfully!' : 'Property listed successfully!', 'active');
 }
 
 function addPropertyToListings(propertyData) {
@@ -567,10 +575,15 @@ function createPropertyCard(propertyData) {
     card.setAttribute('data-type', propertyData.listingType);
     card.setAttribute('data-property-id', propertyData.id);
     card.setAttribute('data-images', JSON.stringify(propertyData.photos.map(p => p.src)));
+    // Store the full property data object on the card for robust editing
+    card._propertyData = { ...propertyData };
     card._photoArray = propertyData.photos.map(p => p.src);
     card._currentPhotoIndex = propertyData.photos.findIndex(p => p.isMain) || 0;
     const mainPhoto = propertyData.photos.find(p => p.isMain) || propertyData.photos[0];
     let priceFormatted = '€' + (Number.isInteger(propertyData.price) ? propertyData.price : propertyData.price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
+    if (propertyData.listingType === 'for-rent') {
+        priceFormatted += '<span class="price-per-month">/month</span>';
+    }
     // Add highlight state
     const isHighlighted = propertyData.highlighted;
     if (isHighlighted) {
@@ -580,6 +593,14 @@ function createPropertyCard(propertyData) {
     let highlightBtnHTML = '';
     if (propertyData.status === 'active') {
         highlightBtnHTML = `<button class="highlight-listing-btn" title="Highlight Listing" type="button">Highlight Listing</button>`;
+    }
+    // Format date as 'day month year' (e.g., 23 Jul 2025)
+    function formatListingDate(dateStr) {
+        const date = new Date(dateStr);
+        const day = date.getDate();
+        const month = date.toLocaleString('default', { month: 'short' });
+        const year = date.getFullYear();
+        return `${day} ${month} ${year}`;
     }
     card.innerHTML = `
         <div class="property-actions">
@@ -628,7 +649,7 @@ function createPropertyCard(propertyData) {
                 <span class="property-type-bullet">•</span>
                 <span>${propertyData.propertyType.charAt(0).toUpperCase() + propertyData.propertyType.slice(1)}</span>
             </div>
-            <div class="property-listing-date">Listed ${new Date(propertyData.listedDate).toLocaleDateString()}</div>
+            <div class="property-listing-date">Listed ${formatListingDate(propertyData.listedDate)}</div>
         </div>
     `;
     // Add highlight button logic
@@ -637,7 +658,7 @@ function createPropertyCard(propertyData) {
         highlightBtn.onclick = function(e) {
             e.preventDefault();
             e.stopPropagation();
-            card.classList.toggle('highlighted-listing');
+            showHighlightListingModal();
         };
     }
     const imgEl = card.querySelector('.property-listing-img');
@@ -672,6 +693,13 @@ function updatePropertyListing(propertyData) {
 }
 
 function openEditPropertyModal(propertyData) {
+    // If this is a default template listing (no description and no saleType), set defaults
+    let isDefaultTemplate = !propertyData.description && !propertyData.saleType && propertyData.id && propertyData.id.startsWith('active-') || propertyData.id.startsWith('pending-');
+    if (isDefaultTemplate) {
+        propertyData.listingType = 'for-sale';
+        propertyData.saleType = 'tenanted-investment';
+        propertyData.description = 'Spacious and modern property ideal for families or investors. Features quality finishes, convenient location, and excellent amenities. Contact us for more details or to arrange an inspection.';
+    }
     isEditMode = true;
     editingPropertyId = propertyData.id;
     const modal = document.getElementById('listPropertyModal');
@@ -689,12 +717,19 @@ function openEditPropertyModal(propertyData) {
     document.getElementById('saleType').value = propertyData.saleType || '';
     document.getElementById('description').value = propertyData.description;
     document.getElementById('price').value = propertyData.price;
-    uploadedPhotos = propertyData.photos.map((p, idx) => ({ ...p, isMain: idx === 0 }));
+    uploadedPhotos = propertyData.photos.map((p, idx) => ({ ...p, isMain: !!p.isMain }));
     photoCounter = uploadedPhotos.length;
     updatePhotoPreviewGrid();
     document.getElementById('charCount').textContent = propertyData.description.length;
     document.getElementById('saleOptionsGroup').style.display = propertyData.listingType === 'for-sale' ? 'block' : 'none';
     document.getElementById('submitBtn').textContent = 'Save Changes';
+    // Update price label for edit mode
+    const pricePerMonthLabel = document.getElementById('pricePerMonthLabel');
+    if (propertyData.listingType === 'for-rent') {
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'inline-block';
+    } else {
+        if (pricePerMonthLabel) pricePerMonthLabel.style.display = 'none';
+    }
     currentStep = 1;
     showStep(1);
     setupModalEventListeners();
@@ -739,9 +774,8 @@ function updateDisplayValues() {
     const formData = {
         name: document.getElementById('displayName').value,
         email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
+        phone: document.getElementById('phone').value
     };
-    
     document.getElementById('displayNameValue').textContent = formData.name;
     document.getElementById('displayEmailValue').textContent = formData.email;
     document.getElementById('displayPhoneValue').textContent = formData.phone;
@@ -772,18 +806,53 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     
     // Get form values
     const phone = document.getElementById('phone').value;
-
+    const jobTitle = document.getElementById('jobTitle').value;
+    const licenseNumber = document.getElementById('licenseNumber').value;
+    const experience = document.getElementById('experience').value;
+    const specialties = document.getElementById('specialties').value;
+    const streetAddress = document.getElementById('streetAddress').value;
+    const city = document.getElementById('city').value;
+    const state = document.getElementById('state').value;
+    const zipCode = document.getElementById('zipCode').value;
+    const facebook = document.getElementById('facebook').value;
+    const linkedin = document.getElementById('linkedin').value;
+    const x = document.getElementById('x').value;
+    const instagram = document.getElementById('instagram').value;
+    
     // Save profile photo to localStorage
     const profileImgSrc = document.getElementById('modalProfileImg').src;
     if (profileImgSrc) {
-        localStorage.setItem('userProfilePhoto', profileImgSrc);
+        localStorage.setItem('agentProfilePhoto', profileImgSrc);
     }
-    
+
     // Update sidebar information
-    document.querySelector('.user-name').textContent = document.getElementById('displayName').value;
+    document.querySelector('.agent-name').textContent = document.getElementById('displayName').value;
     
     // Update display values
     updateDisplayValues();
+    
+    // Update display values for social media as icons
+    const socialRow = document.getElementById('profileSocialRow');
+    socialRow.innerHTML = '';
+    const socials = [
+        { id: 'facebook', url: facebook, icon: 'fab fa-facebook-f', label: 'Facebook' },
+        { id: 'linkedin', url: linkedin, icon: 'fab fa-linkedin-in', label: 'LinkedIn' },
+        { id: 'twitter', url: x, icon: 'fab fa-twitter', label: 'Twitter' },
+        { id: 'instagram', url: instagram, icon: 'fab fa-instagram', label: 'Instagram' }
+    ];
+    socials.forEach(social => {
+        if (social.url) {
+            const a = document.createElement('a');
+            a.href = social.url;
+            a.target = '_blank';
+            a.rel = 'noopener';
+            a.title = social.label;
+            a.setAttribute('aria-label', social.label);
+            a.className = 'profile-social-icon';
+            a.innerHTML = `<i class='${social.icon}'></i>`;
+            socialRow.appendChild(a);
+        }
+    });
     
     // Show success message
     showSuccessMessage('Profile updated successfully!');
@@ -850,10 +919,6 @@ function showSuccessMessage(message, status = 'sold') {
     }, 3000);
 }
 
-function goPremium() {
-    window.location.href = 'premium-offers.html';
-}
-
 // Sidebar toggle for mobile
 function toggleSidebar(forceOpen = null) {
     // Close notifications when toggling sidebar
@@ -912,7 +977,11 @@ function toggleSidebar(forceOpen = null) {
 function navigatePropertyImages(card, direction) {
     const images = JSON.parse(card.dataset.images);
     const imgElement = card.querySelector('.property-listing-img');
-    let currentIndex = images.indexOf(imgElement.src.split('/').pop());
+    // Normalize to just the filename for comparison
+    let currentIndex = images.findIndex(imgPath => {
+        return imgPath.split('/').pop() === imgElement.src.split('/').pop();
+    });
+    if (currentIndex === -1) currentIndex = 0; // fallback
     
     if (direction === 'next') {
         currentIndex = (currentIndex + 1) % images.length;
@@ -920,7 +989,7 @@ function navigatePropertyImages(card, direction) {
         currentIndex = (currentIndex - 1 + images.length) % images.length;
     }
     
-    imgElement.src = '../img/' + images[currentIndex];
+    imgElement.src = '../img/' + images[currentIndex].split('/').pop();
 }
 
 // Change property status
@@ -1298,10 +1367,21 @@ function attachEditListenersToAllCards() {
 }
 
 function extractPropertyDataFromCard(card) {
+    // Always use the stored property data if available for best-practice reliability
+    if (card._propertyData) {
+        return { ...card._propertyData };
+    }
+    // fallback legacy extraction (should not be needed if all cards are created via createPropertyCard)
     try {
         const images = card.getAttribute('data-images') ? JSON.parse(card.getAttribute('data-images')) : [];
         const info = card.querySelector('.property-listing-info');
         const specs = info.querySelectorAll('.property-listing-specs span');
+        const processedImages = images.map((src, idx) => {
+            if (!src.startsWith('http') && !src.startsWith('https') && !src.startsWith('../img/')) {
+                src = '../img/' + src;
+            }
+            return { id: `photo-${idx+1}`, src, fileName: src.split('/').pop(), isMain: idx === 0 };
+        });
         return {
             id: card.getAttribute('data-property-id') || '',
             listingType: card.getAttribute('data-type') || '',
@@ -1315,7 +1395,7 @@ function extractPropertyDataFromCard(card) {
             saleType: '',
             description: '',
             price: parseFloat(info.querySelector('.property-listing-price')?.textContent.replace(/[^\d.]/g, '') || '0'),
-            photos: images.map((src, idx) => ({ id: `photo-${idx+1}`, src, fileName: src, isMain: idx === 0 })),
+            photos: processedImages,
             listedDate: '',
             status: 'active',
         };
@@ -1460,9 +1540,7 @@ function showHighlightListingModal() {
     </div>
   `;
   document.body.appendChild(modal);
-  // Set main-content overflow to visible to allow modal overlay
-  var mainContent = document.querySelector('.main-content');
-  if (mainContent) mainContent.style.overflow = 'visible';
+  
   // Add mobile-responsive styles
   const style = document.createElement('style');
   style.textContent = `
@@ -1472,6 +1550,7 @@ function showHighlightListingModal() {
       max-width: 400px;
       margin: 0 auto;
     }
+    
     .highlight-modal-close {
       position: absolute;
       top: -12px;
@@ -1491,16 +1570,19 @@ function showHighlightListingModal() {
       justify-content: center;
       transition: all 0.2s ease;
     }
+    
     .highlight-modal-close:hover {
       background: #f3f4f6;
       color: #666;
       transform: scale(1.1);
     }
+    
     @media (max-width: 600px) {
       .highlight-modal-container {
         max-width: 100%;
         margin: 0 10px;
       }
+      
       .highlight-modal-close {
         top: 8px;
         right: 8px;
@@ -1508,16 +1590,19 @@ function showHighlightListingModal() {
         height: 36px;
         font-size: 1.5rem;
       }
+      
       #highlightListingModal {
         padding: 10px;
         align-items: flex-start;
         padding-top: 60px;
       }
+      
       #highlightListingModal .premium-card {
         padding: 24px 16px 20px 16px;
         margin-top: 20px;
       }
     }
+    
     @media (max-width: 480px) {
       .highlight-modal-close {
         top: 6px;
@@ -1526,10 +1611,12 @@ function showHighlightListingModal() {
         height: 34px;
         font-size: 1.4rem;
       }
+      
       #highlightListingModal {
         padding: 8px;
         padding-top: 50px;
       }
+      
       #highlightListingModal .premium-card {
         padding: 20px 12px 16px 12px;
         margin-top: 16px;
@@ -1537,14 +1624,10 @@ function showHighlightListingModal() {
     }
   `;
   document.head.appendChild(style);
+  
   // Close logic
-  function closeModal() {
-    modal.remove();
-    if (mainContent) mainContent.style.overflow = '';
-    if (style && style.parentNode) style.parentNode.removeChild(style);
-  }
-  document.getElementById('closeHighlightListingModal').onclick = closeModal;
-  modal.onclick = (e) => { if (e.target === modal) closeModal(); };
+  document.getElementById('closeHighlightListingModal').onclick = () => modal.remove();
+  modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
 }
 // Attach to Highlight Listing button(s)
 document.addEventListener('DOMContentLoaded', function() {
@@ -1618,8 +1701,8 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeListingsTabs();
     attachEditListenersToAllCards();
 
-    // Load user profile photo from localStorage
-    const savedPhoto = localStorage.getItem('userProfilePhoto');
+    // Load agent profile photo from localStorage
+    const savedPhoto = localStorage.getItem('agentProfilePhoto');
     if (savedPhoto) {
         document.getElementById('sidebar-profile-img').src = savedPhoto;
         const modalImg = document.getElementById('modalProfileImg');
@@ -1627,6 +1710,9 @@ document.addEventListener('DOMContentLoaded', function() {
             modalImg.src = savedPhoto;
         }
     }
+
+    // Load saved banner image
+    loadSavedBannerImage();
 
     // Notifications button logic
     const notificationsBtn = document.getElementById('notificationsBtn');
@@ -1645,6 +1731,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
+    var profileForm = document.getElementById('profileForm');
+    if (profileForm) {
+        profileForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            updateDisplayValues();
+            toggleEditMode(false);
+            showSuccessMessage('Profile updated successfully!');
+        });
+    }
 });
 
 // Add event listener for Home button to redirect with agent info
@@ -1652,20 +1748,20 @@ window.addEventListener('DOMContentLoaded', function() {
     var homeBtn = document.getElementById('dashboardHomeBtn');
     if (homeBtn) {
         homeBtn.addEventListener('click', function() {
-            // Get user info from sidebar
+            // Get agent info from sidebar
             var img = document.getElementById('sidebar-profile-img');
-            var name = document.querySelector('.user-name');
+            var name = document.querySelector('.agent-name');
             var imgSrc = img ? img.getAttribute('src') : '';
             // Fix path if needed
             if (imgSrc && imgSrc.startsWith('../img/')) {
                 imgSrc = imgSrc.replace('../img/', 'img/');
             }
-            var userInfo = {
+            var agentInfo = {
                 name: name ? name.textContent : '',
                 img: imgSrc
             };
-            // Store in localStorage (as dashboardUserInfo)
-            localStorage.setItem('dashboardUserInfo', JSON.stringify(userInfo));
+            // Store in localStorage
+            localStorage.setItem('dashboardAgentInfo', JSON.stringify(agentInfo));
             // Redirect to homepage
             window.location.href = '../index.html';
         });
@@ -1720,4 +1816,85 @@ function confirmLogout() {
     sessionStorage.clear();
     // Redirect to login page (or home page)
     window.location.href = '../index.html';
+}
+
+// Banner upload functionality
+function triggerBannerUpload() {
+    document.getElementById('banner-upload').click();
+}
+
+function handleBannerUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+            alert('Please select a valid image file.');
+            return;
+        }
+        
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            alert('Please select an image smaller than 5MB.');
+            return;
+        }
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const bannerImage = document.getElementById('banner-image');
+            bannerImage.src = e.target.result;
+            
+            // Save to localStorage for persistence
+            localStorage.setItem('agentBannerImage', e.target.result);
+            
+            // Show success message
+            showBannerUploadSuccess();
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function showBannerUploadSuccess() {
+    // Create a temporary success message
+    const successMessage = document.createElement('div');
+    successMessage.className = 'banner-upload-success';
+    successMessage.innerHTML = '<i class="fas fa-check"></i> Banner updated successfully!';
+    successMessage.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 1rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 500;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        animation: slideInRight 0.3s ease-out;
+    `;
+    
+    document.body.appendChild(successMessage);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        successMessage.style.animation = 'slideOutRight 0.3s ease-out';
+        setTimeout(() => {
+            if (successMessage.parentNode) {
+                successMessage.parentNode.removeChild(successMessage);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Load saved banner image on page load
+function loadSavedBannerImage() {
+    const savedBanner = localStorage.getItem('agentBannerImage');
+    if (savedBanner) {
+        const bannerImage = document.getElementById('banner-image');
+        if (bannerImage) {
+            bannerImage.src = savedBanner;
+        }
+    }
 }

@@ -360,7 +360,7 @@
         } else if (email === 'agent@gmail.com' && password === 'abcd123!') {
             localStorage.setItem('userType', 'agent');
             localStorage.setItem('isLoggedIn', 'true');
-            window.location.href = 'agent-dashboard/agent-dashboard.html';
+            window.location.href = 'user-dashboard/user-dashboard.html';
         } else {
             showInputError(passwordInput, 'Invalid credentials');
         }
