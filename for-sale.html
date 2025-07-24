@@ -144,8 +144,8 @@
                 </div>
               </div>
             </article>
-            <a href="property-details.html" class="property-card-link" style="text-decoration:none;color:inherit;display:block;">
-            <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]'>
+            <!-- Remove the <a> wrapper and add a click handler to the article itself -->
+            <article class="property-card loading" data-images='["img/thumbnail1.jpg", "img/thumbnail2.jpg", "img/thumbnail3.jpg"]' onclick="propertyCardNavigate(event)">
               <div class="property-banner">
                 <div class="banner-brand">
                   <div class="banner-logo">PE</div>
@@ -153,13 +153,13 @@
                 </div>
               </div>
               <div class="property-image">
-                <img src="img/thumbnail1.jpg" alt="Luxury Villa with Pool" loading="lazy" width="400" height="400">
-                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this)">
+                <img src="img/thumbnail1.jpg" alt="Luxury Villa with Pool" loading="lazy" width="400" height="400" style="cursor:pointer;" onclick="window.location.href='property-details.html'">
+                <button class="property-nav prev" type="button" aria-label="Previous image" onclick="window.ftlistings.previousImage(this);event.stopPropagation();">
                   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
                 </button>
-                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this)">
+                <button class="property-nav next" type="button" aria-label="Next image" onclick="window.ftlistings.nextImage(this);event.stopPropagation();">
                   <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"/>
                   </svg>
@@ -199,7 +199,6 @@
                 </div>
               </div>
             </article>
-            </a>
             <article class="property-card loading" data-images='["img/thumbnail2.jpg", "img/thumbnail3.jpg", "img/thumbnail1.jpg"]'>
               <div class="property-image">
                 <img src="img/thumbnail2.jpg" alt="Cozy Suburban House" loading="lazy" width="400" height="400">

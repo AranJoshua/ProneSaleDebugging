@@ -741,3 +741,16 @@ function attachHomepageFavoriteModals() {
   });
 }
 document.addEventListener('DOMContentLoaded', attachHomepageFavoriteModals);
+
+window.propertyCardNavigate = function(event) {
+    // Prevent navigation if the click was on an image or navigation arrow
+    const target = event.target;
+    if (
+        target.closest('.property-image img') ||
+        target.closest('.property-nav')
+    ) {
+        return; // Do nothing
+    }
+    // Otherwise, navigate
+    window.location.href = 'property-details.html';
+};
