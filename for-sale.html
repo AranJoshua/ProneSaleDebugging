@@ -388,6 +388,15 @@
     <script src="index.js"></script>
     <script src="for-sale.js"></script>
     <script>
+    function propertyCardNavigate(event) {
+      // Prevent navigation if the click was on the favorite button or its children
+      if (event.target.closest('.favorite-btn')) {
+        event.stopPropagation();
+        return;
+      }
+      // Existing navigation logic
+      window.location.href = 'property-details.html';
+    }
     // Navigation links configuration
     const navLinks = [
         { text: 'Home', href: 'index.html' },
