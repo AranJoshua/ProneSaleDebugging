@@ -3442,3 +3442,14 @@ body {
     padding: 0 1rem 1.5rem 1rem;
   }
 }
+
+.photo-preview-item.dragging {
+    opacity: 0.5;
+    z-index: 2;
+    box-shadow: 0 0 0 2px var(--color-primary), var(--shadow-lg);
+}
+.photo-preview-item.drag-over {
+    outline: 2px dashed var(--color-primary);
+    outline-offset: -4px;
+    background: rgba(19, 58, 124, 0.08);
+}

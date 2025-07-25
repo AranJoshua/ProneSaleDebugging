@@ -1,4 +1,3 @@
-/* Property Detail Page Styles */
 .property-detail-main {
     margin-top: 0.5rem;
     margin-bottom: 0.5rem;
@@ -108,7 +107,7 @@
     font-weight: 600;
     border-radius: 8px;
 }
-/* Map Card Styles */
+
 .card.property-map-card {
     border-radius: 0.75rem;
     box-shadow: 0 2px 12px rgba(30,58,138,0.08);
@@ -223,7 +222,6 @@
     }
 } 
 
-/* Agency Banner Styles (matching dashboard/agent-profile) */
 .top-banner {
     width: 100%;
     height: 64px;
@@ -259,7 +257,6 @@
     .agency-logo-banner { font-size: 1.05rem; gap: 8px; }
 } 
 
-/* Divider next to Back to Listings */
 .back-nav-divider {
     height: 2px;
     background: linear-gradient(90deg, #e5e7eb 60%, #cbd5e1 100%);
@@ -267,7 +264,7 @@
     min-width: 40px;
     margin-left: 0.5rem;
     opacity: 0.85;
-    box-shadow: 0 3px 8px -2px rgba(30,58,138,0.10); /* subtle shadow below */
+    box-shadow: 0 3px 8px -2px rgba(30,58,138,0.10); 
 } 
 
 .back-nav-divider-mobile {
@@ -287,7 +284,6 @@
     .back-nav-divider { display: none; }
 } 
 
-/* Remove margin-bottom from all card classes */
 .property-gallery, .property-info-panel, .agent-info-section, .card.property-map-card {
     margin-bottom: 0.5rem;
 }
@@ -311,7 +307,6 @@
     }
 } 
 
-/* Contact Modal Styles */
 .contact-modal {
   position: fixed;
   z-index: 2000;
@@ -422,7 +417,7 @@
     max-width: 98vw;
   }
 }
-/* Custom select for contact form */
+
 .contact-select-wrapper {
   position: relative;
   display: flex;
@@ -490,7 +485,7 @@
   transform: rotate(45deg);
   margin-top: 0.2em;
 }
-/* Microanimation for send button */
+
 .contact-form-send-btn.sending {
   pointer-events: none;
   opacity: 0.7;

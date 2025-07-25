@@ -48,7 +48,7 @@ body {
 .navbar-brand {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #1a1a1a !important;
+    color: #1a1a1a;
     text-decoration: none;
     transition: color .3s ease;
     letter-spacing: -.5px;
@@ -56,7 +56,7 @@ body {
 
 .navbar-brand:hover,
 .navbar-brand:focus {
-    color: #1e3a8a !important;
+    color: #1e3a8a;
     outline: none;
 }
 
@@ -320,14 +320,13 @@ body {
 
 .input-group input {
     width: 100%;
-    padding: 0.75rem 1rem; /* Remove left padding for icons, keep only top/bottom and right */
+    padding: 0.75rem 1rem;
     border: 1.5px solid #e5e7eb;
     border-radius: 8px;
     font-size: 1rem;
     transition: all .3s ease;
     background: #fff;
     outline: none;
-    /* Remove browser default styling */
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
@@ -338,14 +337,12 @@ body {
     box-shadow: 0 0 0 3px rgba(30, 58, 138, 0.1);
 }
 
-/* Remove the invalid state styling that was causing red outlines */
 .input-group input:invalid {
     border-color: #e5e7eb;
 }
 
-/* Remove icon styles */
 .option-icon {
-    display: none !important;
+    display: none;
 }
 
 /* Password toggle button styles */
@@ -381,9 +378,8 @@ body {
     display: block;
 }
 
-/* Adjust input padding for password fields to make room for toggle button */
 .input-group input[type="password"] {
-    padding-right: 2.5rem; /* Only right padding for eye icon */
+    padding-right: 2.5rem; 
 }
 
 /* Error Messages */
@@ -601,7 +597,6 @@ body {
 
     .auth-header h1 {
     
-    /* Ensure checkbox maintains square shape on mobile */
     .checkmark {
         height: 20px;
         width: 20px;

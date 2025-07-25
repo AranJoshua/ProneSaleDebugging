@@ -446,9 +446,6 @@ function updatePhotoPreviewGrid() {
                 <button type="button" class="photo-remove-btn" onclick="removePhoto('${photo.id}')">
                     <i class="fas fa-times"></i>
                 </button>
-                <button type="button" class="photo-main-btn" onclick="setMainPhoto('${photo.id}')" ${photo.isMain ? 'disabled' : ''} title="Set as Main Photo">
-                    <i class="fas fa-star"></i>
-                </button>
             </div>
         `;
         photoPreviewGrid.appendChild(photoItem);
@@ -481,13 +478,6 @@ function removePhoto(photoId) {
         uploadedPhotos[0].isMain = true;
         updateMainPhotoBadges();
     }
-}
-
-function setMainPhoto(photoId) {
-    uploadedPhotos.forEach(photo => {
-        photo.isMain = photo.id === photoId;
-    });
-    updateMainPhotoBadges();
 }
 
 function updateMainPhotoBadges() {

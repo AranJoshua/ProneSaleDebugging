@@ -287,7 +287,6 @@
     .back-nav-divider { display: none; }
 } 
 
-/* Remove margin-bottom from all card classes */
 .property-gallery, .property-info-panel, .agent-info-section, .card.property-map-card {
     margin-bottom: 0.5rem;
 }

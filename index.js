@@ -707,7 +707,6 @@ window.confirmRemoveFavorite = confirmRemoveFavorite;
 window.closeFavoritesConfirmDialog = closeFavoritesConfirmDialog;
 window.removeFavorite = removeFavorite;
 
-// Patch attachHomepageFavoriteModals to pass the button reference
 function attachHomepageFavoriteModals() {
   document.querySelectorAll('.favorite-btn, .property-card-star').forEach(btn => {
     btn.onclick = function(e) {

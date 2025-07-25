@@ -446,9 +446,6 @@ function updatePhotoPreviewGrid() {
                 <button type="button" class="photo-remove-btn" onclick="removePhoto('${photo.id}')">
                     <i class="fas fa-times"></i>
                 </button>
-                <button type="button" class="photo-main-btn" onclick="setMainPhoto('${photo.id}')" ${photo.isMain ? 'disabled' : ''} title="Set as Main Photo">
-                    <i class="fas fa-star"></i>
-                </button>
             </div>
         `;
         photoPreviewGrid.appendChild(photoItem);
@@ -483,13 +480,6 @@ function removePhoto(photoId) {
     }
 }
 
-function setMainPhoto(photoId) {
-    uploadedPhotos.forEach(photo => {
-        photo.isMain = photo.id === photoId;
-    });
-    updateMainPhotoBadges();
-}
-
 function updateMainPhotoBadges() {
     const photoItems = document.querySelectorAll('.photo-preview-item');
     photoItems.forEach(item => {
@@ -509,6 +499,107 @@ function updateMainPhotoBadges() {
         }
     });
 }
+
+// --- Drag-and-drop reordering for photo preview grid ---
+function enablePhotoReordering() {
+    const grid = document.getElementById('photoPreviewGrid');
+    if (!grid) return;
+    let dragSrcIdx = null;
+    let draggingElem = null;
+
+    // Mouse events
+    grid.querySelectorAll('.photo-preview-item').forEach((item, idx) => {
+        item.setAttribute('draggable', 'true');
+        item.ondragstart = function(e) {
+            dragSrcIdx = idx;
+            draggingElem = item;
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        };
+        item.ondragend = function() {
+            item.classList.remove('dragging');
+            dragSrcIdx = null;
+            draggingElem = null;
+            grid.querySelectorAll('.photo-preview-item').forEach(i => i.classList.remove('drag-over'));
+        };
+        item.ondragover = function(e) {
+            e.preventDefault();
+            if (item !== draggingElem) item.classList.add('drag-over');
+        };
+        item.ondragleave = function() {
+            item.classList.remove('drag-over');
+        };
+        item.ondrop = function(e) {
+            e.preventDefault();
+            if (dragSrcIdx === null || item === draggingElem) return;
+            const dropIdx = Array.from(grid.children).indexOf(item);
+            reorderPhotos(dragSrcIdx, dropIdx);
+        };
+    });
+
+    // Touch events (mobile)
+    let touchStartIdx = null;
+    let touchDraggingElem = null;
+    grid.querySelectorAll('.photo-preview-item').forEach((item, idx) => {
+        item.ontouchstart = function(e) {
+            touchStartIdx = idx;
+            touchDraggingElem = item;
+            item.classList.add('dragging');
+        };
+        item.ontouchend = function() {
+            setTimeout(() => {
+                item.classList.remove('dragging');
+                grid.querySelectorAll('.photo-preview-item').forEach(i => i.classList.remove('drag-over'));
+                touchStartIdx = null;
+                touchDraggingElem = null;
+            }, 100);
+        };
+        item.ontouchmove = function(e) {
+            const touch = e.touches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (target && target.classList.contains('photo-preview-item') && target !== item) {
+                target.classList.add('drag-over');
+            }
+        };
+        item.ontouchcancel = function() {
+            item.classList.remove('dragging');
+            grid.querySelectorAll('.photo-preview-item').forEach(i => i.classList.remove('drag-over'));
+            touchStartIdx = null;
+            touchDraggingElem = null;
+        };
+        item.ontouchend = function(e) {
+            const touch = e.changedTouches[0];
+            const target = document.elementFromPoint(touch.clientX, touch.clientY);
+            if (touchStartIdx !== null && target && target.classList.contains('photo-preview-item') && target !== item) {
+                const dropIdx = Array.from(grid.children).indexOf(target);
+                reorderPhotos(touchStartIdx, dropIdx);
+            }
+            setTimeout(() => {
+                item.classList.remove('dragging');
+                grid.querySelectorAll('.photo-preview-item').forEach(i => i.classList.remove('drag-over'));
+                touchStartIdx = null;
+                touchDraggingElem = null;
+            }, 100);
+        };
+    });
+}
+
+function reorderPhotos(fromIdx, toIdx) {
+    if (fromIdx === toIdx || fromIdx < 0 || toIdx < 0 || fromIdx >= uploadedPhotos.length || toIdx >= uploadedPhotos.length) return;
+    const moved = uploadedPhotos.splice(fromIdx, 1)[0];
+    uploadedPhotos.splice(toIdx, 0, moved);
+    // Always set first as main
+    uploadedPhotos.forEach((p, i) => p.isMain = (i === 0));
+    updatePhotoPreviewGrid();
+    updateMainPhotoBadges();
+}
+
+// Patch updatePhotoPreviewGrid to call enablePhotoReordering at the end
+const _updatePhotoPreviewGrid = updatePhotoPreviewGrid;
+updatePhotoPreviewGrid = function() {
+    _updatePhotoPreviewGrid.apply(this, arguments);
+    enablePhotoReordering();
+};
 
 let isEditMode = false;
 let editingPropertyId = null;

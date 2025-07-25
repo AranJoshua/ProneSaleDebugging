@@ -99,7 +99,6 @@ body {
     animation: slideUp 0.4s cubic-bezier(0.4,0,0.2,1) both;
     animation-delay: 0s;
 }
-/* Remove staggered delays */
 .premium-card:nth-child(1),
 .premium-card:nth-child(2),
 .premium-card:nth-child(3) {
@@ -256,15 +255,14 @@ body {
     .premium-card {
         padding: 14px 8px 12px 8px;
         border-radius: 12px;
-        /* Remove vertical stretching and bottom-alignment for mobile */
         align-items: stretch;
         display: block;
         min-height: unset;
     }
     .premium-cta,
     .bundle-cta {
-        margin-top: 24px;   /* Add some space above the button */
-        margin-bottom: 0;   /* Remove any bottom margin if present */
+        margin-top: 24px;
+        margin-bottom: 0;
     }
     .premium-badge {
         left: 12px;
