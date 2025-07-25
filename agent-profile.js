@@ -69,7 +69,6 @@ function initializePropertyFilter() {
             noPropertiesMessage.textContent = `This agent has no properties posted for ${type}.`;
         } else {
             propertyCountDisplay.style.display = '';
-            propertyCountDisplay.textContent = `Showing ${visibleCards.length} out of ${allCards.length} properties for ${type}`;
             noPropertiesMessage.style.display = 'none';
         }
     }
@@ -299,6 +298,22 @@ function renderPropertyPage(page) {
             card.classList.remove('fade-in-listing');
         }
     });
+
+    // --- Update property count display for pagination ---
+    const propertyCountDisplay = document.getElementById('propertyCountDisplay');
+    const noPropertiesMessage = document.getElementById('noPropertiesMessage');
+    if (visibleCards.length === 0) {
+        propertyCountDisplay.style.display = 'none';
+        noPropertiesMessage.style.display = 'block';
+        noPropertiesMessage.textContent = `This agent has no properties posted for ${type}.`;
+    } else {
+        propertyCountDisplay.style.display = '';
+        noPropertiesMessage.style.display = 'none';
+        const startIdx = (currentPage - 1) * PROPERTY_CARDS_PER_PAGE + 1;
+        const endIdx = Math.min(currentPage * PROPERTY_CARDS_PER_PAGE, visibleCards.length);
+        propertyCountDisplay.textContent = `Showing ${startIdx}-${endIdx} out of ${visibleCards.length} properties for ${type}`;
+    }
+    // --- End update ---
 
     renderPaginationControls(totalPages, visibleCards.length);
     initializePropertyImageNavigation && initializePropertyImageNavigation(); // Re-init image nav for visible cards
