@@ -92,6 +92,7 @@ function initializePropertyFilter() {
             selected.textContent = this.textContent;
             closeDropdown();
             updatePropertyCount();
+            renderPropertyPage(1); // Ensure pagination is updated immediately after filter change
         });
     });
 
@@ -255,6 +256,97 @@ initializePropertyFilter = function() {
     triggerMapUpdate();
 };
 
+// PAGINATION LOGIC FOR PROPERTY LISTINGS
+const PROPERTY_CARDS_PER_PAGE = 5;
+let currentPage = 1;
+
+function getAllPropertyCards() {
+    // Get all property card HTML as array
+    const propertyList = document.getElementById('gabrielPropertyList');
+    return Array.from(propertyList.children).filter(
+        el => el.classList.contains('property-listing-card')
+    );
+}
+
+function renderPropertyPage(page) {
+    const propertyList = document.getElementById('gabrielPropertyList');
+    const allCards = getAllPropertyCards();
+    // Only count visible cards (filtered by type)
+    const selected = document.getElementById('propertyDropdownSelected');
+    const type = selected.textContent.trim().toLowerCase().includes('rent') ? 'rent' : 'sale';
+    const visibleCards = allCards.filter(card => card.getAttribute('data-type') === type);
+    // If there are no visible cards, set totalPages to 1 and hide pagination
+    let totalPages = visibleCards.length === 0 ? 1 : Math.ceil(visibleCards.length / PROPERTY_CARDS_PER_PAGE);
+    currentPage = Math.max(1, Math.min(page, totalPages));
+
+    // Hide all, then show only those for this page
+    visibleCards.forEach((card, idx) => {
+        if (idx >= (currentPage - 1) * PROPERTY_CARDS_PER_PAGE && idx < currentPage * PROPERTY_CARDS_PER_PAGE) {
+            card.style.display = '';
+            // Add microanimation class
+            card.classList.remove('fade-in-listing');
+            void card.offsetWidth; // trigger reflow for restart
+            card.classList.add('fade-in-listing');
+        } else {
+            card.style.display = 'none';
+            card.classList.remove('fade-in-listing');
+        }
+    });
+    // Hide all cards that are not of the selected type
+    allCards.forEach(card => {
+        if (card.getAttribute('data-type') !== type) {
+            card.style.display = 'none';
+            card.classList.remove('fade-in-listing');
+        }
+    });
+
+    renderPaginationControls(totalPages, visibleCards.length);
+    initializePropertyImageNavigation && initializePropertyImageNavigation(); // Re-init image nav for visible cards
+    updateLeafletMapMarkers && updateLeafletMapMarkers();
+
+    // Smooth scroll to top of listings
+    const listingsSection = document.querySelector('.listings-section');
+    if (listingsSection) {
+        listingsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+}
+
+function renderPaginationControls(totalPages, visibleCount) {
+    const pagination = document.getElementById('propertyPagination');
+    if (!pagination) return;
+    // Hide pagination if there are no visible cards
+    if (visibleCount === 0) {
+        pagination.innerHTML = '';
+        pagination.style.display = 'none';
+        return;
+    } else {
+        pagination.style.display = '';
+    }
+    let html = '';
+    html += `<button class="pagination-btn" id="paginationPrev" ${currentPage === 1 ? 'disabled' : ''} aria-label="Previous">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>`;
+    for (let i = 1; i <= totalPages; i++) {
+        html += `<button class="pagination-page${i === currentPage ? ' active' : ''}" data-page="${i}">${i}</button>`;
+    }
+    html += `<button class="pagination-btn" id="paginationNext" ${currentPage === totalPages ? 'disabled' : ''} aria-label="Next">
+      <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>`;
+    pagination.innerHTML = html;
+
+    // Add event listeners
+    pagination.querySelectorAll('.pagination-page').forEach(btn => {
+        btn.addEventListener('click', e => {
+            const page = parseInt(btn.getAttribute('data-page'));
+            renderPropertyPage(page);
+        });
+    });
+    const prevBtn = document.getElementById('paginationPrev');
+    const nextBtn = document.getElementById('paginationNext');
+    if (prevBtn) prevBtn.addEventListener('click', () => renderPropertyPage(currentPage - 1));
+    if (nextBtn) nextBtn.addEventListener('click', () => renderPropertyPage(currentPage + 1));
+}
+
 (function() {
   const emailBtn = document.querySelector('.btn-email');
   const modal = document.getElementById('contactModal');
@@ -396,4 +488,6 @@ document.addEventListener('DOMContentLoaded', function() {
     initializePropertyImageNavigation();
     initializeSmoothScroll();
     initializeLeafletMap();
+    // PAGINATION INIT
+    renderPropertyPage(1);
 }); 

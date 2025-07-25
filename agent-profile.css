@@ -660,6 +660,85 @@
   100% { transform: translateY(-50%) rotate(360deg); }
 }
 
+/* Pagination styles */
+.property-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem 0 1rem 0;
+  font-family: 'Poppins', Arial, sans-serif;
+  background: #f8f9fa;
+  border-radius: 2.5rem;
+  box-shadow: 0 2px 12px rgba(30,58,138,0.07);
+  padding: 0.7rem 1.5rem;
+}
+.property-pagination .pagination-btn,
+.property-pagination .pagination-page {
+  background: none;
+  border: none;
+  color: #133a7c;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.25em 0.95em;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, box-shadow 0.18s;
+  outline: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.3em;
+  min-height: 2.3em;
+  box-shadow: none;
+}
+.property-pagination .pagination-page.active {
+  background: #133a7c;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(30,58,138,0.10);
+}
+.property-pagination .pagination-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+  background: none;
+  color: #b0b8c9;
+}
+.property-pagination .pagination-btn {
+  font-size: 1.2rem;
+  color: #133a7c;
+  background: none;
+  border: none;
+  border-radius: 50%;
+  padding: 0.25em 0.95em;
+  transition: background 0.18s, color 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.property-pagination .pagination-btn svg {
+  width: 1.3em;
+  height: 1.3em;
+  display: block;
+}
+.property-pagination .pagination-btn:hover:not(:disabled),
+.property-pagination .pagination-page:hover:not(.active) {
+  background: none;
+  color: #133a7c;
+  box-shadow: none;
+}
+.property-pagination .pagination-btn:hover:not(:disabled) svg {
+  color: #0d2554;
+  stroke: #0d2554;
+}
+.property-pagination .pagination-page {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #133a7c;
+  background: #f8f9fa;
+  border: 1.5px solid transparent;
+}
+
 /* =========================
    Responsive Design
    ========================= */
@@ -793,4 +872,18 @@
 #propertyMap {
     border: 2px solid #e3e8f0;
     box-shadow: 0 2px 12px rgba(30,58,138,0.08);
+} 
+
+.fade-in-listing {
+  animation: fadeInListing 0.35s cubic-bezier(0.4, 0.2, 0.2, 1);
+}
+@keyframes fadeInListing {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 } 

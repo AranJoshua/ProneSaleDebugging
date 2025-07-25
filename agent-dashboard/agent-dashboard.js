@@ -872,7 +872,8 @@ function updateDisplayValues() {
         streetAddress: document.getElementById('streetAddress').value,
         city: document.getElementById('city').value,
         state: document.getElementById('state').value,
-        zipCode: document.getElementById('zipCode').value
+        zipCode: document.getElementById('zipCode').value,
+        description: document.getElementById('descriptionInput').value
     };
     
     document.getElementById('displayNameValue').textContent = formData.name;
@@ -882,6 +883,8 @@ function updateDisplayValues() {
     document.getElementById('displayLicenseValue').textContent = formData.licenseNumber;
     document.getElementById('displayExperienceValue').textContent = formData.experience + ' years';
     document.getElementById('displayAddressValue').textContent = `${formData.streetAddress}, ${formData.city}, ${formData.state} ${formData.zipCode}`;
+    document.getElementById('displayDescriptionValue').textContent = formData.description || 'No description provided.';
+    document.getElementById('displayDescriptionValue').title = formData.description || 'No description provided.';
 }
 
 function updateProfilePhoto(event) {
@@ -921,12 +924,15 @@ document.getElementById('profileForm').addEventListener('submit', function(e) {
     const linkedin = document.getElementById('linkedin').value;
     const x = document.getElementById('x').value;
     const instagram = document.getElementById('instagram').value;
+    const description = document.getElementById('descriptionInput').value;
     
     // Save profile photo to localStorage
     const profileImgSrc = document.getElementById('modalProfileImg').src;
     if (profileImgSrc) {
         localStorage.setItem('agentProfilePhoto', profileImgSrc);
     }
+    // Save description to localStorage
+    localStorage.setItem('agentDescription', description);
 
     // Update sidebar information
     document.querySelector('.agent-name').textContent = document.getElementById('displayName').value;
@@ -1816,6 +1822,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (modalImg) {
             modalImg.src = savedPhoto;
         }
+    }
+
+    // Load saved description
+    const savedDescription = localStorage.getItem('agentDescription');
+    if (savedDescription) {
+        document.getElementById('displayDescriptionValue').textContent = savedDescription;
+        document.getElementById('displayDescriptionValue').title = savedDescription;
+        const descInput = document.getElementById('descriptionInput');
+        if (descInput) descInput.value = savedDescription;
     }
 
     // Load saved banner image
