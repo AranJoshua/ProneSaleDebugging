@@ -360,7 +360,7 @@
         } else if (email === 'agent@gmail.com' && password === 'abcd123!') {
             localStorage.setItem('userType', 'agent');
             localStorage.setItem('isLoggedIn', 'true');
-            window.location.href = 'user-dashboard/user-dashboard.html';
+            window.location.href = 'agent-dashboard/agent-dashboard.html';
         } else {
             showInputError(passwordInput, 'Invalid credentials');
         }
@@ -481,10 +481,8 @@
     }
 
     document.addEventListener('DOMContentLoaded', function() {
-        // This logic is now handled in handleLoginSuccess
     });
 
-    // Expose for debugging
     window.loginApp = {
         navigateToStep,
         validateForm,
