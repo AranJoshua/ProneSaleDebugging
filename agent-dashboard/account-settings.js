@@ -1,7 +1,4 @@
-// Account Settings JavaScript
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Password visibility toggle functionality
     const toggleButtons = document.querySelectorAll('.toggle-password');
     
     toggleButtons.forEach(button => {
@@ -21,19 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Password change form submission
     const changePasswordBtn = document.querySelector('.change-password-btn');
     if (changePasswordBtn) {
         changePasswordBtn.addEventListener('click', handlePasswordChange);
     }
 
-    // Email change link functionality
     const changeLink = document.querySelector('.change-link');
     if (changeLink) {
         changeLink.addEventListener('click', handleEmailChange);
     }
 
-    // Password reset link functionality
     const resetLink = document.querySelector('.reset-link');
     if (resetLink) {
         resetLink.addEventListener('click', handlePasswordReset);
@@ -64,15 +58,11 @@ function handlePasswordChange(e) {
         return;
     }
     
-    // Here you would typically make an API call to change the password
-    // For now, we'll just show a success message
     showNotification('Password changed successfully!', 'success');
     
-    // Clear the form
     currentPassword.value = '';
     newPassword.value = '';
     
-    // Reset password visibility
     const toggleButtons = document.querySelectorAll('.toggle-password');
     toggleButtons.forEach(button => {
         const icon = button.querySelector('i');
@@ -89,19 +79,16 @@ function handlePasswordChange(e) {
 function handleEmailChange(e) {
     e.preventDefault();
     
-    // Here you would typically open a modal or navigate to an email change page
     showNotification('Email change functionality would be implemented here', 'info');
 }
 
 function handlePasswordReset(e) {
     e.preventDefault();
     
-    // Here you would typically open a password reset modal or navigate to a reset page
     showNotification('Password reset functionality would be implemented here', 'info');
 }
 
 function showNotification(message, type = 'info') {
-    // Create notification element
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.innerHTML = `
@@ -111,7 +98,6 @@ function showNotification(message, type = 'info') {
         </div>
     `;
     
-    // Add styles
     notification.style.cssText = `
         position: fixed;
         top: 20px;
@@ -126,7 +112,6 @@ function showNotification(message, type = 'info') {
         animation: slideIn 0.3s ease-out;
     `;
     
-    // Add animation styles
     const style = document.createElement('style');
     style.textContent = `
         @keyframes slideIn {
@@ -160,22 +145,18 @@ function showNotification(message, type = 'info') {
     `;
     document.head.appendChild(style);
     
-    // Add to page
     document.body.appendChild(notification);
     
-    // Close button functionality
     const closeBtn = notification.querySelector('.notification-close');
     closeBtn.addEventListener('click', () => {
         notification.remove();
     });
     
-    // Auto remove after 5 seconds
     setTimeout(() => {
         if (notification.parentNode) {
             notification.style.animation = 'slideOut 0.3s ease-in';
             notification.style.animationFillMode = 'forwards';
             
-            // Add slideOut animation
             const slideOutStyle = document.createElement('style');
             slideOutStyle.textContent = `
                 @keyframes slideOut {
@@ -200,7 +181,6 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Form validation helpers
 function validatePassword(password) {
     const minLength = 8;
     const hasUpperCase = /[A-Z]/.test(password);
@@ -232,7 +212,6 @@ function validatePassword(password) {
     };
 }
 
-// Export functions for potential external use
 window.AccountSettings = {
     handlePasswordChange,
     handleEmailChange,

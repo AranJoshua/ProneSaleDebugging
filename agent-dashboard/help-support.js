@@ -1,7 +1,4 @@
-// Help & Support JavaScript - Fixed for single scrollbar
-
 document.addEventListener('DOMContentLoaded', function() {
-    // FAQ Toggle Functionality with smooth height transitions
     const faqQuestions = document.querySelectorAll('.faq-question');
     
     faqQuestions.forEach(question => {
@@ -10,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const answer = this.nextElementSibling;
             const isActive = faqItem.classList.contains('active');
             
-            // Close other open FAQ items with smooth animation
             document.querySelectorAll('.faq-item.active').forEach(item => {
                 if (item !== faqItem) {
                     const otherAnswer = item.querySelector('.faq-answer');
@@ -19,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Toggle current FAQ item with smooth animation
             if (isActive) {
                 faqItem.classList.remove('active');
                 slideUp(answer);
@@ -30,22 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Search Functionality
     const searchInput = document.querySelector('.search-input');
     const searchBtn = document.querySelector('.search-btn');
     
     if (searchInput && searchBtn) {
-        // Search on button click
         searchBtn.addEventListener('click', performSearch);
         
-        // Search on Enter key press
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
         
-        // Real-time search as user types
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             if (query.length > 0) {
@@ -57,7 +48,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Smooth slide down animation
 function slideDown(element) {
     element.style.display = 'block';
     element.style.height = '0px';
@@ -65,33 +55,28 @@ function slideDown(element) {
     element.style.transition = 'height 0.3s ease, opacity 0.3s ease';
     element.style.opacity = '0';
     
-    // Force reflow
     element.offsetHeight;
     
     const height = element.scrollHeight;
     element.style.height = height + 'px';
     element.style.opacity = '1';
     
-    // Clean up after animation
     setTimeout(() => {
         element.style.height = 'auto';
         element.style.overflow = 'visible';
     }, 300);
 }
 
-// Smooth slide up animation
 function slideUp(element) {
     element.style.height = element.scrollHeight + 'px';
     element.style.overflow = 'hidden';
     element.style.transition = 'height 0.3s ease, opacity 0.3s ease';
     
-    // Force reflow
     element.offsetHeight;
     
     element.style.height = '0px';
     element.style.opacity = '0';
     
-    // Hide after animation
     setTimeout(() => {
         element.style.display = 'none';
         element.style.height = '';
@@ -121,7 +106,6 @@ function filterFAQs(query) {
         
         if (question.includes(query) || answer.includes(query)) {
             item.style.display = 'block';
-            // Highlight matching text
             highlightText(item, query);
         } else {
             item.style.display = 'none';
@@ -134,7 +118,6 @@ function showAllFAQs() {
     
     faqItems.forEach(item => {
         item.style.display = 'block';
-        // Remove highlighting
         removeHighlight(item);
     });
 }
@@ -175,7 +158,6 @@ function removeHighlight(element) {
     }
 }
 
-// Add smooth scrolling for better UX
 function smoothScrollTo(element) {
     element.scrollIntoView({
         behavior: 'smooth',
@@ -183,7 +165,6 @@ function smoothScrollTo(element) {
     });
 }
 
-// Export functions for potential external use
 window.HelpSupport = {
     performSearch,
     filterFAQs,

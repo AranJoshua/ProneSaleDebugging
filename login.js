@@ -207,7 +207,6 @@
             }
         });
 
-        // Password confirmation validation
         const passwordInputs = form.querySelectorAll('input[type="password"]');
         if (passwordInputs.length === 2) {
             const password = passwordInputs[0].value;

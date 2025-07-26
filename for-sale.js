@@ -1,49 +1,26 @@
-// for-sale.js
-// Handles For Sale tab logic, state, and rendering
-
-// 1. Sample property data (placeholder)
-// Property card logic removed as requested
-
-// 2. State management for search/filter (placeholder)
 let searchState = {
   query: '',
   filters: {},
 };
 
-// 3. Render hero section (placeholder)
 function renderHero() {
-  // ...
 }
 
-// 4. Render search bar (placeholder)
 function renderSearchBar() {
-  // ...
 }
 
-// 5. Render property grid (placeholder)
-// function renderPropertyGrid(properties) { ... } removed
-
-// 6. Loading/Error states (placeholder)
 function showLoading() {
-  // ...
 }
+
 function showError() {
-  // ...
 }
 
-// 7. Prepare for future API integration
-// ...
-
-// 8. Initialize For Sale tab
 function initForSale() {
   renderHero();
   renderSearchBar();
-  // Property grid rendering removed
 }
 
-// 9. Banner carousel and search tab interactivity (copied from homepage)
 document.addEventListener('DOMContentLoaded', function() {
-  // Banner carousel data (single slide for now, can be extended)
   const bannerData = [
     {
       slideClass: 'banner-slide-1',
@@ -82,7 +59,6 @@ document.addEventListener('DOMContentLoaded', function() {
     `).join('');
   }
 
-  // Search tab functionality (copied from homepage)
   const allTabs = document.querySelectorAll('.search-tabs');
   allTabs.forEach((tabsContainer) => {
     const tabs = tabsContainer.querySelectorAll('.search-tab');

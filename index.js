@@ -539,7 +539,6 @@ function confirmRemoveFavorite(listingId, favoriteBtnRef) {
       </div>
     </div>
   `;
-  // Store the button reference in the dialog for later use
   dialog.favoriteBtnRef = favoriteBtnRef;
   document.body.appendChild(dialog);
 }
@@ -555,12 +554,10 @@ function closeFavoritesConfirmDialog() {
 }
 
 function removeFavorite(listingId, buttonElement) {
-  // Get the favorite button reference from the dialog
   const dialog = document.getElementById('favoritesConfirmDialog');
   const favoriteBtn = dialog ? dialog.favoriteBtnRef : null;
   
   if (favoriteBtn) {
-    // Remove the active class and change icon
     favoriteBtn.classList.remove('active');
     const icon = favoriteBtn.querySelector('i');
     if (icon) {
@@ -569,7 +566,6 @@ function removeFavorite(listingId, buttonElement) {
     }
   }
 
-  // Remove from localStorage collections if it exists
   try {
     let collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
     collections.forEach(collection => {
@@ -590,7 +586,6 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
     collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
   } catch (e) {}
   
-  // Ensure default collections exist if none are found
   if (!collections || collections.length === 0) {
     collections = [
       {
@@ -648,7 +643,6 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
       return;
     }
     
-    // Get current collections
     let collections = [];
     try {
       collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
@@ -656,20 +650,18 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
       collections = [];
     }
     
-    // Find the selected collection
     const selectedCollection = collections.find(col => col.id === selectedCollectionId);
     if (!selectedCollection) {
       showErrorNotification('Collection not found');
       return;
     }
     
-    // Create listing object from the current property card
     const propertyCard = favoriteBtnRef.closest('.property-card');
     let listing = {
       id: listingId || `listing-${Date.now()}`,
       title: propertyCard.querySelector('.property-price')?.textContent || 'Property',
       address: propertyCard.querySelector('.property-address')?.textContent || '',
-      bedrooms: 2, // Default values - could be extracted from card if available
+      bedrooms: 2,
       bathrooms: 1,
       parking: 1,
       size: 85,
@@ -680,14 +672,12 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
       images: ['thumbnail1.jpg', 'thumbnail2.jpg', 'thumbnail3.jpg']
     };
     
-    // Add listing to collection if not already present
     const existingListing = selectedCollection.listings.find(l => l.id === listing.id);
     if (!existingListing) {
       selectedCollection.listings.push(listing);
       localStorage.setItem('favoritesCollections', JSON.stringify(collections));
     }
     
-    // Robustly activate the star for this property card
     if (favoriteBtnRef && favoriteBtnRef.querySelector) {
       const icon = favoriteBtnRef.querySelector('i');
       if (icon) {
@@ -702,7 +692,6 @@ function showAddToCollectionModal(listingId, favoriteBtnRef) {
   modal.onclick = (e) => { if (e.target === modal) modal.remove(); };
 }
 
-// Expose functions globally for inline HTML handlers
 window.confirmRemoveFavorite = confirmRemoveFavorite;
 window.closeFavoritesConfirmDialog = closeFavoritesConfirmDialog;
 window.removeFavorite = removeFavorite;
@@ -714,16 +703,13 @@ function attachHomepageFavoriteModals() {
       let card = btn.closest('.property-card, article');
       let listingId = card ? (card.getAttribute('data-id') || card.getAttribute('data-listing-id') || card.id || '') : '';
       
-      // Check if the item is already favorited
       const isAlreadyFavorited = btn.classList.contains('active') || 
                                  btn.querySelector('i')?.classList.contains('fas');
       
       if (isAlreadyFavorited) {
-        // Show remove confirmation modal
         if (typeof confirmRemoveFavorite === 'function') {
           confirmRemoveFavorite(listingId, btn);
         } else {
-          // Fallback: directly remove the favorite
           btn.classList.remove('active');
           const icon = btn.querySelector('i');
           if (icon) {
@@ -733,7 +719,6 @@ function attachHomepageFavoriteModals() {
           showSuccessNotification('Removed from favorites!');
         }
       } else {
-        // Show add to collection modal
         showAddToCollectionModal(listingId, btn);
       }
     };
@@ -742,14 +727,12 @@ function attachHomepageFavoriteModals() {
 document.addEventListener('DOMContentLoaded', attachHomepageFavoriteModals);
 
 window.propertyCardNavigate = function(event) {
-    // Prevent navigation if the click was on an image or navigation arrow
     const target = event.target;
     if (
         target.closest('.property-image img') ||
         target.closest('.property-nav')
     ) {
-        return; // Do nothing
+        return;
     }
-    // Otherwise, navigate
     window.location.href = 'property-details.html';
 };

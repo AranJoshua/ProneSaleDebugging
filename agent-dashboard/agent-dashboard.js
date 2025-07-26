@@ -5,26 +5,21 @@ function closeSidebarIfMobile() {
 }
 
 function showSection(sectionName) {
-    // Close notifications when navigating
     const modal = document.getElementById('notificationsModal');
     if (modal && modal.style.display === 'block') {
         closeNotificationsModal();
     }
     
-    // Hide all sections
     const sections = document.querySelectorAll('.content-section');
     sections.forEach(section => section.classList.remove('active'));
 
-    // Show selected section (including 'favorites')
     var targetSection = document.getElementById(sectionName);
     if (targetSection) {
         targetSection.classList.add('active');
     }
 
-    // Update nav items
     const navItems = document.querySelectorAll('.nav-item');
     navItems.forEach(item => item.classList.remove('active'));
-    // Find the nav-item that triggered this, if possible
     if (showSection.caller && showSection.caller.arguments && showSection.caller.arguments[0]) {
         const evt = showSection.caller.arguments[0];
         if (evt && evt.target && evt.target.classList.contains('nav-item')) {
@@ -33,7 +28,6 @@ function showSection(sectionName) {
     } else if (window.event && window.event.target && window.event.target.classList.contains('nav-item')) {
         window.event.target.classList.add('active');
     } else {
-        // fallback: mark the nav-item for this section active
         navItems.forEach(item => {
             if (item.getAttribute('onclick') && item.getAttribute('onclick').includes(sectionName)) {
                 item.classList.add('active');
@@ -41,12 +35,10 @@ function showSection(sectionName) {
         });
     }
 
-    // If showing listings section, ensure Active tab is highlighted
     if (sectionName === 'listings') {
         initializeListingsTabs();
     }
 
-    // Scroll to top of the main content area
     const mainContent = document.querySelector('.main-content');
     if (mainContent) {
         mainContent.scrollTo({
@@ -55,7 +47,6 @@ function showSection(sectionName) {
         });
     }
 
-    // Close sidebar on mobile after navigation
     closeSidebarIfMobile();
 }
 
@@ -64,19 +55,16 @@ let currentTab = 'active';
 function switchTab(tabName) {
     currentTab = tabName;
     
-    // Update tab buttons
     const tabs = document.querySelectorAll('.tab-btn');
     tabs.forEach(tab => {
         tab.classList.remove('active', 'active-tab', 'pending-tab', 'sold-tab');
     });
     event.target.classList.add('active', tabName + '-tab');
     
-    // Update listings content
     const listingsContent = document.querySelectorAll('.listings-content');
     listingsContent.forEach(content => content.classList.remove('active'));
     document.getElementById(tabName + '-listings').classList.add('active');
     
-    // Update tab indicator
     const indicator = document.getElementById('listingsTabIndicator');
     if (indicator) {
         indicator.className = tabName;
@@ -87,13 +75,11 @@ function toggleSwitch(element) {
     element.classList.toggle('active');
 }
 
-// List Property Modal Variables
 let currentStep = 1;
 let uploadedPhotos = [];
 let photoCounter = 0;
 
 function showListPropertyModal() {
-    // Close notifications when opening property modal
     const notificationsModal = document.getElementById('notificationsModal');
     if (notificationsModal && notificationsModal.style.display === 'block') {
         closeNotificationsModal();
@@ -101,14 +87,10 @@ function showListPropertyModal() {
     
     const modal = document.getElementById('listPropertyModal');
     modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-    
-    // Reset form and step
+    document.body.style.overflow = 'hidden';   
     resetModalForm();
     currentStep = 1;
     showStep(1);
-    
-    // Add event listeners
     setupModalEventListeners();
 }
 
@@ -116,8 +98,6 @@ function closeListPropertyModal() {
     const modal = document.getElementById('listPropertyModal');
     modal.classList.remove('active');
     document.body.style.overflow = 'auto';
-    
-    // Remove event listeners
     removeModalEventListeners();
 }
 
@@ -125,33 +105,24 @@ function resetModalForm() {
     document.getElementById('listPropertyForm').reset();
     uploadedPhotos = [];
     photoCounter = 0;
-    
-    // Reset photo preview
     updatePhotoPreviewGrid();
-    
-    // Reset character counter
     document.getElementById('charCount').textContent = '0';
-    
-    // Hide sale options
     document.getElementById('saleOptionsGroup').style.display = 'none';
 }
 
 function setupModalEventListeners() {
-    // Close modal on overlay click
     document.getElementById('listPropertyModal').addEventListener('click', function(e) {
         if (e.target === this) {
             closeListPropertyModal();
         }
     });
     
-    // Close modal on escape key
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
             closeListPropertyModal();
         }
     });
     
-    // Character counter for description
     document.getElementById('description').addEventListener('input', function() {
         const charCount = this.value.length;
         document.getElementById('charCount').textContent = charCount;
@@ -164,7 +135,6 @@ function setupModalEventListeners() {
     // Form submission
     document.getElementById('listPropertyForm').addEventListener('submit', handleFormSubmission);
     
-    // Drag and drop functionality
     setupDragAndDrop();
 }
 

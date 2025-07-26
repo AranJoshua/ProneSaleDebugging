@@ -1,7 +1,4 @@
-// Account Settings JavaScript
-
 document.addEventListener('DOMContentLoaded', function() {
-    // Password visibility toggle functionality
     const toggleButtons = document.querySelectorAll('.toggle-password');
     
     toggleButtons.forEach(button => {
@@ -21,19 +18,16 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Password change form submission
     const changePasswordBtn = document.querySelector('.change-password-btn');
     if (changePasswordBtn) {
         changePasswordBtn.addEventListener('click', handlePasswordChange);
     }
 
-    // Email change link functionality
     const changeLink = document.querySelector('.change-link');
     if (changeLink) {
         changeLink.addEventListener('click', handleEmailChange);
     }
 
-    // Password reset link functionality
     const resetLink = document.querySelector('.reset-link');
     if (resetLink) {
         resetLink.addEventListener('click', handlePasswordReset);

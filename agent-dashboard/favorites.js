@@ -1,22 +1,16 @@
-// favorites.js - Handles Favorites Tab Functionality
-
-// --- Data Storage (for demo, use localStorage or in-memory) ---
 let collections = JSON.parse(localStorage.getItem('favoritesCollections') || '[]');
 let currentCollectionId = null;
 
-// --- DOM Elements ---
 const collectionsGrid = document.getElementById('collectionsGrid');
 const favoritesGrid = document.getElementById('favoritesGrid');
 const collectionViewHeader = document.getElementById('collectionViewHeader');
 const selectedCollectionTitle = document.getElementById('selectedCollectionTitle');
 const backToCollectionsBtn = document.getElementById('backToCollectionsBtn');
 
-// --- Utility: Save to localStorage ---
 function saveCollections() {
   localStorage.setItem('favoritesCollections', JSON.stringify(collections));
 }
 
-// --- Default Collection and Sample Listing (for frontend demo) ---
 function ensureDefaultCollection() {
   if (!collections || collections.length === 0) {
     collections = [
@@ -47,7 +41,6 @@ function ensureDefaultCollection() {
   }
 }
 
-// --- Render Collections Grid (with thumbnail/placeholder logic) ---
 function renderCollections(newCollectionId = null) {
   collectionsGrid.innerHTML = '';
   if (collections.length === 0) {
@@ -58,13 +51,11 @@ function renderCollections(newCollectionId = null) {
     const card = document.createElement('div');
     card.className = 'collection-card';
     
-    // Add animation class for new collection
     if (newCollectionId && col.id === newCollectionId) {
       card.classList.add('new-collection');
     }
     
     card.onclick = () => openCollection(col.id);
-    // Thumbnail or placeholder
     if (col.listings && col.listings.length > 0) {
       card.innerHTML += `
         <div class="collection-thumb filled-thumb">
@@ -85,19 +76,17 @@ function renderCollections(newCollectionId = null) {
         </div>
       `;
     }
-    // Title and delete button in info row
     card.innerHTML += `<div class="collection-info"><span class="collection-title">${col.name}</span><button class="collection-delete-btn" title="Delete Collection" onclick="event.stopPropagation(); confirmDeleteCollection('${col.id}')"><i class="fas fa-trash"></i></button></div>`;
     collectionsGrid.appendChild(card);
   });
   
-  // Remove animation class after animation completes
   if (newCollectionId) {
     setTimeout(() => {
       const newCard = document.querySelector(`.collection-card.new-collection`);
       if (newCard) {
         newCard.classList.remove('new-collection');
       }
-    }, 400); // Match the animation duration
+    }, 400);
   }
 }
 

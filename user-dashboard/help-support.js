@@ -1,7 +1,4 @@
-// Help & Support JavaScript - Fixed for single scrollbar
-
 document.addEventListener('DOMContentLoaded', function() {
-    // FAQ Toggle Functionality with smooth height transitions
     const faqQuestions = document.querySelectorAll('.faq-question');
     
     faqQuestions.forEach(question => {
@@ -10,7 +7,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const answer = this.nextElementSibling;
             const isActive = faqItem.classList.contains('active');
             
-            // Close other open FAQ items with smooth animation
             document.querySelectorAll('.faq-item.active').forEach(item => {
                 if (item !== faqItem) {
                     const otherAnswer = item.querySelector('.faq-answer');
@@ -19,7 +15,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             });
             
-            // Toggle current FAQ item with smooth animation
             if (isActive) {
                 faqItem.classList.remove('active');
                 slideUp(answer);
@@ -30,22 +25,18 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Search Functionality
     const searchInput = document.querySelector('.search-input');
     const searchBtn = document.querySelector('.search-btn');
     
     if (searchInput && searchBtn) {
-        // Search on button click
         searchBtn.addEventListener('click', performSearch);
         
-        // Search on Enter key press
         searchInput.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 performSearch();
             }
         });
         
-        // Real-time search as user types
         searchInput.addEventListener('input', function() {
             const query = this.value.toLowerCase().trim();
             if (query.length > 0) {
